@@ -1,0 +1,38 @@
+﻿using InfiniteCreativity.Models;
+using InfiniteCreativity.Models.DTO;
+using InfiniteCreativity.Services;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+
+namespace InfiniteCreativity.Controllers
+{
+    [Authorize]
+    [ApiController, Route("/api/quest")]
+    public class QuestController
+    {
+        private IQuestService _questService;
+
+        public QuestController(IQuestService questService)
+        {
+            _questService = questService;
+        }
+
+        [HttpGet, Route("{characterId}")]
+        public Task<IEnumerable<ShowQuestDTO>> GetQuest(int characterId)
+        {
+            return _questService.GetQuestByCharacterId(characterId);
+        }
+
+        [HttpPost, Route("{characterId}")]
+        public Task<ShowQuestDTO> CreateQuest(int characterId)
+        {
+            return _questService.CreateQuest(characterId);
+        }
+
+        [HttpPut, Route("{questId}/{amount}")]
+        public async Task<ShowQuestDTO> StatusUpdate(int questId, int amount)
+        {
+            return await _questService.MakeQuestProgress(questId, amount);
+        }
+    }
+}

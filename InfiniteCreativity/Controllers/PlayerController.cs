@@ -1,0 +1,51 @@
+﻿using InfiniteCreativity.Models;
+using InfiniteCreativity.Models.DTO;
+using InfiniteCreativity.Repositorys;
+using InfiniteCreativity.Services;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
+using System.Security.Claims;
+
+namespace InfiniteCreativity.Controllers
+{
+    [ApiController, Route("/api/player")]
+    public class PlayerController : Controller
+    {
+        private IPlayerService _playerService;
+
+        public PlayerController(IPlayerService playerService)
+        {
+            _playerService = playerService;
+        }
+
+        [HttpPost]
+        public async Task CreatePlayer([FromBody] CreatePlayerDTO player)
+        {
+            await _playerService.CreatePlayer(player);
+        }
+
+        [HttpPost, Route("login")]
+        public async Task<IActionResult> Login([FromBody] LoginPlayerDTO player)
+        {
+            int id;
+            try
+            {
+                id = await _playerService.GetPlayerIdIfValid(player);
+                var claims = new List<Claim>() { new Claim(ClaimTypes.Sid, id.ToString()) };
+                var identity = new ClaimsIdentity(claims, "Cookies");
+                var principal = new ClaimsPrincipal(identity);
+                var props = new AuthenticationProperties();
+                await HttpContext.SignInAsync("Cookies", principal, props);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return Unauthorized();
+            }
+
+            return Ok(id);
+        }
+    }
+}
