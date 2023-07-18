@@ -3,7 +3,6 @@ using InfiniteCreativity.Data;
 using InfiniteCreativity.Models;
 using InfiniteCreativity.Models.DTO;
 using InfiniteCreativity.Models.Enums;
-using InfiniteCreativity.Repositorys;
 using Microsoft.EntityFrameworkCore;
 
 namespace InfiniteCreativity.Services
@@ -11,17 +10,14 @@ namespace InfiniteCreativity.Services
     public class ItemService : IItemService
     {
         private InfiniteCreativityContext _context;
-        private IItemRepository _itemRepository;
         private IMapper _mapper;
 
         public ItemService(
             InfiniteCreativityContext context,
-            IItemRepository itemRepository,
             IMapper mapper
         )
         {
             _context = context;
-            _itemRepository = itemRepository;
             _mapper = mapper;
         }
 

@@ -2,7 +2,7 @@
 
 namespace InfiniteCreativity.Models
 {
-    abstract public class Item
+    public abstract class Item
     {
         public int Id { get; set; }
         public string Name { get; set; }
