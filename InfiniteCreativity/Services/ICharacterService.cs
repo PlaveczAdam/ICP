@@ -1,9 +1,10 @@
-﻿using InfiniteCreativity.Models.DTO;
+﻿using InfiniteCreativity.Models;
+using InfiniteCreativity.Models.DTO;
 
 namespace InfiniteCreativity.Services
 {
     public interface ICharacterService
     {
-        public Task CreateCharacter(CreateCharacterDTO character);
+        public Task<Character> CreateCharacter(CreateCharacterDTO character);
     }
 }

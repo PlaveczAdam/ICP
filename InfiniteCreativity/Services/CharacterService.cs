@@ -1,35 +1,40 @@
 ﻿using AutoMapper;
+using InfiniteCreativity.Data;
 using InfiniteCreativity.Models;
 using InfiniteCreativity.Models.DTO;
-using InfiniteCreativity.Repositorys;
+using Microsoft.EntityFrameworkCore;
+using System.Numerics;
 
 namespace InfiniteCreativity.Services
 {
     public class CharacterService : ICharacterService
     {
-        private ICharacterRepository _characterRepository;
         private IPlayerService _playerService;
         private IMapper _mapper;
 
+        private readonly InfiniteCreativityContext _context;
         private const int _starterPurse = 10;
 
         public CharacterService(
-            ICharacterRepository characterRepository,
             IPlayerService playerService,
             IMapper mapper
-        )
+,
+            InfiniteCreativityContext context)
         {
-            _characterRepository = characterRepository;
             _playerService = playerService;
             _mapper = mapper;
+            _context = context;
         }
 
-        public async Task CreateCharacter(CreateCharacterDTO character)
+        public async Task<Character> CreateCharacter(CreateCharacterDTO character)
         {
             var currentPlayer = await _playerService.GetCurrentPlayer();
             var newCharacter = _mapper.Map<Character>(character);
             newCharacter.Purse = _starterPurse;
-            var pc = await _characterRepository.CreateCharacter(newCharacter, currentPlayer);
+
+            currentPlayer.Characters.Add(newCharacter);
+            await _context.SaveChangesAsync();
+            return newCharacter;
         }
     }
 }
