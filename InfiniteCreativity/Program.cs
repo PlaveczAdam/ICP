@@ -1,7 +1,6 @@
 using InfiniteCreativity.Data;
 using InfiniteCreativity.Mappers;
 using InfiniteCreativity.Models;
-using InfiniteCreativity.Repositorys;
 using InfiniteCreativity.Services;
 using InfiniteCreativity.Services.ItemGeneratorNS;
 using InfiniteCreativity.Services.QuestGeneratorNS;
@@ -41,13 +40,9 @@ builder.Services.AddDbContext<InfiniteCreativityContext>(
     options => options.UseNpgsql(connectionString)
 );
 
-builder.Services.AddScoped<IPlayerRepository, PlayerRepositry>();
 builder.Services.AddScoped<IPlayerService, PlayerService>();
-builder.Services.AddScoped<IItemRepository, ItemRepository>();
 builder.Services.AddScoped<IItemService, ItemService>();
-builder.Services.AddScoped<ICharacterRepository, CharacterRepository>();
 builder.Services.AddScoped<ICharacterService, CharacterService>();
-builder.Services.AddScoped<IQuestRepository, QuestRepository>();
 builder.Services.AddScoped<IQuestService, QuestService>();
 
 builder.Services.AddScoped<QuestGenerator>();
