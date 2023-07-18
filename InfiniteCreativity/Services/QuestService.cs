@@ -1,33 +1,31 @@
 ﻿using AutoMapper;
+using InfiniteCreativity.Data;
 using InfiniteCreativity.Exceptions;
 using InfiniteCreativity.Models;
 using InfiniteCreativity.Models.DTO;
-using InfiniteCreativity.Repositorys;
 using InfiniteCreativity.Services.QuestGeneratorNS;
+using Microsoft.EntityFrameworkCore;
 
 namespace InfiniteCreativity.Services
 {
     public class QuestService : IQuestService
     {
-        private IQuestRepository _questRepository;
         private IPlayerService _playerService;
         private IMapper _mapper;
         private QuestGenerator _questGenerator;
-        private IItemRepository _itemRepository;
+        private InfiniteCreativityContext _context;
 
         public QuestService(
-            IQuestRepository questRepository,
             IMapper mapper,
             IPlayerService playerService,
-            QuestGenerator questGenerator,
-            IItemRepository itemRepository
-        )
+            QuestGenerator questGenerator
+,
+            InfiniteCreativityContext context)
         {
-            _questRepository = questRepository;
             _mapper = mapper;
             _playerService = playerService;
             _questGenerator = questGenerator;
-            _itemRepository = itemRepository;
+            _context = context;
         }
 
         public async Task<IEnumerable<ShowQuestDTO>> GetQuestByCharacterId(int characterId)
@@ -42,7 +40,9 @@ namespace InfiniteCreativity.Services
         {
             var currentPlayer = await _playerService.GetCurrentPlayer();
             var q =
-                await _questRepository.GetQuestById(questId)
+                await _context.Quest
+                .Include(x => x.Rewards)
+                .FirstOrDefaultAsync(x => x.Id == questId)!
                 ?? throw new UnauthorizedOperationException();
             var character = GetCharacterById(q.Character.Id, currentPlayer);
             if (q.IsDone)
@@ -56,9 +56,11 @@ namespace InfiniteCreativity.Services
             {
                 q.Rewards.ToList().ForEach(x => x.Character = character);
                 q.IsDone = true;
-                await _itemRepository.UpdateItems(q.Rewards);
+
+                await _context.SaveChangesAsync();
             }
-            return _mapper.Map<ShowQuestDTO>(await _questRepository.UpdateQuest(q));
+            await _context.SaveChangesAsync();
+            return _mapper.Map<ShowQuestDTO>(q);
         }
 
         public async Task<ShowQuestDTO> CreateQuest(int characterId)
@@ -67,7 +69,10 @@ namespace InfiniteCreativity.Services
             var character = GetCharacterById(characterId, currentPlayer);
             var quest = _questGenerator.Generate();
             quest.Character = character;
-            quest = await _questRepository.CreateQuest(quest);
+
+            _context.Quest.Add(quest);
+            await _context.SaveChangesAsync();
+
             return _mapper.Map<ShowQuestDTO>(quest);
         }
 
