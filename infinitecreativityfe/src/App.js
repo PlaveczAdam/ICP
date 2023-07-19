@@ -10,16 +10,16 @@ function App() {
     <div className="App">
       <header className="App-header">
         <Router>
-          <Link to="/home">Home</Link>
+          <Link to="/">Home</Link>
           <Link to="/login">Login</Link>
           <Link to="/registration">Registration</Link>
           <Routes>
-            <Route path="/home"></Route>
             <Route
               path="/registration"
               element={<Registration></Registration>}
             ></Route>
             <Route path="/login" element={<Login></Login>}></Route>
+            <Route path="/"></Route>
           </Routes>
         </Router>
       </header>
