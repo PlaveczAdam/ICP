@@ -1,6 +1,5 @@
 ﻿using InfiniteCreativity.Models;
 using InfiniteCreativity.Models.DTO;
-using InfiniteCreativity.Repositorys;
 using InfiniteCreativity.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
