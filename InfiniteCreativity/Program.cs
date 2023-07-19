@@ -7,6 +7,7 @@ using InfiniteCreativity.Services.QuestGeneratorNS;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
+using Microsoft.Extensions.Options;
 using System.Numerics;
 using System.Reflection;
 
@@ -58,8 +59,13 @@ builder.Services
         options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
         options.LoginPath = "/api/player/login";
         //todo maybe �tirni
-        options.AccessDeniedPath = "/api/player/login";
+        options.Events.OnRedirectToLogin = context =>
+        {
+            context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+            return Task.CompletedTask;
+        };
     });
+
 
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddScoped<PasswordHasher<Player>>();
@@ -74,6 +80,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins("http://localhost:3000"));
 
 app.UseAuthentication();
 app.UseAuthorization();
