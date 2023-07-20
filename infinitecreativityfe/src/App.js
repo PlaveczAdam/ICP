@@ -11,6 +11,11 @@ import { Box } from "@mui/material";
 
 function App() {
   const userCTX = useContext(UserContext);
+  async function handleLogOut()
+  {
+    await fetch("/api/player/logout");
+    userCTX.refresh();
+  }
 
   return (
     <div className="App">
@@ -20,6 +25,7 @@ function App() {
           {userCTX.user && <Link to="/account">Account</Link>}
           {!userCTX.user && <Link to="/login">Login</Link>}
           {!userCTX.user && <Link to="/registration">Registration</Link>}
+          {userCTX.user && <Link to="/" onClick={()=>handleLogOut()}>Log Out</Link>}
           {userCTX.user && <Box>You are logged in as: {userCTX.user.name}</Box>}
           <Routes>
             <Route

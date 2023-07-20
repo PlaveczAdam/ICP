@@ -47,6 +47,14 @@ namespace InfiniteCreativity.Controllers
             return Ok(id);
         }
         [Authorize]
+        [HttpGet, Route("logout")]
+        public async Task<IActionResult> LogOut()
+        { 
+            await HttpContext.SignOutAsync();
+            return Ok();
+        }
+
+        [Authorize]
         [HttpGet, Route("current")]
         public async Task<ShowPlayerDTO> GetCurrentPlayer()
         { 

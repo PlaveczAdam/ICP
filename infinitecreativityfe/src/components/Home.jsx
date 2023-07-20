@@ -1,5 +1,4 @@
 import { Box } from '@mui/material';
-import { Typography } from '@mui/material/Typography';
 
 function Home(props) {
 

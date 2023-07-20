@@ -13,6 +13,9 @@ function UserContextProvider(props){
         if(currentPlayer.ok)
         {
             setUser(await currentPlayer.json());
+        }else
+        {
+            setUser(null);
         }
         setIsLoading(false);
     };
