@@ -1,21 +1,26 @@
 import "./App.css";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useContext } from "react";
 
 import Login from "./components/Login";
 import Registration from "./components/Registration";
 import Home from "./components/Home";
 import Account from './components/Account';
+import { UserContext } from "./components/UserContextProvider";
+import { Box } from "@mui/material";
 
 function App() {
+  const userCTX = useContext(UserContext);
+
   return (
     <div className="App">
       <header className="App-header">
         <Router>
           <Link to="/">Home</Link>
-          <Link to="/account">Account</Link>
-          <Link to="/login">Login</Link>
-          <Link to="/registration">Registration</Link>
+          {userCTX.user && <Link to="/account">Account</Link>}
+          {!userCTX.user && <Link to="/login">Login</Link>}
+          {!userCTX.user && <Link to="/registration">Registration</Link>}
+          {userCTX.user && <Box>You are logged in as: {userCTX.user.name}</Box>}
           <Routes>
             <Route
               path="/registration"
