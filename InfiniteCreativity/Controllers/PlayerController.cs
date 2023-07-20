@@ -46,5 +46,11 @@ namespace InfiniteCreativity.Controllers
 
             return Ok(id);
         }
+        [Authorize]
+        [HttpGet, Route("current")]
+        public async Task<ShowPlayerDTO> GetCurrentPlayer()
+        { 
+            return await _playerService.GetCurrentPlayerDTO();
+        }
     }
 }

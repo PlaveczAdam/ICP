@@ -17,6 +17,9 @@ namespace InfiniteCreativity.Mappers
             CreateMap<Player, CreatePlayerDTO>().ReverseMap();
             CreateMap<Character, CreateCharacterDTO>().ReverseMap();
             CreateMap<Quest, ShowQuestDTO>();
+
+            CreateMap<Player, ShowPlayerDTO>();
+            CreateMap<Character, ShowCharacterDTO>();
             /*CreateMap<Item, ShowMeleeDTO>().ConstructUsing((source, context) => context.Mapper.Map<ShowMeleeDTO>(source as Melee));*/
         }
     }

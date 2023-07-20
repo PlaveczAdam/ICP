@@ -8,5 +8,6 @@ namespace InfiniteCreativity.Services
         public Task CreatePlayer(CreatePlayerDTO newPlayer);
         public Task<int> GetPlayerIdIfValid(LoginPlayerDTO player);
         public Task<Player> GetCurrentPlayer();
+        public Task<ShowPlayerDTO> GetCurrentPlayerDTO();
     }
 }

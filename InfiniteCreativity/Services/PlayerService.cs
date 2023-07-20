@@ -74,5 +74,11 @@ namespace InfiniteCreativity.Services
             var user = await _context.Player.Include(x => x.Characters).FirstAsync(x => x.Id == userId); ;
             return user;
         }
+
+        public async Task<ShowPlayerDTO> GetCurrentPlayerDTO()
+        {
+            var player = await GetCurrentPlayer();
+            return _mapper.Map<ShowPlayerDTO>(player);
+        }
     }
 }
