@@ -1,17 +1,19 @@
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import Link from "@mui/material/Link";
+import {Link} from "react-router-dom";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { UserContext } from './UserContextProvider';
 
 function Login(props) {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
+    const userCTX = useContext(UserContext);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -23,6 +25,7 @@ function Login(props) {
         if(res.ok)
         {
           navigate("/");
+          userCTX.refresh();
           return;
         }
         alert("Invalid username or Password.");
@@ -52,7 +55,7 @@ function Login(props) {
                 required
                 fullWidth
                 id="username"
-                label="Email Address"
+                label="Username"
                 name="username"
                 autoComplete="email"
                 autoFocus
@@ -81,8 +84,10 @@ function Login(props) {
               </Button>
               <Grid container>
                 <Grid item>
-                  <Link href="#" variant="body2">
+                  <Link to="/registration">
+                    <Typography variant="body2">
                     {"Don't have an account? Sign Up"}
+                    </Typography>
                   </Link>
                 </Grid>
               </Grid>
