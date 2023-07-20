@@ -18,7 +18,7 @@ namespace InfiniteCreativity.Controllers
         }
 
         [HttpGet, Route("{characterId}")]
-        public Task<IEnumerable<ShowQuestDTO>> GetQuest(int characterId)
+        public Task<IEnumerable<ShowQuestDTO>> GetQuests(int characterId)
         {
             return _questService.GetQuestByCharacterId(characterId);
         }

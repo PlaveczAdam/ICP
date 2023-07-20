@@ -33,7 +33,9 @@ namespace InfiniteCreativity.Services
             var currentPlayer = await _playerService.GetCurrentPlayer();
             var character = GetCharacterById(characterId, currentPlayer);
 
-            return _mapper.Map<IEnumerable<ShowQuestDTO>>(character.Quests);
+            var quests = _context.Quest.Where(x => x.Character.Id == character.Id);
+
+            return _mapper.Map<IEnumerable<ShowQuestDTO>>(quests);
         }
 
         public async Task<ShowQuestDTO> MakeQuestProgress(int questId, int amount)
