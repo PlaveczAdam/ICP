@@ -1,5 +1,6 @@
 using InfiniteCreativity.Data;
 using InfiniteCreativity.Mappers;
+using InfiniteCreativity.Middlewares;
 using InfiniteCreativity.Models;
 using InfiniteCreativity.Services;
 using InfiniteCreativity.Services.ItemGeneratorNS;
@@ -86,6 +87,7 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.UseMiddleware<ErrorHandlerMiddleware>();
 app.MapControllers();
 
 app.Run();

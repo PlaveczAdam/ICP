@@ -32,9 +32,17 @@ namespace InfiniteCreativity.Services
 
         public async Task CreatePlayer(CreatePlayerDTO newPlayer)
         {
-            newPlayer.Password = _passwordHasher.HashPassword(_mapper.Map<Player>(newPlayer), newPlayer.Password);
-            _context.Player.Add(_mapper.Map<Player>(newPlayer));
-            await _context.SaveChangesAsync();
+            var p = await _context.Player
+                .Include(x => x.Characters)
+                .FirstOrDefaultAsync(x => x.Name == newPlayer.Name);
+            if (p == null)
+            {
+                newPlayer.Password = _passwordHasher.HashPassword(_mapper.Map<Player>(newPlayer), newPlayer.Password);
+                _context.Player.Add(_mapper.Map<Player>(newPlayer));
+                await _context.SaveChangesAsync();
+                return;
+            }
+            throw new UserAlreadyExistException();
         }
 
         public async Task<int> GetPlayerIdIfValid(LoginPlayerDTO player)

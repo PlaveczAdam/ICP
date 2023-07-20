@@ -1,4 +1,7 @@
 ﻿namespace InfiniteCreativity.Exceptions
 {
-    public class UserNotFoundException : Exception { }
+    public class UserNotFoundException : ExceptionBase
+    {
+        public override string Code => "UserNotFoundException";
+    }
 }
