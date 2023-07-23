@@ -56,7 +56,7 @@ namespace InfiniteCreativity.Services
 
             if (q.Progression == 100)
             {
-                q.Rewards.ToList().ForEach(x => x.Character = character);
+                q.Rewards.ToList().ForEach(x => x.Player = currentPlayer);
                 q.IsDone = true;
 
                 await _context.SaveChangesAsync();

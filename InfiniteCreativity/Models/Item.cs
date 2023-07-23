@@ -10,7 +10,7 @@ namespace InfiniteCreativity.Models
         public int StackSize { get; set; }
         public int? Value { get; set; }
         public ItemType ItemType { get; init; }
-        public Character? Character { get; set; }
+        public Player? Player { get; set; }
 
         public Item ShallowCopy()
         {
