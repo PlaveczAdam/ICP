@@ -17,6 +17,8 @@ namespace InfiniteCreativity.Services
         private readonly InfiniteCreativityContext _context;
         private PasswordHasher<Player> _passwordHasher;
 
+        private const int _starterPurse = 10;
+
         public PlayerService(
             IMapper mapper,
             IHttpContextAccessor contextAccessor
@@ -37,8 +39,11 @@ namespace InfiniteCreativity.Services
                 .FirstOrDefaultAsync(x => x.Name == newPlayer.Name);
             if (p == null)
             {
-                newPlayer.Password = _passwordHasher.HashPassword(_mapper.Map<Player>(newPlayer), newPlayer.Password);
-                _context.Player.Add(_mapper.Map<Player>(newPlayer));
+                var player = _mapper.Map<Player>(newPlayer);
+                player.Purse = _starterPurse;
+                player.Password = _passwordHasher.HashPassword(player, player.Password);
+
+                _context.Player.Add(player);
                 await _context.SaveChangesAsync();
                 return;
             }

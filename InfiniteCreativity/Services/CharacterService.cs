@@ -13,7 +13,6 @@ namespace InfiniteCreativity.Services
         private IMapper _mapper;
 
         private readonly InfiniteCreativityContext _context;
-        private const int _starterPurse = 10;
 
         public CharacterService(
             IPlayerService playerService,
@@ -30,7 +29,6 @@ namespace InfiniteCreativity.Services
         {
             var currentPlayer = await _playerService.GetCurrentPlayer();
             var newCharacter = _mapper.Map<Character>(character);
-            newCharacter.Purse = _starterPurse;
 
             currentPlayer.Characters.Add(newCharacter);
             await _context.SaveChangesAsync();
