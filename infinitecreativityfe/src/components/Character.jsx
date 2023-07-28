@@ -1,15 +1,19 @@
-import { Box, Card } from "@mui/material";
-import Quests from "./Quests"
+import { Box, Card, Grow, Slide } from "@mui/material";
+import Quests from "./Quests";
 
 function Character(props) {
   return (
-    <Card variant="outlined">
+    <Grow in appear>
+    <Card
+      variant="outlined"
+      sx={{border: '3px solid rgba(7,163,173,0.33)'}}
+    >
       <Box padding={4} minHeight={110}>
         <Box>Name: {props.character.name}</Box>
-        <Box>Purse: {props.character.purse}</Box>
         <Quests characterID={props.character.id}></Quests>
       </Box>
     </Card>
+    </Grow>
   );
 }
 

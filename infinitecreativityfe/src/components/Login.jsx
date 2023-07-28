@@ -33,7 +33,7 @@ function Login(props) {
       };
     
       return (
-        <Container component="main" maxWidth="sm">
+        <Container component="main" width="100%">
           <Box
             sx={{
               boxShadow: 3,
@@ -44,12 +44,14 @@ function Login(props) {
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
+              bgcolor: 'rgba(10, 10, 10, 0.85)',
+
             }}
           >
             <Typography component="h1" variant="h5">
               Sign in
             </Typography>
-            <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+            <Box component="form"  onSubmit={handleSubmit} noValidate sx={{ mt: 1, }}>
               <TextField
                 margin="normal"
                 required
@@ -78,14 +80,14 @@ function Login(props) {
                 type="submit"
                 fullWidth
                 variant="contained"
-                sx={{ mt: 3, mb: 2 }}
+                sx={{mt: 3, mb: 2 }}
               >
                 Sign In
               </Button>
               <Grid container>
                 <Grid item>
                   <Link to="/registration">
-                    <Typography variant="body2">
+                    <Typography style={{color: '#f149f5'}} variant="body2">
                     {"Don't have an account? Sign Up"}
                     </Typography>
                   </Link>

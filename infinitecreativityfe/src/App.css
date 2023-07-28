@@ -14,7 +14,9 @@
 }
 
 .App-header {
-  background-color: #282c34;
+  background-image: url('img/bg.png');
+  background-repeat: no-repeat;
+  background-size: cover;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -22,6 +24,7 @@
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
+  font-size: x-large;
 }
 
 .App-link {
@@ -36,3 +39,25 @@
     transform: rotate(360deg);
   }
 }
+
+/* ===== Scrollbar CSS ===== */
+  /* Firefox */
+  * {
+    scrollbar-width: auto;
+    scrollbar-color: #922ead #2aa4ac;
+  }
+
+  /* Chrome, Edge, and Safari */
+  *::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  *::-webkit-scrollbar-track {
+    background: #2aa4ac;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background-color: #922ead;
+    border-radius: 10px;
+    border: 0px solid #2aa4ac;
+  }

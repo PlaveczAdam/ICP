@@ -75,7 +75,7 @@ function Quests(props) {
             <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
               Quests
             </Typography>
-            <Button variant="outline" onClick={() => takeQuest()}>
+            <Button onClick={() => takeQuest()} sx={{boxShadow: "-3px 7px 9px -1px rgba(0,0,0,0.54)"}}>
               Take Quest
             </Button>
           </Toolbar>

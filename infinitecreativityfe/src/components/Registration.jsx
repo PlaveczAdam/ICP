@@ -28,7 +28,7 @@ function Registration(props){
       };
     
       return (
-        <Container component="main" maxWidth="sm">
+        <Container component="main" width="100%">
           <Box
             sx={{
               boxShadow: 3,
@@ -39,8 +39,10 @@ function Registration(props){
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
+              bgcolor: 'rgba(10, 10, 10, 0.85)',
             }}
           >
+            
             <Typography component="h1" variant="h5">
               Sign up
             </Typography>

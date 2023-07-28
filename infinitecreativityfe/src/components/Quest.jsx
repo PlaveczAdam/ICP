@@ -36,7 +36,9 @@ function Quest(props) {
           loading={isLoading}
           disabled={props.quest.progression >= 100}
         >
-          Progress 1-50
+          <Box>
+            PROGRESS 1-50
+          </Box>
         </LoadingButton>
       </TableCell>
     </TableRow>
