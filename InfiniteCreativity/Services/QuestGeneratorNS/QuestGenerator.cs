@@ -28,6 +28,8 @@ namespace InfiniteCreativity.Services.QuestGeneratorNS
             quest.Name = questDesc.Name;
             quest.Description = questDesc.Description;
             quest.Rewards = new List<Item> { _itemGenerator.Generate() };
+            quest.CashReward = Math.Round(_random.NextDouble(10,50));
+
             return quest;
         }
     }

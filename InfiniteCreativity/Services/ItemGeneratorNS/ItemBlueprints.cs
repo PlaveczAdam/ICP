@@ -1,6 +1,7 @@
 ﻿using InfiniteCreativity.Models.Enums;
 using InfiniteCreativity.Models.Weapons;
 using InfiniteCreativity.Models;
+using InfiniteCreativity.Models.Armor;
 
 namespace InfiniteCreativity.Services.ItemGeneratorNS
 {
@@ -22,9 +23,9 @@ namespace InfiniteCreativity.Services.ItemGeneratorNS
                 Range = 1,
                 Value = 10
             },
-            /*new Ranged
+            new Ranged
             {
-                Name = "WEPÖN",
+                Name = "RANGEDWEPÖN",
                 Description = "nincs nemis volt123",
                 ItemType = ItemType.Weapon,
                 WeaponType = WeaponType.Bow,
@@ -35,10 +36,10 @@ namespace InfiniteCreativity.Services.ItemGeneratorNS
                 CritMultiplier = 50,
                 Range = 10,
                 Value = 5
-            },*/
+            },
             new Melee
             {
-                Name = "WEPÖN",
+                Name = "PointyWEPÖN",
                 Description = "nincs nemis volt",
                 ItemType = ItemType.Weapon,
                 WeaponType = WeaponType.Spear,
@@ -49,6 +50,60 @@ namespace InfiniteCreativity.Services.ItemGeneratorNS
                 CritMultiplier = 75,
                 Range = 5,
                 Value = 15
+            },
+            new Head{ 
+                Name = "Bucket",
+                Description = "without water",
+                ArmorType = ArmorType.Head,
+                ItemType = ItemType.Armor,
+                ArmorValue = 1,
+                StackSize = 1,
+                Value = 15,
+            },
+            new Shoulder{
+                Name = "Stripe",
+                Description = "you did not earn it",
+                ArmorType = ArmorType.Shoulder,
+                ItemType = ItemType.Armor,
+                ArmorValue = 1,
+                StackSize = 1,
+                Value = 15,
+            },
+            new Chest{
+                Name = "Apron",
+                Description = "bruh",
+                ArmorType = ArmorType.Chest,
+                ItemType = ItemType.Armor,
+                ArmorValue = 1,
+                StackSize = 1,
+                Value = 15,
+            },
+            new Hand{
+                Name = "HoboGloves",
+                Description = "in case of emergency",
+                ArmorType = ArmorType.Hand,
+                ItemType = ItemType.Armor,
+                ArmorValue = 1,
+                StackSize = 1,
+                Value = 15,
+            },
+            new Leg{
+                Name = "Shorts",
+                Description = "out of ideas",
+                ArmorType = ArmorType.Leg,
+                ItemType = ItemType.Armor,
+                ArmorValue = 1,
+                StackSize = 1,
+                Value = 15,
+            },
+            new Boot{
+                Name = "FlipFlop",
+                Description = "secound part indicates what will happen",
+                ArmorType = ArmorType.Boot,
+                ItemType = ItemType.Armor,
+                ArmorValue = 1,
+                StackSize = 1,
+                Value = 15,
             },
         };
     }

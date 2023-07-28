@@ -1,4 +1,6 @@
-﻿namespace InfiniteCreativity.Models.DTO
+﻿using InfiniteCreativity.Models.Enums;
+
+namespace InfiniteCreativity.Models.DTO.Weapon
 {
     public class ShowWeaponDTO : ShowItemDTO
     {
@@ -7,5 +9,6 @@
         public double Range { get; set; }
         public double CritChance { get; set; }
         public double CritMultiplier { get; set; }
+        public WeaponType WeaponType { get; set; }
     }
 }

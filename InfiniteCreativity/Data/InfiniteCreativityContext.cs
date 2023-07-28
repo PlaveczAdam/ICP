@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using InfiniteCreativity.Models;
 using InfiniteCreativity.Models.Weapons;
+using InfiniteCreativity.Models.Armor;
 
 namespace InfiniteCreativity.Data
 {
@@ -15,5 +16,12 @@ namespace InfiniteCreativity.Data
         public DbSet<Ranged> RangedWeapon { get; set; }
         public DbSet<Item> Item { get; set; }
         public DbSet<Quest> Quest { get; set; }
+        public DbSet<Head> Head { get; set; }
+        public DbSet<Shoulder> Shoulder { get; set; }
+        public DbSet<Chest> Chest { get; set; }
+        public DbSet<Hand> Hand { get; set; }
+        public DbSet<Leg> Leg { get; set; }
+        public DbSet<Boot> Boot { get; set; }
+
     }
 }

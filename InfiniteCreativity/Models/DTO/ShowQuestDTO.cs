@@ -8,5 +8,6 @@
         public double Progression { get; set; }
         public bool IsDone { get; set; }
         public IEnumerable<ShowItemDTO> Rewards { get; set; }
+        public double CashReward { get; set; }
     }
 }
