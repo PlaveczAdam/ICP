@@ -1,7 +1,7 @@
 import "./App.css";
 import logo from "./img/logo.png";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import Login from "./components/Login";
 import Registration from "./components/Registration";
 import Home from "./components/Home";
@@ -37,9 +37,9 @@ const theme = createTheme({
     activeButtonColor: {
       main: purple[700],
     },
-    cancelButtonTextColor:{
+    cancelButtonTextColor: {
       main: teal[400],
-    }
+    },
   },
 });
 
@@ -156,7 +156,8 @@ const globalTheme = createTheme(theme, {
               color: theme.palette.disabled.text,
               backgroundColor: theme.palette.disabled.main,
               borderColor: theme.palette.disabled.text,
-              backgroundImage: "linear-gradient(45deg, purple 25%, #000000 25%, #000000 50%, purple 50%, purple 75%, #000000 75%, #000000 100%)",
+              backgroundImage:
+                "linear-gradient(45deg, purple 25%, #000000 25%, #000000 50%, purple 50%, purple 75%, #000000 75%, #000000 100%)",
               backgroundSize: "74.95px 74.95px",
             },
           },
@@ -164,7 +165,10 @@ const globalTheme = createTheme(theme, {
         {
           props: {
             variant: "contained",
-            color: "secondary",
+            color: "activeButtonColor",
+          },
+          style:{
+            backgroundColor: theme.palette.activeButtonColor.main,
           },
         },
       ],
@@ -173,8 +177,7 @@ const globalTheme = createTheme(theme, {
 });
 
 function App() {
-  const [homeButtonStatus, setHomeButtonStatus] = useState(false);
-  const [accountButtonStatus, setAccountButtonStatus] = useState(false);
+  const [activeButton, setActiveButton] = useState("home");
 
   const userCTX = useContext(UserContext);
   async function handleLogOut() {
@@ -223,12 +226,13 @@ function App() {
                   }}
                 >
                   <Button
-                    color={homeButtonStatus ? "activeButtonColor" : "primary"}
+                    color={
+                      activeButton === "home" ? "activeButtonColor" : "primary"
+                    }
                     component={Link}
                     to="/"
                     onClick={() => {
-                      setAccountButtonStatus(false);
-                      setHomeButtonStatus(true);
+                      setActiveButton("home");
                     }}
                   >
                     Home
@@ -236,13 +240,14 @@ function App() {
                   {userCTX.user && (
                     <Button
                       color={
-                        accountButtonStatus ? "activeButtonColor" : "primary"
+                        activeButton === "account"
+                          ? "activeButtonColor"
+                          : "primary"
                       }
                       component={Link}
                       to="/account"
                       onClick={() => {
-                        setAccountButtonStatus(true);
-                        setHomeButtonStatus(false);
+                        setActiveButton("account");
                       }}
                     >
                       Account
@@ -321,10 +326,7 @@ function App() {
                     ></Route>
 
                     <Route path="/account" element={<Account />}>
-                      <Route
-                        path="characters"
-                        element={<Characters />}
-                      ></Route>
+                      <Route path="characters" element={<Characters />}></Route>
                     </Route>
                     <Route path="/login" element={<Login />}></Route>
                     <Route path="/" element={<Home />}></Route>

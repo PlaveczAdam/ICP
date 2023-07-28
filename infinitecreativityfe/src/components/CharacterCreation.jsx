@@ -48,7 +48,7 @@ function CharacterCreation(props) {
           />
         </DialogContent>
         <DialogActions>
-          <Button variant="text" onClick={() => setIsOpen(false)}>Cancel</Button>
+          <Button variant="text" onClick={() => setIsOpen(false)} color="cancelButtonTextColor">Cancel</Button>
           <Button
             onClick={() => {
               handleSave();
