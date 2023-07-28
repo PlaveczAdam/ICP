@@ -1,9 +1,12 @@
 import { Box, TableCell, TableRow } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import LinearProgress from "@mui/material/LinearProgress";
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { InventoryContext } from "./InventoryContextProvider";
 
 function Quest(props) {
+  const inventoryCTX = useContext(InventoryContext);
+
   const [isLoading, setIsLoading] = useState(false);
   async function makeProgress() {
     setIsLoading(true);
@@ -12,6 +15,10 @@ function Quest(props) {
       { method: "PUT" }
     );
     const newQuestState = await p.json();
+    if(newQuestState.isDone)
+    {
+      inventoryCTX.refresh();
+    }
     props.onQuestChange(newQuestState);
     setIsLoading(false);
   }

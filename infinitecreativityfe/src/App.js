@@ -1,7 +1,7 @@
 import "./App.css";
 import logo from "./img/logo.png";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
-import { useContext, useState, useEffect } from "react";
+import { useContext, useState } from "react";
 import Login from "./components/Login";
 import Registration from "./components/Registration";
 import Home from "./components/Home";
@@ -11,6 +11,7 @@ import { UserContext } from "./components/UserContextProvider";
 import { Box, Button } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { purple, teal } from "@mui/material/colors";
+import Inventory from './components/Inventory';
 
 const theme = createTheme({
   palette: {
@@ -256,7 +257,7 @@ function App() {
                 </Box>
                 <Box sx={{ flexShrink: "1" }}>
                   {userCTX.user && (
-                    <Box sx={{ display: "flex", flexWrap: "wrap" }}>
+                    <Box sx={{ display: "flex", flexWrap: "wrap", alignItems:"center" }}>
                       <Box sx={{ paddingRight: "10px" }}>
                         {userCTX.user.name}
                       </Box>
@@ -327,6 +328,7 @@ function App() {
 
                     <Route path="/account" element={<Account />}>
                       <Route path="characters" element={<Characters />}></Route>
+                      <Route path="inventory" element={<Inventory />}></Route>
                     </Route>
                     <Route path="/login" element={<Login />}></Route>
                     <Route path="/" element={<Home />}></Route>

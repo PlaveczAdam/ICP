@@ -11,23 +11,27 @@ namespace InfiniteCreativity.Services
     {
         private InfiniteCreativityContext _context;
         private IMapper _mapper;
+        private IPlayerService _playerService;
 
         public ItemService(
             InfiniteCreativityContext context,
-            IMapper mapper
-        )
+            IMapper mapper,
+            IPlayerService playerService)
         {
             _context = context;
             _mapper = mapper;
+            _playerService = playerService;
         }
 
         public async Task<IEnumerable<ShowItemDTO>> GetAllItems()
         {
-            var contItem = _context.Item.ToList();
-            var mapped = _mapper.Map<List<ShowItemDTO>>(contItem);
-            return mapped;
+            var currentPlayer = await _playerService.GetCurrentPlayer();
+            var contItem = _context.Item.Where((x)=>x.Player!=null && x.Player.Id==currentPlayer.Id).ToList();
+            var mappedItem = _mapper.Map<List<ShowItemDTO>>(contItem);
+            return mappedItem;
         }
 
+        [Obsolete]
         public async Task<IEnumerable<ShowItemDTO>> GetAllItemsByType(ItemType itemType)
         {
             return await _context.Item
