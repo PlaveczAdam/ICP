@@ -14,24 +14,27 @@ namespace InfiniteCreativity.Services
         private IMapper _mapper;
         private QuestGenerator _questGenerator;
         private InfiniteCreativityContext _context;
+        private ICharacterService _characterService;
 
         public QuestService(
             IMapper mapper,
             IPlayerService playerService,
             QuestGenerator questGenerator
 ,
-            InfiniteCreativityContext context)
+            InfiniteCreativityContext context,
+            ICharacterService characterService)
         {
             _mapper = mapper;
             _playerService = playerService;
             _questGenerator = questGenerator;
             _context = context;
+            _characterService = characterService;
         }
 
         public async Task<IEnumerable<ShowQuestDTO>> GetQuestByCharacterId(int characterId)
         {
             var currentPlayer = await _playerService.GetCurrentPlayer();
-            var character = GetCharacterById(characterId, currentPlayer);
+            var character = await _characterService.GetCharacterById(characterId, currentPlayer);
 
             var quests = _context.Quest.Include((x)=>x.Rewards).Where(x => x.Character.Id == character.Id);
 
@@ -46,7 +49,7 @@ namespace InfiniteCreativity.Services
                 .Include(x => x.Rewards)
                 .FirstOrDefaultAsync(x => x.Id == questId)!
                 ?? throw new UnauthorizedOperationException();
-            var character = GetCharacterById(q.Character.Id, currentPlayer);
+            var character = _characterService.GetCharacterById(q.Character.Id, currentPlayer);
             if (q.IsDone)
             {
                 throw new UnauthorizedOperationException();
@@ -69,7 +72,7 @@ namespace InfiniteCreativity.Services
         public async Task<ShowQuestDTO> CreateQuest(int characterId)
         {
             var currentPlayer = await _playerService.GetCurrentPlayer();
-            var character = GetCharacterById(characterId, currentPlayer);
+            var character = await  _characterService.GetCharacterById(characterId, currentPlayer);
             var quest = _questGenerator.Generate();
             quest.Character = character;
 
@@ -79,12 +82,6 @@ namespace InfiniteCreativity.Services
             return _mapper.Map<ShowQuestDTO>(quest);
         }
 
-        private Character GetCharacterById(int characterId, Player currentPlayer)
-        {
-            var character =
-                currentPlayer.Characters.FirstOrDefault(x => x.Id == characterId)
-                ?? throw new UnauthorizedOperationException();
-            return character;
-        }
+        
     }
 }

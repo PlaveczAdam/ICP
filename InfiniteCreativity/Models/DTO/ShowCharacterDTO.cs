@@ -1,4 +1,8 @@
-﻿namespace InfiniteCreativity.Models.DTO
+﻿using InfiniteCreativity.Models.Armor;
+using InfiniteCreativity.Models.DTO.Armor;
+using InfiniteCreativity.Models.DTO.Weapon;
+
+namespace InfiniteCreativity.Models.DTO
 {
     public class ShowCharacterDTO
     {

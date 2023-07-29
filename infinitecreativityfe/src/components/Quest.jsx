@@ -38,7 +38,7 @@ function Quest(props) {
       <TableCell>
         <Box>
           {props.quest.rewards.map((x) => (
-            <Item item={x}></Item>
+            <Item item={x} key={x.id}></Item>
           ))}
           GÓD: {props.quest.cashReward}
         </Box>

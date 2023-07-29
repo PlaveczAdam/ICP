@@ -5,6 +5,9 @@ namespace InfiniteCreativity.Services
 {
     public interface ICharacterService
     {
-        public Task<Character> CreateCharacter(CreateCharacterDTO character);
+        public Task<ShowCharacterDTO> CreateCharacter(CreateCharacterDTO character);
+        public Task<ShowEquipmentDTO> GetEquipment(int characterId);
+        public Task<Character> GetCharacterById(int characterId, Player currentPlayer, bool withEquipment = false);
+        public Task EquipEquipment(int characterId, int itemId);
     }
 }

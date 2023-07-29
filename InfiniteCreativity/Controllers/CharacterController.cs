@@ -22,5 +22,17 @@ namespace InfiniteCreativity.Controllers
         {
             await _characterService.CreateCharacter(newCharacter);
         }
+
+        [HttpGet, Route("equipment/{characterId}")]
+        public async Task<ShowEquipmentDTO> GetEquipment(int characterId)
+        { 
+            return await _characterService.GetEquipment(characterId);
+        }
+
+        [HttpPut, Route("equipment/{characterId}/{itemId}")]
+        public async Task EquipEquipment(int characterId, int itemId)
+        { 
+            await _characterService.EquipEquipment(characterId, itemId);
+        }
     }
 }

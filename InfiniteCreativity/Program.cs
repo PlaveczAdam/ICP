@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Serialization;
 using System.Numerics;
 using System.Reflection;
 
@@ -16,7 +18,12 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers().AddNewtonsoftJson();
+builder.Services.AddControllers().AddNewtonsoftJson((o) => {
+    o.SerializerSettings.Converters.Add(new StringEnumConverter
+    {
+        NamingStrategy = new CamelCaseNamingStrategy()
+    });
+});
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -71,6 +78,7 @@ builder.Services
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddScoped<PasswordHasher<Player>>();
 builder.Services.AddAutoMapper(typeof(MapperProfile).Assembly);
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
