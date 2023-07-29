@@ -88,6 +88,7 @@ function Quests(props) {
                 <TableCell>Name</TableCell>
                 <TableCell>Description</TableCell>
                 <TableCell>Progress</TableCell>
+                <TableCell>Reward</TableCell>
                 <TableCell></TableCell>
               </TableRow>
             </TableHead>

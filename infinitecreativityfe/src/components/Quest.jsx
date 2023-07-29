@@ -3,6 +3,7 @@ import { LoadingButton } from "@mui/lab";
 import LinearProgress from "@mui/material/LinearProgress";
 import { useState, useContext } from "react";
 import { InventoryContext } from "./InventoryContextProvider";
+import Item from "./Item";
 
 function Quest(props) {
   const inventoryCTX = useContext(InventoryContext);
@@ -15,8 +16,7 @@ function Quest(props) {
       { method: "PUT" }
     );
     const newQuestState = await p.json();
-    if(newQuestState.isDone)
-    {
+    if (newQuestState.isDone) {
       inventoryCTX.refresh();
     }
     props.onQuestChange(newQuestState);
@@ -36,6 +36,14 @@ function Quest(props) {
         <Box minWidth={60}>{props.quest.progression}%</Box>
       </TableCell>
       <TableCell>
+        <Box>
+          {props.quest.rewards.map((x) => (
+            <Item item={x}></Item>
+          ))}
+          GÓD: {props.quest.cashReward}
+        </Box>
+      </TableCell>
+      <TableCell>
         <LoadingButton
           onClick={() => {
             makeProgress();
@@ -43,9 +51,7 @@ function Quest(props) {
           loading={isLoading}
           disabled={props.quest.progression >= 100}
         >
-          <Box>
-            PROGRESS 1-50
-          </Box>
+          <Box>PROGRESS 1-50</Box>
         </LoadingButton>
       </TableCell>
     </TableRow>
