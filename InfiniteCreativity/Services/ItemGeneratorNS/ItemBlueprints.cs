@@ -12,6 +12,7 @@ namespace InfiniteCreativity.Services.ItemGeneratorNS
             new Melee
             {
                 Name = "WEPÖN",
+                ImageName = ImageName.Sword,
                 Description = "nincs nemis volt",
                 ItemType = ItemType.Weapon,
                 WeaponType = WeaponType.Sword,
@@ -26,6 +27,7 @@ namespace InfiniteCreativity.Services.ItemGeneratorNS
             new Ranged
             {
                 Name = "RANGEDWEPÖN",
+                ImageName = ImageName.Bow,
                 Description = "nincs nemis volt123",
                 ItemType = ItemType.Weapon,
                 WeaponType = WeaponType.Bow,
@@ -40,6 +42,7 @@ namespace InfiniteCreativity.Services.ItemGeneratorNS
             new Melee
             {
                 Name = "PointyWEPÖN",
+                ImageName = ImageName.Spear,
                 Description = "nincs nemis volt",
                 ItemType = ItemType.Weapon,
                 WeaponType = WeaponType.Spear,
@@ -53,6 +56,7 @@ namespace InfiniteCreativity.Services.ItemGeneratorNS
             },
             new Head{ 
                 Name = "Bucket",
+                ImageName = ImageName.Armor,
                 Description = "without water",
                 ArmorType = ArmorType.Head,
                 ItemType = ItemType.Armor,
@@ -62,6 +66,7 @@ namespace InfiniteCreativity.Services.ItemGeneratorNS
             },
             new Shoulder{
                 Name = "Stripe",
+                ImageName = ImageName.Armor,
                 Description = "you did not earn it",
                 ArmorType = ArmorType.Shoulder,
                 ItemType = ItemType.Armor,
@@ -71,6 +76,7 @@ namespace InfiniteCreativity.Services.ItemGeneratorNS
             },
             new Chest{
                 Name = "Apron",
+                ImageName = ImageName.Armor,
                 Description = "bruh",
                 ArmorType = ArmorType.Chest,
                 ItemType = ItemType.Armor,
@@ -80,6 +86,7 @@ namespace InfiniteCreativity.Services.ItemGeneratorNS
             },
             new Hand{
                 Name = "HoboGloves",
+                ImageName = ImageName.Armor,
                 Description = "in case of emergency",
                 ArmorType = ArmorType.Hand,
                 ItemType = ItemType.Armor,
@@ -89,6 +96,7 @@ namespace InfiniteCreativity.Services.ItemGeneratorNS
             },
             new Leg{
                 Name = "Shorts",
+                ImageName = ImageName.Armor,
                 Description = "out of ideas",
                 ArmorType = ArmorType.Leg,
                 ItemType = ItemType.Armor,
@@ -98,6 +106,7 @@ namespace InfiniteCreativity.Services.ItemGeneratorNS
             },
             new Boot{
                 Name = "FlipFlop",
+                ImageName = ImageName.Armor,
                 Description = "secound part indicates what will happen",
                 ArmorType = ArmorType.Boot,
                 ItemType = ItemType.Armor,

@@ -33,7 +33,7 @@ namespace InfiniteCreativity.Services
             var currentPlayer = await _playerService.GetCurrentPlayer();
             var character = GetCharacterById(characterId, currentPlayer);
 
-            var quests = _context.Quest.Where(x => x.Character.Id == character.Id);
+            var quests = _context.Quest.Include((x)=>x.Rewards).Where(x => x.Character.Id == character.Id);
 
             return _mapper.Map<IEnumerable<ShowQuestDTO>>(quests);
         }
@@ -57,6 +57,7 @@ namespace InfiniteCreativity.Services
             if (q.Progression == 100)
             {
                 q.Rewards.ToList().ForEach(x => x.Player = currentPlayer);
+                currentPlayer.Purse += q.CashReward;
                 q.IsDone = true;
 
                 await _context.SaveChangesAsync();
