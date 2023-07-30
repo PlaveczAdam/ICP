@@ -6,6 +6,7 @@ namespace InfiniteCreativity.Services
 {
     public interface IItemService
     {
+        public Task DeleteItems(DeleteItemsDTO items);
         public Task<IEnumerable<ShowItemDTO>> GetAllItems();
     }
 }

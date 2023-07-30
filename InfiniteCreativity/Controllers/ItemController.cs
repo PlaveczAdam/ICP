@@ -25,5 +25,11 @@ namespace InfiniteCreativity.Controllers
             var newItem = await _itemService.GetAllItems();
             return newItem;
         }
+
+        [HttpDelete]
+        public async Task DeleteItems([FromBody]DeleteItemsDTO items)
+        {
+            await _itemService.DeleteItems(items);
+        }
     }
 }

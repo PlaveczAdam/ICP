@@ -39,7 +39,7 @@ function Quest(props) {
         <Box minWidth={60}>{props.quest.progression}%</Box>
       </TableCell>
       <TableCell>
-        <Box>
+        {!props.quest.isDone?<Box>
           <Box>
             {props.quest.rewards.map((x) => (
               <Item item={x} key={x.id}></Item>
@@ -48,7 +48,7 @@ function Quest(props) {
 
           <Box>GÓD: {props.quest.cashReward}</Box>
           <Box>XP: {props.quest.levelReward.toFixed(2)}</Box>
-        </Box>
+        </Box>:<Box>Claimed</Box>}
       </TableCell>
       <TableCell>
         <LoadingButton

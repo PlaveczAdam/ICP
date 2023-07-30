@@ -1,15 +1,57 @@
 import { InventoryContext } from "./InventoryContextProvider";
-import { useContext } from 'react';
-import { Box } from '@mui/material';
-import Item from "./Item"
+import { useContext, useState } from "react";
+import { Box, Portal, Collapse } from "@mui/material";
+import Item from "./Item";
+import { LoadingButton } from "@mui/lab";
 
-function Inventory(props)
-{
-    const inventoryCTX = useContext(InventoryContext);
+function Inventory(props) {
+  const inventoryCTX = useContext(InventoryContext);
+  const [selectedItems, setSelectedItems] = useState([]);
 
-    return<Box display="flex" flexWrap="wrap" gap="2px">
-        {inventoryCTX.inventory.map((x)=><Item item={x} key={x.id}></Item>)}
+  async function handleDelete() {
+    let res = await fetch("/api/item", {
+      method: "DELETE",
+      body: JSON.stringify({ items: selectedItems.map((x) => x.id) }),
+      headers: { "Content-Type": "application/json" },
+    });
+    if(res.ok)
+    {
+        setSelectedItems([]);
+        inventoryCTX.refresh();
+    }
+  }
+  return (
+    <Box display="flex" flexWrap="wrap" gap="2px">
+      <Portal container={() => document.getElementById("inventoryPanel")}>
+        <Collapse in appear>
+          <LoadingButton
+            disabled={selectedItems.length === 0}
+            onClick={() => handleDelete()}
+          >
+            Delete Item(s)
+          </LoadingButton>
+        </Collapse>
+      </Portal>
+      {inventoryCTX.inventory.map((x) => {
+        let selected = selectedItems.includes(x);
+        return (
+          <Item
+            item={x}
+            key={x.id}
+            selected={selected}
+            interactive
+            onClick={() => {
+              if (selected) {
+                setSelectedItems((old) => old.filter((y) => y !== x));
+              } else {
+                setSelectedItems((old) => [...old, x]);
+              }
+            }}
+          ></Item>
+        );
+      })}
     </Box>
+  );
 }
 
 export default Inventory;

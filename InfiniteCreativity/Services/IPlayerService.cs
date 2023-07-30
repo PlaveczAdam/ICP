@@ -7,7 +7,7 @@ namespace InfiniteCreativity.Services
     {
         public Task CreatePlayer(CreatePlayerDTO newPlayer);
         public Task<int> GetPlayerIdIfValid(LoginPlayerDTO player);
-        public Task<Player> GetCurrentPlayer();
+        public Task<Player> GetCurrentPlayer(bool withInventory=false);
         public Task<ShowPlayerDTO> GetCurrentPlayerDTO();
     }
 }

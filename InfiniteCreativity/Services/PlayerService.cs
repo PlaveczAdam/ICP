@@ -68,15 +68,19 @@ namespace InfiniteCreativity.Services
             return p.Id;
         }
 
-        public async Task<Player> GetCurrentPlayer()
+        public async Task<Player> GetCurrentPlayer(bool withInventory = false)
         {
             var userId = int.Parse(
                 _contextAccessor.HttpContext!.User.Claims
                     .FirstOrDefault(x => x.Type == ClaimTypes.Sid)!
                     .Value
             );
-
-            var user = await _context.Player.Include(x => x.Characters).FirstAsync(x => x.Id == userId); ;
+            IQueryable<Player> userBase = _context.Player;
+            if (withInventory)
+            {
+                userBase = userBase.Include(x => x.Inventory);
+            }
+            var user = await userBase.Include(x => x.Characters).FirstAsync(x => x.Id == userId); ;
             return user;
         }
 

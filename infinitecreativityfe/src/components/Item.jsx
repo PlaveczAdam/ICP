@@ -1,6 +1,7 @@
 import { Box, Tooltip } from "@mui/material";
 import { itemTypeName } from "../utils/OptionNames";
 import { itemImages } from "../utils/ImportUtils";
+import PriceCheckOutlinedIcon from "@mui/icons-material/PriceCheckOutlined";
 
 function Item(props) {
   const tooltipContent = props.item ? (
@@ -16,6 +17,7 @@ function Item(props) {
   return (
     <Tooltip title={tooltipContent} arrow disableInteractive>
       <Box
+        position="relative"
         width="50px"
         height="50px"
         display="flex"
@@ -32,13 +34,26 @@ function Item(props) {
         onClick={() => props.onClick?.()}
       >
         {props.item ? (
-          <Box
-            component="img"
-            maxWidth="100%"
-            maxHeight="100%"
-            src={itemImages[props.item.imageName]}
-            alt={props.item.name}
-          />
+          <>
+            <Box
+              component="img"
+              maxWidth="100%"
+              maxHeight="100%"
+              src={itemImages[props.item.imageName]}
+              alt={props.item.name}
+            />
+            {props.selected && (
+              <PriceCheckOutlinedIcon
+                sx={{
+                  position: "absolute",
+                  backgroundColor: "#000000aa",
+                  color: "#fff",
+                  top: 0,
+                  left: 0,
+                }}
+              ></PriceCheckOutlinedIcon>
+            )}
+          </>
         ) : null}
       </Box>
     </Tooltip>

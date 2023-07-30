@@ -1,8 +1,6 @@
-import { Box, Portal, Button, Collapse } from "@mui/material";
+import { Box, Portal, Button } from "@mui/material";
 import { useContext, useState } from "react";
 import { UserContext } from "./UserContextProvider";
-import Character from "./Character";
-import CharacterCreation from "./CharacterCreation";
 import {
   BrowserRouter as Router,
   Routes,
@@ -14,7 +12,6 @@ import InventoryContextProvider from "./InventoryContextProvider";
 
 function Account(props) {
   const userCTX = useContext(UserContext);
-  const [checked, setChecked] = useState(false);
 
   if (!userCTX.user) {
     return null;
@@ -42,7 +39,6 @@ function Account(props) {
                 width: "100%",
               }}
               to="characters"
-              onClick={() => setChecked(false)}
             >
               Characters
             </Button>
@@ -54,7 +50,6 @@ function Account(props) {
               }}
               component={Link}
               to="inventory"
-              onClick={() => setChecked(true)}
             >
               Inventory
             </Button>
@@ -68,8 +63,7 @@ function Account(props) {
                 },
               }}
             >
-              <Box>
-                <Collapse in={checked}>Content here</Collapse>
+              <Box id="inventoryPanel">
               </Box>
             </Box>
           </Box>
