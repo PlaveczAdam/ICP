@@ -22,6 +22,7 @@ namespace InfiniteCreativity.Data
         public DbSet<Hand> Hand { get; set; }
         public DbSet<Leg> Leg { get; set; }
         public DbSet<Boot> Boot { get; set; }
+        public DbSet<Listing> Listing { get; set; }
 
     }
 }

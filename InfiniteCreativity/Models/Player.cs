@@ -10,5 +10,6 @@ namespace InfiniteCreativity.Models
         public double Purse { get; set; }
         public IEnumerable<Item>? Inventory { get; set; }
         public ICollection<Character> Characters { get; set; }
+        public IEnumerable<Listing> Listing { get; set; }
     }
 }

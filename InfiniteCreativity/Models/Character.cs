@@ -21,5 +21,6 @@ namespace InfiniteCreativity.Models
         public Leg? Leg { get; set; }
         public Boot? Boot { get; set; }
         public Weapon? Weapon { get; set; }
+        public Player Player { get; set; }
     }
 }

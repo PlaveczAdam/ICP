@@ -12,6 +12,9 @@ import { Box, Button } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { purple, teal } from "@mui/material/colors";
 import Inventory from './components/Inventory';
+import Market from './components/Market';
+import CreateListing from './components/CreateListing';
+import MyListings from './components/MyListings';
 
 const theme = createTheme({
   palette: {
@@ -254,6 +257,22 @@ function App() {
                       Account
                     </Button>
                   )}
+                  {userCTX.user && (
+                    <Button
+                      color={
+                        activeButton === "market"
+                          ? "activeButtonColor"
+                          : "primary"
+                      }
+                      component={Link}
+                      to="/market/myListings"
+                      onClick={() => {
+                        setActiveButton("market");
+                      }}
+                    >
+                      Market
+                    </Button>
+                  )}
                 </Box>
                 <Box sx={{ flexShrink: "1" }}>
                   {userCTX.user && (
@@ -325,7 +344,10 @@ function App() {
                       path="/registration"
                       element={<Registration />}
                     ></Route>
-
+                    <Route path="/market" element={<Market></Market>}>
+                      <Route path="createListing" element={<CreateListing></CreateListing>}></Route>
+                      <Route path="myListings" element={<MyListings></MyListings>}></Route>
+                    </Route>
                     <Route path="/account" element={<Account />}>
                       <Route path="characters" element={<Characters />}></Route>
                       <Route path="inventory" element={<Inventory />}></Route>

@@ -9,5 +9,6 @@ namespace InfiniteCreativity.Services
         public Task<ShowEquipmentDTO> GetEquipment(int characterId);
         public Task<Character> GetCharacterById(int characterId, Player currentPlayer, bool withEquipment = false);
         public Task EquipEquipment(int characterId, int itemId);
+        public Task UnequipItemFromAllCharacter(int itemId);
     }
 }

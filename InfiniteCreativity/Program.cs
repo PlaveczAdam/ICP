@@ -53,6 +53,7 @@ builder.Services.AddScoped<IPlayerService, PlayerService>();
 builder.Services.AddScoped<IItemService, ItemService>();
 builder.Services.AddScoped<ICharacterService, CharacterService>();
 builder.Services.AddScoped<IQuestService, QuestService>();
+builder.Services.AddScoped<IListingService, ListingService>();
 
 builder.Services.AddScoped<QuestGenerator>();
 builder.Services.AddScoped<ItemGenerator>();

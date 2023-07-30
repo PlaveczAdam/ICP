@@ -97,5 +97,45 @@ namespace InfiniteCreativity.Services
             }
             return character;
         }
+
+        public async Task UnequipItemFromAllCharacter(int itemId)
+        {
+            var currentPlayer = await _playerService.GetCurrentPlayer();
+            var item = await _context.Item.FindAsync(itemId);
+
+            var charactersWithItem = await _context.Character
+                .Include((x=>x.Head))
+                .Include((x => x.Shoulder))
+                .Include((x => x.Hand))
+                .Include((x => x.Chest))
+                .Include((x => x.Leg))
+                .Include((x => x.Boot))
+                .Include((x => x.Weapon))
+                .Where((x) =>
+                x.Player.Id == currentPlayer.Id && (
+                    (x.Head!=null && x.Head.Id == itemId) ||
+                    (x.Shoulder != null && x.Shoulder.Id == itemId) ||
+                    (x.Hand != null && x.Hand.Id == itemId) ||
+                    (x.Chest != null && x.Chest.Id == itemId) ||
+                    (x.Leg != null && x.Leg.Id == itemId) ||
+                    (x.Boot != null && x.Boot.Id == itemId) ||
+                    (x.Weapon != null && x.Weapon.Id == itemId)
+            )).ToListAsync();
+
+            charactersWithItem.ForEach((x) => {
+                switch (item) {
+                    case Boot boot:
+                        x.Boot = null; break;
+                    case Head head: x.Head = null; break;
+                    case Shoulder shoulder: x.Shoulder = null; break;
+                    case Chest chest: x.Chest = null; break;
+                    case Hand hand: x.Hand = null; break;
+                    case Leg leg: x.Leg = null; break;
+                    case Weapon weapon: x.Weapon = null; break;
+                } 
+            }
+            );
+            await _context.SaveChangesAsync();
+        }
     }
 }

@@ -33,6 +33,7 @@ namespace InfiniteCreativity.Mappers
             CreateMap<Character, ShowCharacterDTO>();
             CreateMap<Character, ShowEquipmentDTO>();
 
+            CreateMap<Listing, ShowListingDTO>();
 
             /*CreateMap<Item, ShowMeleeDTO>().ConstructUsing((source, context) => context.Mapper.Map<ShowMeleeDTO>(source as Melee));*/
         }
