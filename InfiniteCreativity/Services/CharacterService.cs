@@ -34,6 +34,9 @@ namespace InfiniteCreativity.Services
             var currentPlayer = await _playerService.GetCurrentPlayer();
             var newCharacter = _mapper.Map<Character>(character);
 
+            newCharacter.Level = 1;
+            newCharacter.BaseHealth = 100;
+
             currentPlayer.Characters.Add(newCharacter);
             await _context.SaveChangesAsync();
             return _mapper.Map<ShowCharacterDTO>(newCharacter);

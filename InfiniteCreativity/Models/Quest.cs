@@ -10,6 +10,7 @@ namespace InfiniteCreativity.Models
         public double Progression { get; set; }
         public IEnumerable<Item> Rewards { get; set; }
         public double CashReward { get; set; }
+        public double LevelReward { get; set; }
         public Character Character { get; set; }
         public bool IsDone { get; set; }
     }

@@ -9,5 +9,6 @@
         public bool IsDone { get; set; }
         public IEnumerable<ShowItemDTO> Rewards { get; set; }
         public double CashReward { get; set; }
+        public double LevelReward { get; set; }
     }
 }

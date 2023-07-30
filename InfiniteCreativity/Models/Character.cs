@@ -1,6 +1,7 @@
 ﻿using InfiniteCreativity.Models.Armor;
 using InfiniteCreativity.Models.Weapons;
 using System.Collections;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace InfiniteCreativity.Models
 {
@@ -8,6 +9,10 @@ namespace InfiniteCreativity.Models
     {
         public int Id { get; set; }
         public string? Name { get; set; }
+        public double BaseHealth { get; set; }
+        [NotMapped]
+        public double Health => BaseHealth*Level;
+        public double Level { get; set; }
         public IEnumerable<Quest>? Quests { get; set; }
         public Head? Head { get; set; }
         public Shoulder? Shoulder { get; set; }

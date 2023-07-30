@@ -49,7 +49,7 @@ namespace InfiniteCreativity.Services
                 .Include(x => x.Rewards)
                 .FirstOrDefaultAsync(x => x.Id == questId)!
                 ?? throw new UnauthorizedOperationException();
-            var character = _characterService.GetCharacterById(q.Character.Id, currentPlayer);
+            var character = await _characterService.GetCharacterById(q.Character.Id, currentPlayer);
             if (q.IsDone)
             {
                 throw new UnauthorizedOperationException();
@@ -61,6 +61,7 @@ namespace InfiniteCreativity.Services
             {
                 q.Rewards.ToList().ForEach(x => x.Player = currentPlayer);
                 currentPlayer.Purse += q.CashReward;
+                character.Level += q.LevelReward;
                 q.IsDone = true;
 
                 await _context.SaveChangesAsync();

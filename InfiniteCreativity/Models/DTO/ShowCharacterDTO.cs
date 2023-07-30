@@ -8,6 +8,8 @@ namespace InfiniteCreativity.Models.DTO
     {
         public int Id { get; set; }
         public string? Name { get; set; }
+        public double Health { get; set; }
+        public double Level { get; set; }
         public int Purse { get; set; }
         public IEnumerable<ShowQuestDTO>? Quests { get; set; }
     }
