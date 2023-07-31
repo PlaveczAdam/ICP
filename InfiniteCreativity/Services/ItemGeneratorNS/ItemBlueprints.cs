@@ -56,7 +56,7 @@ namespace InfiniteCreativity.Services.ItemGeneratorNS
             },
             new Head{ 
                 Name = "Bucket",
-                ImageName = ImageName.Armor,
+                ImageName = ImageName.Head,
                 Description = "without water",
                 ArmorType = ArmorType.Head,
                 ItemType = ItemType.Armor,
@@ -66,7 +66,7 @@ namespace InfiniteCreativity.Services.ItemGeneratorNS
             },
             new Shoulder{
                 Name = "Stripe",
-                ImageName = ImageName.Armor,
+                ImageName = ImageName.Shoulder,
                 Description = "you did not earn it",
                 ArmorType = ArmorType.Shoulder,
                 ItemType = ItemType.Armor,
@@ -76,7 +76,7 @@ namespace InfiniteCreativity.Services.ItemGeneratorNS
             },
             new Chest{
                 Name = "Apron",
-                ImageName = ImageName.Armor,
+                ImageName = ImageName.Chest,
                 Description = "bruh",
                 ArmorType = ArmorType.Chest,
                 ItemType = ItemType.Armor,
@@ -86,7 +86,7 @@ namespace InfiniteCreativity.Services.ItemGeneratorNS
             },
             new Hand{
                 Name = "HoboGloves",
-                ImageName = ImageName.Armor,
+                ImageName = ImageName.Hand,
                 Description = "in case of emergency",
                 ArmorType = ArmorType.Hand,
                 ItemType = ItemType.Armor,
@@ -96,7 +96,7 @@ namespace InfiniteCreativity.Services.ItemGeneratorNS
             },
             new Leg{
                 Name = "Shorts",
-                ImageName = ImageName.Armor,
+                ImageName = ImageName.Leg,
                 Description = "out of ideas",
                 ArmorType = ArmorType.Leg,
                 ItemType = ItemType.Armor,
@@ -106,7 +106,7 @@ namespace InfiniteCreativity.Services.ItemGeneratorNS
             },
             new Boot{
                 Name = "FlipFlop",
-                ImageName = ImageName.Armor,
+                ImageName = ImageName.Boot,
                 Description = "secound part indicates what will happen",
                 ArmorType = ArmorType.Boot,
                 ItemType = ItemType.Armor,
