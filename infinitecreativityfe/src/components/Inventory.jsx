@@ -7,7 +7,8 @@ import { LoadingButton } from "@mui/lab";
 function Inventory(props) {
   const inventoryCTX = useContext(InventoryContext);
   const [selectedItems, setSelectedItems] = useState([]);
-
+  let price = selectedItems.map(x => x.value).reduce((x, y) => x + y, 0);
+  
   async function handleDelete() {
     let res = await fetch("/api/item", {
       method: "DELETE",
@@ -28,7 +29,7 @@ function Inventory(props) {
             disabled={selectedItems.length === 0}
             onClick={() => handleDelete()}
           >
-            Delete Item(s)
+            {`Sell Item(s): $${price}`}
           </LoadingButton>
         </Collapse>
       </Portal>
