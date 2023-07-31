@@ -25,9 +25,16 @@ function Item(props) {
         flexGrow={0}
         flexShrink={0}
         sx={[
+          {
+            background: "rgba(0,105,93,0.7)",
+            width: "70px",
+            height: "70px",
+            borderRadius: "5px",
+            border: "2px solid rgba(0,105,93,1)"
+          },
           props.interactive && {
             cursor: "pointer",
-            "&:hover": { opacity: 0.8 },
+            "&:hover": { background: "rgba(0,105,93,1)", opacity: 1 },
             transition: (theme) => theme.transitions.create("opacity"),
           },
         ]}
