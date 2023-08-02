@@ -3,27 +3,36 @@ import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
+import {CircularProgress} from "@mui/material";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 function Registration(props){
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
+    const [isFailed, setIsFailed] = useState(false);
     const navigate = useNavigate();
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+        setIsLoading(true);
         const res = await fetch("/api/player", {
             method:"Post",
             headers:{"Content-Type":"application/json"},
             body:JSON.stringify({name:username, password:password}),
         });
         if(res.ok)
-        {
+        {setIsFailed(false);
+          setIsLoading(false);
           navigate("/");
           return;
         }
-        alert("Username already exists.");
+        setIsFailed(true);
+        setIsLoading(false);
+        setTimeout(() => {
+            setIsFailed(false);
+          }, 2000)
         console.log(await res.json());
       };
     
@@ -48,6 +57,7 @@ function Registration(props){
             </Typography>
             <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
               <TextField
+                error={isFailed}
                 margin="normal"
                 required
                 fullWidth
@@ -60,6 +70,8 @@ function Registration(props){
                 onChange={(e)=>setUsername(e.target.value)}
               />
               <TextField
+                error={isFailed}
+                helperText="Username already exists."
                 margin="normal"
                 required
                 fullWidth
@@ -77,7 +89,7 @@ function Registration(props){
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
               >
-                Create Account
+                {isLoading ? <CircularProgress color="inherit" style={{height: "24px", width: "24px"}}/> : "Create Account"}
               </Button>
             </Box>
           </Box>
