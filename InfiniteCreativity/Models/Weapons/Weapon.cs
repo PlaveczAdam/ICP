@@ -2,7 +2,7 @@
 
 namespace InfiniteCreativity.Models.Weapons
 {
-    public class Weapon : Item
+    public class Weapon : Equippable
     {
         public WeaponType WeaponType { get; set; }
         public double Damage { get; set; }
@@ -10,6 +10,5 @@ namespace InfiniteCreativity.Models.Weapons
         public double Range { get; set; }
         public double CritChance { get; set; }
         public double CritMultiplier { get; set; }
-        public bool IsEquipped { get; set; }
     }
 }

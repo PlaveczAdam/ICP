@@ -2,11 +2,10 @@
 
 namespace InfiniteCreativity.Models.Armor
 {
-    public class Armor:Item
+    public class Armor:Equippable
     {
         public ArmorType ArmorType { get; set; }
         public double ArmorValue { get; set; }
-        public bool IsEquipped { get; set; }
 
     }
 }

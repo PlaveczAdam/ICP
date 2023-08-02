@@ -2,11 +2,10 @@
 
 namespace InfiniteCreativity.Models.DTO.Armor
 {
-    public class ShowArmorDTO : ShowItemDTO
+    public class ShowArmorDTO : ShowEquippableDTO
     {
         public ArmorType ArmorType { get; set; }
         public double ArmorValue { get; set; }
-        public bool IsEquipped { get; set; }
     }
 
 }

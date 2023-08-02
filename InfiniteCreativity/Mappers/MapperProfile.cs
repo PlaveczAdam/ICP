@@ -13,6 +13,7 @@ namespace InfiniteCreativity.Mappers
         public MapperProfile()
         {
             CreateMap<Item, ShowItemDTO>().IncludeAllDerived();
+            CreateMap<Equippable, ShowEquippableDTO>();
             CreateMap<Weapon, ShowWeaponDTO>();
             CreateMap<Melee, ShowMeleeDTO>();
             CreateMap<Ranged, ShowRangedDTO>();

@@ -2,7 +2,7 @@
 
 namespace InfiniteCreativity.Models.DTO.Weapon
 {
-    public class ShowWeaponDTO : ShowItemDTO
+    public class ShowWeaponDTO : ShowEquippableDTO
     {
         public double Damage { get; set; }
         public double AttackSpeed { get; set; }
@@ -10,6 +10,5 @@ namespace InfiniteCreativity.Models.DTO.Weapon
         public double CritChance { get; set; }
         public double CritMultiplier { get; set; }
         public WeaponType WeaponType { get; set; }
-        public bool IsEquipped { get; set; }
     }
 }

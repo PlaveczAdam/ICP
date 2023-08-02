@@ -15,6 +15,7 @@ namespace InfiniteCreativity.Data
         public DbSet<Melee> MeleeWeapon { get; set; }
         public DbSet<Ranged> RangedWeapon { get; set; }
         public DbSet<Item> Item { get; set; }
+        public DbSet<Equippable> Equippable { get; set; }
         public DbSet<Quest> Quest { get; set; }
         public DbSet<Head> Head { get; set; }
         public DbSet<Shoulder> Shoulder { get; set; }
