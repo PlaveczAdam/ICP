@@ -1,42 +1,31 @@
-import Button from "@mui/material/Button";
 import { Box } from "@mui/material";
-import { useState, useEffect } from "react";
 import up from "../img/up.png";
+function TopButton() {
+  const scrollUp = () => {
+    let dialogContent = document.getElementById("dialogContent");
+    dialogContent.scrollIntoView({ behavior: "smooth" });
+  };
 
-export default function ToTopButton() {
-    const [topButton, setTopButton] = useState(false);
-
-    useEffect(() => {
-        const scrollEventListener = () => {
-            if (window.scrollY > 500) {
-                setTopButton(true);
-            } else {
-                setTopButton(false);
-            }
-        };
-
-        window.addEventListener("scroll", scrollEventListener);
-
-        return () => {
-            window.removeEventListener("scroll", scrollEventListener);
-        };
-
-    }, []);
-
-    const scrollUp = () => {
-        window.scrollTo({
-            top: 0,
-            behavior: "smooth",
-        });
-    };
-
-    return (
-        <Box sx={{ zIndex: 999, background: "red", position: "absolute" }}>
-            {topButton && (
-                <Button onClick={scrollUp}>
-                    <img src={up} alt="toTop" />
-                </Button>
-            )}
-        </Box>
-    );
+  return (
+    <>
+      {<Box
+        component="img"
+        src={up}
+        onClick={scrollUp}
+        sx={{
+          "&:hover": { cursor: "pointer" },
+          right: "20px",
+          bottom: "20px",
+          borderRadius: "50%",
+          border: "5px solid purple",
+          backgroundColor: "teal",
+          padding: "5px",
+          position: "fixed",
+          width: "50px",
+          height: "50px"
+        }}>
+      </Box>}
+    </>
+  );
 }
+export default TopButton;
