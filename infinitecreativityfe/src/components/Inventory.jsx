@@ -8,13 +8,12 @@ import { UserContext } from "./UserContextProvider";
 function Inventory(props) {
   const inventoryCTX = useContext(InventoryContext);
   const [selectedItems, setSelectedItems] = useState([]);
-  const [equippedItems, setEquippedItems] = useState([]);
-  const userContext = useContext(UserContext);
   let price = selectedItems.map(x => x.value).reduce((x, y) => x + y, 0);
 
-  useEffect(() => {
-    setEquippedItems(userContext.user.inventory.map((x) => x.isEquipped ? x.id : null));
+ /*  useEffect(() => {
+    inventoryCTX.refresh();
   }, [])
+ */
   
   async function handleDelete() {
     let res = await fetch("/api/item", {
@@ -42,10 +41,8 @@ function Inventory(props) {
       </Portal>
       {inventoryCTX.inventory.map((x) => {
         let selected = selectedItems.includes(x);
-        let equipped = equippedItems.includes(x.id);
         return (
           <Item
-            equippedI={equipped}
             item={x}
             key={x.id}
             selected={selected}

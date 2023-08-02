@@ -43,12 +43,10 @@ function Equipment(props) {
     if (res.ok) {
       const key = armor || weapon;
       setEquipment((old) => ({ ...old, [key]: item }));
+      inventoryCTX.refresh();
     }
   }
 
-  useEffect(() => {
-    inventoryCTX.refresh();
-  }, [armor, weapon]);
 
   return (
     <Box>

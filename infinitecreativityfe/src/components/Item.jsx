@@ -60,7 +60,7 @@ function Item(props) {
                 }}
               ></PriceCheckOutlinedIcon>
             )}
-            {props.equippedI && (
+            {props.item.isEquipped && (
               <StarRoundedIcon sx={{
                 position: "absolute",
                 bottom: 0,

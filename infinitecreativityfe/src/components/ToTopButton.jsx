@@ -1,8 +1,8 @@
 import { Box } from "@mui/material";
 import up from "../img/up.png";
-function TopButton() {
+function TopButton(props) {
   const scrollUp = () => {
-    let dialogContent = document.getElementById("dialogContent");
+    let dialogContent = document.getElementById(props.toId);
     dialogContent.scrollIntoView({ behavior: "smooth" });
   };
 

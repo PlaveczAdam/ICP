@@ -7,7 +7,7 @@ import {
   TableCell,
   TableBody,
 } from "@mui/material";
-import { useState, forwardRef } from "react";
+import { useState, forwardRef, useMemo } from "react";
 import Dialog from "@mui/material/Dialog";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
@@ -30,20 +30,32 @@ function Quests(props) {
   async function getQuests() {
     const res = await fetch(`/api/quest/${props.characterID}`);
     const qs = await res.json();
-    setQuests(rearrangeQuests(qs));
+    setQuests(qs);
   }
   function handleQuestChange(newQuestState) {
     const newQuests = [...quests];
     const idx = newQuests.findIndex((x) => x.id === newQuestState.id);
     newQuests[idx] = newQuestState;
-    setQuests(rearrangeQuests(newQuests));
+    setQuests(newQuests);
   }
-
+/* 
   function rearrangeQuests(qss){
     let done = qss.filter((x) => x.isDone);
     let notDone = qss.filter((x) => !x.isDone);
     return [...notDone, ...done]
+  } */
+
+  function rearrangeQuests(qss){
+    return qss.sort((a,b) => a.isDone-b.isDone);
   }
+  const orderedQuests = useMemo(()=>{
+    if(!quests)
+    {
+      return undefined;
+    }
+    const nq = [...quests];
+    return rearrangeQuests(nq);
+  },[quests])
 
   async function takeQuest() {
     const res = await fetch(`/api/quest/${props.characterID}`, {
@@ -101,7 +113,7 @@ function Quests(props) {
               </TableRow>
             </TableHead>
             <TableBody>
-              {quests.map((x) => (
+              {orderedQuests.map((x) => (
                 <Quest
                   quest={x}
                   onQuestChange={handleQuestChange}
@@ -113,7 +125,7 @@ function Quests(props) {
         ) : (
           <LinearProgress />
         )}
-        <ScrollTop></ScrollTop>
+        <ScrollTop toId="dialogContent"></ScrollTop>
       </Dialog>
     </Box>
   );
