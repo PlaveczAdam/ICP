@@ -1,25 +1,32 @@
 import { InventoryContext } from "./InventoryContextProvider";
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { Box, Portal, Collapse } from "@mui/material";
 import Item from "./Item";
 import { LoadingButton } from "@mui/lab";
+import { UserContext } from "./UserContextProvider";
 
 function Inventory(props) {
   const inventoryCTX = useContext(InventoryContext);
   const [selectedItems, setSelectedItems] = useState([]);
+  let price = selectedItems.map(x => x.value).reduce((x, y) => x + y, 0);
 
+ /*  useEffect(() => {
+    inventoryCTX.refresh();
+  }, [])
+ */
+  
   async function handleDelete() {
     let res = await fetch("/api/item", {
       method: "DELETE",
       body: JSON.stringify({ items: selectedItems.map((x) => x.id) }),
       headers: { "Content-Type": "application/json" },
     });
-    if(res.ok)
-    {
-        setSelectedItems([]);
-        inventoryCTX.refresh();
+    if (res.ok) {
+      setSelectedItems([]);
+      inventoryCTX.refresh();
     }
   }
+
   return (
     <Box display="flex" flexWrap="wrap" gap="2px">
       <Portal container={() => document.getElementById("inventoryPanel")}>
@@ -28,7 +35,7 @@ function Inventory(props) {
             disabled={selectedItems.length === 0}
             onClick={() => handleDelete()}
           >
-            Delete Item(s)
+            {`Sell Item(s): $${price}`}
           </LoadingButton>
         </Collapse>
       </Portal>

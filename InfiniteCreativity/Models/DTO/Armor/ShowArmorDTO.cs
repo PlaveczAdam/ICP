@@ -6,6 +6,7 @@ namespace InfiniteCreativity.Models.DTO.Armor
     {
         public ArmorType ArmorType { get; set; }
         public double ArmorValue { get; set; }
+        public bool IsEquipped { get; set; }
     }
 
 }

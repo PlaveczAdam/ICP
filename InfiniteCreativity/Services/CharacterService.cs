@@ -54,23 +54,46 @@ namespace InfiniteCreativity.Services
             var currentPlayer = await _playerService.GetCurrentPlayer();
             var item = await _context.Item.SingleAsync((x) => x.Id == itemId && x.Player != null && x.Player.Id == currentPlayer.Id);
             var character = await GetCharacterById(characterId, currentPlayer, true);
-
+            
             switch (item)
             {
                 case Head head:
-                    character.Head = head; break;
+                   if(character.Head != null)
+                    {
+                        character.Head.IsEquipped = false;
+                        character.Head = head;
+                        character.Head.IsEquipped = true;
+                    }
+                    else
+                    {
+						character.Head = head;
+						character.Head.IsEquipped = true;
+					}
+                    break;
                 case Shoulder shoulder: 
-                    character.Shoulder = shoulder; break;
+                    character.Shoulder = shoulder;
+					character.Shoulder.IsEquipped = true; 
+                    break;
                 case Chest chest: 
-                    character.Chest = chest; break;
+                    character.Chest = chest;
+					character.Chest.IsEquipped = true; 
+                    break;
                 case Hand hand: 
-                    character.Hand = hand; break;
+                    character.Hand = hand;
+					character.Hand.IsEquipped = true; 
+                    break;
                 case Leg leg: 
-                    character.Leg = leg; break;
+                    character.Leg = leg;
+					character.Leg.IsEquipped = true; 
+                    break;
                 case Boot boot: 
-                    character.Boot = boot; break;
+                    character.Boot = boot;
+					character.Boot.IsEquipped = true; 
+                    break;
                 case Weapon weapon: 
-                    character.Weapon = weapon; break;
+                    character.Weapon = weapon;
+					character.Weapon.IsEquipped = true; 
+                    break;
             }
             await _context.SaveChangesAsync();
         }
@@ -125,13 +148,27 @@ namespace InfiniteCreativity.Services
             charactersWithItem.ForEach((x) => {
                 switch (item) {
                     case Boot boot:
-                        x.Boot = null; break;
-                    case Head head: x.Head = null; break;
-                    case Shoulder shoulder: x.Shoulder = null; break;
-                    case Chest chest: x.Chest = null; break;
-                    case Hand hand: x.Hand = null; break;
-                    case Leg leg: x.Leg = null; break;
-                    case Weapon weapon: x.Weapon = null; break;
+                        x.Boot = null;
+                        x.Boot.IsEquipped = false;
+                        break;
+                    case Head head: x.Head = null;
+						x.Head.IsEquipped = false; 
+                        break;
+                    case Shoulder shoulder: x.Shoulder = null;
+						x.Shoulder.IsEquipped = false; 
+                        break;
+                    case Chest chest: x.Chest = null;
+						x.Chest.IsEquipped = false; 
+                        break;
+                    case Hand hand: x.Hand = null;
+						x.Hand.IsEquipped = false; 
+                        break;
+                    case Leg leg: x.Leg = null;
+						x.Leg.IsEquipped = false; 
+                        break;
+                    case Weapon weapon: x.Weapon = null;
+						x.Weapon.IsEquipped = false; 
+                        break;
                 } 
             }
             );

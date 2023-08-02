@@ -2,7 +2,7 @@ import { Box, Tooltip } from "@mui/material";
 import { itemTypeName } from "../utils/OptionNames";
 import { itemImages } from "../utils/ImportUtils";
 import PriceCheckOutlinedIcon from "@mui/icons-material/PriceCheckOutlined";
-
+import StarRoundedIcon from '@mui/icons-material/StarRounded';
 function Item(props) {
   const tooltipContent = props.item ? (
     <Box>
@@ -25,9 +25,16 @@ function Item(props) {
         flexGrow={0}
         flexShrink={0}
         sx={[
+          {
+            background: "rgba(0,105,93,0.7)",
+            width: "70px",
+            height: "70px",
+            borderRadius: "5px",
+            border: "2px solid rgba(0,105,93,1)"
+          },
           props.interactive && {
             cursor: "pointer",
-            "&:hover": { opacity: 0.8 },
+            "&:hover": { background: "rgba(0,105,93,1)", opacity: 1 },
             transition: (theme) => theme.transitions.create("opacity"),
           },
         ]}
@@ -53,6 +60,14 @@ function Item(props) {
                 }}
               ></PriceCheckOutlinedIcon>
             )}
+            {props.item.isEquipped && (
+              <StarRoundedIcon sx={{
+                position: "absolute",
+                bottom: 0,
+                right: 0,
+                color: "white",
+              }}>
+              </StarRoundedIcon>)}
           </>
         ) : null}
       </Box>

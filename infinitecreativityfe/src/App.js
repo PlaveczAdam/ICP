@@ -162,7 +162,7 @@ const globalTheme = createTheme(theme, {
               borderColor: theme.palette.disabled.text,
               backgroundImage:
                 "linear-gradient(45deg, purple 25%, #000000 25%, #000000 50%, purple 50%, purple 75%, #000000 75%, #000000 100%)",
-              backgroundSize: "74.95px 74.95px",
+              backgroundSize: "50px 50px",
             },
           },
         },
@@ -171,7 +171,7 @@ const globalTheme = createTheme(theme, {
             variant: "contained",
             color: "activeButtonColor",
           },
-          style:{
+          style: {
             backgroundColor: theme.palette.activeButtonColor.main,
           },
         },
@@ -182,7 +182,6 @@ const globalTheme = createTheme(theme, {
 
 function App() {
   const [activeButton, setActiveButton] = useState("home");
-
   const userCTX = useContext(UserContext);
   async function handleLogOut() {
     await fetch("/api/player/logout");
@@ -276,7 +275,7 @@ function App() {
                 </Box>
                 <Box sx={{ flexShrink: "1" }}>
                   {userCTX.user && (
-                    <Box sx={{ display: "flex", flexWrap: "wrap", alignItems:"center" }}>
+                    <Box sx={{ display: "flex", flexWrap: "wrap", alignItems: "center" }}>
                       <Box sx={{ paddingRight: "10px" }}>
                         {userCTX.user.name}
                       </Box>

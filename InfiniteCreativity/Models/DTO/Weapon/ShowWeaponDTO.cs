@@ -10,5 +10,6 @@ namespace InfiniteCreativity.Models.DTO.Weapon
         public double CritChance { get; set; }
         public double CritMultiplier { get; set; }
         public WeaponType WeaponType { get; set; }
+        public bool IsEquipped { get; set; }
     }
 }

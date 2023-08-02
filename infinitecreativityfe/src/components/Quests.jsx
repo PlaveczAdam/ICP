@@ -7,7 +7,7 @@ import {
   TableCell,
   TableBody,
 } from "@mui/material";
-import { useState, forwardRef } from "react";
+import { useState, forwardRef, useMemo } from "react";
 import Dialog from "@mui/material/Dialog";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
@@ -17,6 +17,8 @@ import CloseIcon from "@mui/icons-material/Close";
 import Slide from "@mui/material/Slide";
 import LinearProgress from "@mui/material/LinearProgress";
 import Quest from "./Quest";
+import ScrollTop from "./ToTopButton";
+
 
 const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -25,10 +27,10 @@ const Transition = forwardRef(function Transition(props, ref) {
 function Quests(props) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [quests, setQuests] = useState();
-
   async function getQuests() {
-    const qs = await fetch(`/api/quest/${props.characterID}`);
-    setQuests(await qs.json());
+    const res = await fetch(`/api/quest/${props.characterID}`);
+    const qs = await res.json();
+    setQuests(qs);
   }
   function handleQuestChange(newQuestState) {
     const newQuests = [...quests];
@@ -36,6 +38,24 @@ function Quests(props) {
     newQuests[idx] = newQuestState;
     setQuests(newQuests);
   }
+/* 
+  function rearrangeQuests(qss){
+    let done = qss.filter((x) => x.isDone);
+    let notDone = qss.filter((x) => !x.isDone);
+    return [...notDone, ...done]
+  } */
+
+  function rearrangeQuests(qss){
+    return qss.sort((a,b) => a.isDone-b.isDone);
+  }
+  const orderedQuests = useMemo(()=>{
+    if(!quests)
+    {
+      return undefined;
+    }
+    const nq = [...quests];
+    return rearrangeQuests(nq);
+  },[quests])
 
   async function takeQuest() {
     const res = await fetch(`/api/quest/${props.characterID}`, {
@@ -62,7 +82,7 @@ function Quests(props) {
         onClose={() => setIsModalOpen(false)}
         TransitionComponent={Transition}
       >
-        <AppBar sx={{ position: "relative" }}>
+        <AppBar id="dialogContent" sx={{ position: "relative" }}>
           <Toolbar>
             <IconButton
               edge="start"
@@ -75,7 +95,7 @@ function Quests(props) {
             <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
               Quests
             </Typography>
-            <Button onClick={() => takeQuest()} sx={{boxShadow: "-3px 7px 9px -1px rgba(0,0,0,0.54)"}}>
+            <Button onClick={() => takeQuest()} sx={{ boxShadow: "-3px 7px 9px -1px rgba(0,0,0,0.54)" }}>
               Take Quest
             </Button>
           </Toolbar>
@@ -93,7 +113,7 @@ function Quests(props) {
               </TableRow>
             </TableHead>
             <TableBody>
-              {quests.map((x) => (
+              {orderedQuests.map((x) => (
                 <Quest
                   quest={x}
                   onQuestChange={handleQuestChange}
@@ -105,6 +125,7 @@ function Quests(props) {
         ) : (
           <LinearProgress />
         )}
+        <ScrollTop toId="dialogContent"></ScrollTop>
       </Dialog>
     </Box>
   );

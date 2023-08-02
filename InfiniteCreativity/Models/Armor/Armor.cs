@@ -6,6 +6,7 @@ namespace InfiniteCreativity.Models.Armor
     {
         public ArmorType ArmorType { get; set; }
         public double ArmorValue { get; set; }
+        public bool IsEquipped { get; set; }
 
     }
 }

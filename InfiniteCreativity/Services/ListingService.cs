@@ -40,7 +40,7 @@ namespace InfiniteCreativity.Services
 
         public async Task<IEnumerable<ShowListingDTO>> GetListings()
         {
-            var ltings = await _context.Listing.ToListAsync();
+            var ltings = await _context.Listing.Include((x) => x.Seller).Include((x) => x.Item).ToListAsync();
             return _mapper.Map<List<ShowListingDTO>>(ltings);
         }
 
