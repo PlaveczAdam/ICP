@@ -239,6 +239,10 @@ namespace InfiniteCreativity.Migrations
                         .ValueGeneratedOnUpdateSometimes()
                         .HasColumnType("double precision");
 
+                    b.Property<bool>("IsEquipped")
+                        .ValueGeneratedOnUpdateSometimes()
+                        .HasColumnType("boolean");
+
                     b.HasDiscriminator().HasValue("Boot");
                 });
 
@@ -253,6 +257,10 @@ namespace InfiniteCreativity.Migrations
                     b.Property<double>("ArmorValue")
                         .ValueGeneratedOnUpdateSometimes()
                         .HasColumnType("double precision");
+
+                    b.Property<bool>("IsEquipped")
+                        .ValueGeneratedOnUpdateSometimes()
+                        .HasColumnType("boolean");
 
                     b.HasDiscriminator().HasValue("Chest");
                 });
@@ -269,6 +277,10 @@ namespace InfiniteCreativity.Migrations
                         .ValueGeneratedOnUpdateSometimes()
                         .HasColumnType("double precision");
 
+                    b.Property<bool>("IsEquipped")
+                        .ValueGeneratedOnUpdateSometimes()
+                        .HasColumnType("boolean");
+
                     b.HasDiscriminator().HasValue("Hand");
                 });
 
@@ -283,6 +295,10 @@ namespace InfiniteCreativity.Migrations
                     b.Property<double>("ArmorValue")
                         .ValueGeneratedOnUpdateSometimes()
                         .HasColumnType("double precision");
+
+                    b.Property<bool>("IsEquipped")
+                        .ValueGeneratedOnUpdateSometimes()
+                        .HasColumnType("boolean");
 
                     b.HasDiscriminator().HasValue("Head");
                 });
@@ -299,6 +315,10 @@ namespace InfiniteCreativity.Migrations
                         .ValueGeneratedOnUpdateSometimes()
                         .HasColumnType("double precision");
 
+                    b.Property<bool>("IsEquipped")
+                        .ValueGeneratedOnUpdateSometimes()
+                        .HasColumnType("boolean");
+
                     b.HasDiscriminator().HasValue("Leg");
                 });
 
@@ -313,6 +333,10 @@ namespace InfiniteCreativity.Migrations
                     b.Property<double>("ArmorValue")
                         .ValueGeneratedOnUpdateSometimes()
                         .HasColumnType("double precision");
+
+                    b.Property<bool>("IsEquipped")
+                        .ValueGeneratedOnUpdateSometimes()
+                        .HasColumnType("boolean");
 
                     b.HasDiscriminator().HasValue("Shoulder");
                 });
@@ -333,11 +357,20 @@ namespace InfiniteCreativity.Migrations
                     b.Property<double>("Damage")
                         .HasColumnType("double precision");
 
+                    b.Property<bool>("IsEquipped")
+                        .HasColumnType("boolean");
+
                     b.Property<double>("Range")
                         .HasColumnType("double precision");
 
                     b.Property<int>("WeaponType")
                         .HasColumnType("integer");
+
+                    b.ToTable("Item", t =>
+                        {
+                            t.Property("IsEquipped")
+                                .HasColumnName("Weapon_IsEquipped");
+                        });
 
                     b.HasDiscriminator().HasValue("Weapon");
                 });
@@ -345,6 +378,12 @@ namespace InfiniteCreativity.Migrations
             modelBuilder.Entity("InfiniteCreativity.Models.Weapons.Melee", b =>
                 {
                     b.HasBaseType("InfiniteCreativity.Models.Weapons.Weapon");
+
+                    b.ToTable("Item", t =>
+                        {
+                            t.Property("IsEquipped")
+                                .HasColumnName("Weapon_IsEquipped");
+                        });
 
                     b.HasDiscriminator().HasValue("Melee");
                 });
@@ -355,6 +394,12 @@ namespace InfiniteCreativity.Migrations
 
                     b.Property<double>("Reload")
                         .HasColumnType("double precision");
+
+                    b.ToTable("Item", t =>
+                        {
+                            t.Property("IsEquipped")
+                                .HasColumnName("Weapon_IsEquipped");
+                        });
 
                     b.HasDiscriminator().HasValue("Ranged");
                 });
