@@ -29,7 +29,6 @@ function Equipment(props) {
   const [armor, setArmor] = useState("");
   const [weapon, setWeapon] = useState("");
   const inventoryCTX = useContext(InventoryContext);
-
   async function getEquipment() {
     const res = await fetch(`/api/character/equipment/${props.characterID}`);
     let equipment = await res.json();
@@ -46,6 +45,11 @@ function Equipment(props) {
       setEquipment((old) => ({ ...old, [key]: item }));
     }
   }
+
+  useEffect(() => {
+    inventoryCTX.refresh();
+    console.log("test");
+  }, [armor, weapon]);
 
   return (
     <Box>
