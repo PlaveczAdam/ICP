@@ -48,7 +48,6 @@ function Equipment(props) {
 
   useEffect(() => {
     inventoryCTX.refresh();
-    console.log("test");
   }, [armor, weapon]);
 
   return (
