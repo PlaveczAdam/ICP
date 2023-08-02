@@ -86,7 +86,7 @@ namespace InfiniteCreativity.Services
 
         public async Task<ShowPlayerDTO> GetCurrentPlayerDTO()
         {
-            var player = await GetCurrentPlayer();
+            var player = await GetCurrentPlayer(true);
             return _mapper.Map<ShowPlayerDTO>(player);
         }
     }
