@@ -2,7 +2,7 @@ import { Box, Tooltip } from "@mui/material";
 import { itemTypeName } from "../utils/OptionNames";
 import { itemImages } from "../utils/ImportUtils";
 import PriceCheckOutlinedIcon from "@mui/icons-material/PriceCheckOutlined";
-
+import StarRoundedIcon from '@mui/icons-material/StarRounded';
 function Item(props) {
   const tooltipContent = props.item ? (
     <Box>
@@ -60,6 +60,14 @@ function Item(props) {
                 }}
               ></PriceCheckOutlinedIcon>
             )}
+            {props.equippedI && (
+              <StarRoundedIcon sx={{
+                position: "absolute",
+                bottom: 0,
+                right: 0,
+                color: "white",
+              }}>
+              </StarRoundedIcon>)}
           </>
         ) : null}
       </Box>
