@@ -1,19 +1,9 @@
 import { Box, Portal, Button } from "@mui/material";
 import InventoryContextProvider from "./InventoryContextProvider";
 import { useEffect, useState } from "react";
-import Listing from "./Listing";
 import { Link, Outlet } from 'react-router-dom';
 
 function Market(props) {
-  const [listings, setListings] = useState([]);
-
-  async function getListings() {
-    const res = await fetch("/api/listing");
-    const l = await res.json();
-    setListings(l);
-  }
-  useEffect(() => {getListings()}, []);
-
   return (
     <InventoryContextProvider>
       <Portal container={() => document.getElementById("sideBarContent")}>
@@ -64,11 +54,6 @@ function Market(props) {
             </Box>
           </Box>
       </Portal>
-      <Box>
-        {listings.map((x) => (
-          <Listing listing={x} key={x.id}></Listing>
-        ))}
-      </Box>
       <Outlet/>
     </InventoryContextProvider>
   );
