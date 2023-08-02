@@ -9,7 +9,8 @@ import Container from "@mui/material/Container";
 import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from './UserContextProvider';
-
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 function Login(props) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -17,7 +18,7 @@ function Login(props) {
   const [isFailed, setIsFailed] = useState(false);
   const navigate = useNavigate();
   const userCTX = useContext(UserContext);
-
+  
   const handleSubmit = async (event) => {
     event.preventDefault();
     setIsLoading(true);
@@ -33,12 +34,26 @@ function Login(props) {
       userCTX.refresh();
       return;
     }
+    notify();
     setIsFailed(true);
     setIsLoading(false);
     setTimeout(() => {
       setIsFailed(false);
-    }, 2000)
+    }, 2770)
     console.log(await res.json());
+  };
+
+  const notify = () => {
+    toast.error("Invalid Username or Password!", {
+      position: "top-center",
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+    });
   };
 
   return (
@@ -57,6 +72,9 @@ function Login(props) {
 
         }}
       >
+        <Box>
+          <ToastContainer position="absolute" />
+        </Box>
         <Typography component="h1" variant="h5">
           Sign In
         </Typography>
@@ -76,7 +94,6 @@ function Login(props) {
           />
           <TextField
             error={isFailed}
-            helperText="Invalid Username or Password"
             margin="normal"
             required
             fullWidth

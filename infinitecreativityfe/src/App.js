@@ -34,7 +34,6 @@ const theme = createTheme({
       main: "#fff",
     },
     disabled: {
-      //background: repeating-linear-gradient(45deg, green 0, green 25%, #58a 0, #58a 50%);
       main: "rgba(166, 23, 202, 0.4)",
       text: "#fff",
     },

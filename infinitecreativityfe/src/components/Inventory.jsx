@@ -4,22 +4,27 @@ import { Box, Portal, Collapse } from "@mui/material";
 import Item from "./Item";
 import { LoadingButton } from "@mui/lab";
 import { UserContext } from "./UserContextProvider";
+import { ToastContainer, toast, Slide, Flip, cssTransition } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 function Inventory(props) {
   const inventoryCTX = useContext(InventoryContext);
   const [selectedItems, setSelectedItems] = useState([]);
   let price = selectedItems.map(x => x.value).reduce((x, y) => x + y, 0);
-
- /*  useEffect(() => {
-    inventoryCTX.refresh();
-  }, [])
- */
   
   async function handleDelete() {
-    let res = await fetch("/api/item", {
+    let res = await toast.promise(fetch("/api/item", {
       method: "DELETE",
       body: JSON.stringify({ items: selectedItems.map((x) => x.id) }),
       headers: { "Content-Type": "application/json" },
+    }), {
+      pending: "Processing...",
+      success: `You have gained ${price} gold!`,
+      error: "Something went wrong!",
+      theme: "dark",
+      transition: "slide",
+      closeOnClick: true,
+      autoClose: 2000,
     });
     if (res.ok) {
       setSelectedItems([]);
@@ -29,6 +34,9 @@ function Inventory(props) {
 
   return (
     <Box display="flex" flexWrap="wrap" gap="2px">
+      <Box>
+          <ToastContainer autoClose={2000} closeOnClick transition={Slide} position="top-center" theme="dark"/>
+        </Box>
       <Portal container={() => document.getElementById("inventoryPanel")}>
         <Collapse in appear>
           <LoadingButton
