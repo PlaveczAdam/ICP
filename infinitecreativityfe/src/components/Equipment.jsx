@@ -42,7 +42,7 @@ function Equipment(props) {
     );
     if (res.ok) {
       const key = armor || weapon;
-      setEquipment((old) => ({ ...old, [key]: item }));
+      setEquipment((old) => ({ ...old, [key]: {...item, isEquipped:true} }));
       inventoryCTX.refresh();
     }
   }

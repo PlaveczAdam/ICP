@@ -7,7 +7,11 @@ using InfiniteCreativity.Models.DTO;
 using InfiniteCreativity.Models.Enums;
 using InfiniteCreativity.Models.Weapons;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Linq;
+using System.Linq.Expressions;
 using System.Numerics;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace InfiniteCreativity.Services
 {
@@ -58,41 +62,36 @@ namespace InfiniteCreativity.Services
             switch (item)
             {
                 case Head head:
-                   if(character.Head != null)
-                    {
-                        character.Head.IsEquipped = false;
-                        character.Head = head;
-                        character.Head.IsEquipped = true;
-                    }
-                    else
-                    {
-						character.Head = head;
-						character.Head.IsEquipped = true;
-					}
+                    /*  if(character.Head != null)
+                       {
+                           character.Head.IsEquipped = false;
+                           character.Head = head;
+                           character.Head.IsEquipped = true;
+                       }
+                       else
+                       {
+                           character.Head = head;
+                           character.Head.IsEquipped = true;
+                       }*/
+                    ChangeEquipment(character, head, (x) => x.Head);
                     break;
-                case Shoulder shoulder: 
-                    character.Shoulder = shoulder;
-					character.Shoulder.IsEquipped = true; 
+                case Shoulder shoulder:
+                    ChangeEquipment(character, shoulder, (x) => x.Shoulder);
                     break;
-                case Chest chest: 
-                    character.Chest = chest;
-					character.Chest.IsEquipped = true; 
+                case Chest chest:
+                    ChangeEquipment(character, chest, (x) => x.Chest);
                     break;
-                case Hand hand: 
-                    character.Hand = hand;
-					character.Hand.IsEquipped = true; 
+                case Hand hand:
+                    ChangeEquipment(character, hand, (x) => x.Hand);
                     break;
-                case Leg leg: 
-                    character.Leg = leg;
-					character.Leg.IsEquipped = true; 
+                case Leg leg:
+                    ChangeEquipment(character, leg, (x) => x.Leg);
                     break;
-                case Boot boot: 
-                    character.Boot = boot;
-					character.Boot.IsEquipped = true; 
+                case Boot boot:
+                    ChangeEquipment(character, boot, (x) => x.Boot);
                     break;
-                case Weapon weapon: 
-                    character.Weapon = weapon;
-					character.Weapon.IsEquipped = true; 
+                case Weapon weapon:
+                    ChangeEquipment(character, weapon, (x) => x.Weapon);
                     break;
             }
             await _context.SaveChangesAsync();
@@ -148,31 +147,54 @@ namespace InfiniteCreativity.Services
             charactersWithItem.ForEach((x) => {
                 switch (item) {
                     case Boot boot:
-                        x.Boot = null;
-                        x.Boot.IsEquipped = false;
+                        ChangeEquipment(x, null, (y) => y.Boot);
                         break;
-                    case Head head: x.Head = null;
-						x.Head.IsEquipped = false; 
+                    case Head head:
+                        ChangeEquipment(x, null, (y) => y.Head);
                         break;
-                    case Shoulder shoulder: x.Shoulder = null;
-						x.Shoulder.IsEquipped = false; 
+                    case Shoulder shoulder:
+                        ChangeEquipment(x, null, (y) => y.Shoulder);
                         break;
-                    case Chest chest: x.Chest = null;
-						x.Chest.IsEquipped = false; 
+                    case Chest chest:
+                        ChangeEquipment(x, null, (y) => y.Chest);
                         break;
-                    case Hand hand: x.Hand = null;
-						x.Hand.IsEquipped = false; 
+                    case Hand hand:
+                        ChangeEquipment(x, null, (y) => y.Hand);
                         break;
-                    case Leg leg: x.Leg = null;
-						x.Leg.IsEquipped = false; 
+                    case Leg leg:
+                        ChangeEquipment(x, null, (y) => y.Leg);
                         break;
-                    case Weapon weapon: x.Weapon = null;
-						x.Weapon.IsEquipped = false; 
+                    case Weapon weapon:
+                        ChangeEquipment(x, null, (y) => y.Weapon);
                         break;
                 } 
             }
             );
             await _context.SaveChangesAsync();
+        }
+
+        private void ChangeEquipment(Character character ,Equippable changeTo, Expression<Func<Character, Equippable>>selector)
+        {
+            var func = selector.Compile();
+            var old = func(character);
+            if (old is not null)
+            {
+                old.EquipCount--;
+            }
+
+            if (changeTo is not null) 
+            {
+                changeTo.EquipCount++;
+            }
+            if (selector.Body is MemberExpression memberExpression)
+            {
+                var propertyInfo = (PropertyInfo)memberExpression.Member;
+                propertyInfo.SetValue(character, changeTo);
+            }
+            else
+            {
+                throw new ArgumentException();
+            }
         }
     }
 }
