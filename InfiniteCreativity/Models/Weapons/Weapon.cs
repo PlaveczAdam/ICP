@@ -10,5 +10,6 @@ namespace InfiniteCreativity.Models.Weapons
         public double Range { get; set; }
         public double CritChance { get; set; }
         public double CritMultiplier { get; set; }
+        public bool IsEquipped { get; set; }
     }
 }
