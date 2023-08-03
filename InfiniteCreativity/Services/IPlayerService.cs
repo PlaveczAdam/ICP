@@ -9,5 +9,6 @@ namespace InfiniteCreativity.Services
         public Task<int> GetPlayerIdIfValid(LoginPlayerDTO player);
         public Task<Player> GetCurrentPlayer(bool withInventory=false);
         public Task<ShowPlayerDTO> GetCurrentPlayerDTO();
+        public Task<ShowWalletDTO> GetWallet();
     }
 }

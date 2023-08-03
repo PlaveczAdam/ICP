@@ -47,6 +47,10 @@ namespace InfiniteCreativity.Services
                 {
                     ltings = ltings.Where((x) => x.Seller.Id == listingFilter.SellerId);
                 }
+                if (listingFilter.NotSellerId is not null)
+                {
+                    ltings = ltings.Where((x) => x.Seller.Id != listingFilter.NotSellerId);
+                }
             }
             var listingResult = await ltings.ToListAsync();
             return _mapper.Map<List<ShowListingDTO>>(listingResult);
@@ -59,12 +63,12 @@ namespace InfiniteCreativity.Services
                     .Include(x => x.Item)
                     .SingleAsync(x=>x.Id==id);
             var player = await _playerService.GetCurrentPlayer();
-            if (player.Purse < lting.Price)
+            if (player.Money < lting.Price)
             {
                 throw new InvalidOperationException();
             }
-            player.Purse -= lting.Price;
-            lting.Seller.Purse += lting.Price;
+            player.Money -= lting.Price;
+            lting.Seller.Money += lting.Price;
             lting.Item.Player = player;
             _context.Remove(lting);
             await _context.SaveChangesAsync();

@@ -264,7 +264,7 @@ function App() {
                           : "primary"
                       }
                       component={Link}
-                      to="/market/myListings"
+                      to="/market/allListings"
                       onClick={() => {
                         setActiveButton("market");
                       }}

@@ -40,7 +40,7 @@ namespace InfiniteCreativity.Services
             if (p == null)
             {
                 var player = _mapper.Map<Player>(newPlayer);
-                player.Purse = _starterPurse;
+                player.Money = _starterPurse;
                 player.Password = _passwordHasher.HashPassword(player, player.Password);
 
                 _context.Player.Add(player);
@@ -88,6 +88,12 @@ namespace InfiniteCreativity.Services
         {
             var player = await GetCurrentPlayer();
             return _mapper.Map<ShowPlayerDTO>(player);
+        }
+
+        public async Task<ShowWalletDTO> GetWallet()
+        {
+            var player = await GetCurrentPlayer();
+            return _mapper.Map<ShowWalletDTO>(player);
         }
     }
 }

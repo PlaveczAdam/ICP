@@ -2,10 +2,13 @@ import { Box, Button } from "@mui/material";
 import { useContext, useEffect } from "react";
 import { UserContext } from "./UserContextProvider";
 import { InventoryContext } from "./InventoryContextProvider";
+import {WalletContext} from "./WalletContextProvider";
+import DoubleDisplay from "./DoubleDisplay";
 
 function Listing(props) {
   const userCTX = useContext(UserContext);
   const inventoryCTX = useContext(InventoryContext);
+  const walletCTX = useContext(WalletContext);
   const currentDate = new Date();
   const parseDate = new Date(props.listing.listingDate);
   const timeDifference = currentDate.getTime() - parseDate.getTime();
@@ -17,6 +20,7 @@ function Listing(props) {
     });
     if (res.ok) {
       inventoryCTX.refresh();
+      walletCTX.refresh();
       props.getListings();
     }
   }
@@ -29,16 +33,11 @@ function Listing(props) {
       props.getListings();
     }
   }
-  if (!userCTX.user) {
-    return null;
-  }
 
   return (
     <Box
       sx={{
         border: "2px solid rgb(0, 105,94,1)",
-        minWidth: "300px",
-        maxHeight: "300px",
         borderRadius: "5px",
         background: "rgb(0,105,94,0.7)",
         display: "flex",
@@ -48,19 +47,18 @@ function Listing(props) {
         alignItems: "center",
         justifyContent: "left",
         textAlign: "left",
-        flexWrap: "wrap",
         gap: "20px",
       }}
     >
       <Box flexGrow={1}>
         <Box>{`Seller: ${props.listing.seller.name}`}</Box>
-        <Box>{`Price: ${props.listing.price}`}</Box>
+        <Box>Price: <DoubleDisplay value={props.listing.price} precision={0}></DoubleDisplay></Box>
         <Box>{`Item: ${props.listing.item.name}`}</Box>
         <Box sx={{ fontSize: "small" }}>{`${daysPassed} days ago`}</Box>
       </Box>
       <Box flexShrink={1}>
         {userCTX.user.id !== props.listing.seller.id && (
-          <Button onClick={() => sell()}>Buy</Button>
+          <Button onClick={() => sell()} disabled={props.listing.price>walletCTX.wallet.money}>Buy</Button>
         )}
         {userCTX.user.id === props.listing.seller.id && (
           <Button onClick={() => cancel()}>Cancel</Button>

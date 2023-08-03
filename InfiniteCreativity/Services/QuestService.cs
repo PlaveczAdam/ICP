@@ -60,7 +60,7 @@ namespace InfiniteCreativity.Services
             if (q.Progression == 100)
             {
                 q.Rewards.ToList().ForEach(x => x.Player = currentPlayer);
-                currentPlayer.Purse += q.CashReward;
+                currentPlayer.Money += q.CashReward;
                 character.Level += q.LevelReward;
                 q.IsDone = true;
 
