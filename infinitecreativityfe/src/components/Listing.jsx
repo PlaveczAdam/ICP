@@ -2,6 +2,7 @@ import { Box, Button } from "@mui/material";
 import { useContext, useEffect } from "react";
 import { UserContext } from "./UserContextProvider";
 import { InventoryContext } from "./InventoryContextProvider";
+import { itemImages } from "../utils/ImportUtils";
 
 function Listing(props) {
   const userCTX = useContext(UserContext);
@@ -58,6 +59,7 @@ function Listing(props) {
         <Box>{`Item: ${props.listing.item.name}`}</Box>
         <Box sx={{ fontSize: "small" }}>{`${daysPassed} days ago`}</Box>
       </Box>
+      <Box component="img" sx={{padding: "3px", border: "2px dashed black", width: "70px", borderRadius: "5px"}} src={itemImages[props.listing.item.imageName]}></Box>
       <Box flexShrink={1}>
         {userCTX.user.id !== props.listing.seller.id && (
           <Button onClick={() => sell()}>Buy</Button>
