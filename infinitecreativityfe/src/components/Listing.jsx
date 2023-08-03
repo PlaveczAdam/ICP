@@ -56,10 +56,10 @@ function Listing(props) {
       </Box>
       <Box flexShrink={1}>
         {userCTX.user.id !== props.listing.seller.id && (
-          <Button onClick={sell}>Buy</Button>
+          <Button onClick={()=>sell()}>Buy</Button>
         )}
         {userCTX.user.id === props.listing.seller.id && (
-          <Button onClick={cancel}>Cancel</Button>
+          <Button onClick={()=>cancel()}>Cancel</Button>
         )}
       </Box>
     </Box>

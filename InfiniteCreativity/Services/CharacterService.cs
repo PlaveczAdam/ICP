@@ -62,17 +62,6 @@ namespace InfiniteCreativity.Services
             switch (item)
             {
                 case Head head:
-                    /*  if(character.Head != null)
-                       {
-                           character.Head.IsEquipped = false;
-                           character.Head = head;
-                           character.Head.IsEquipped = true;
-                       }
-                       else
-                       {
-                           character.Head = head;
-                           character.Head.IsEquipped = true;
-                       }*/
                     ChangeEquipment(character, head, (x) => x.Head);
                     break;
                 case Shoulder shoulder:
@@ -170,6 +159,40 @@ namespace InfiniteCreativity.Services
                 } 
             }
             );
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UnequipEquipment(int characterId, int itemId)
+        {
+            var currentPlayer = await _playerService.GetCurrentPlayer();
+            var item = await _context.Item.FindAsync(itemId);
+
+            var characterWithItem = await GetCharacterById(characterId, currentPlayer, true);
+
+            switch (item)
+            {
+                case Boot boot:
+                    ChangeEquipment(characterWithItem, null, (y) => y.Boot);
+                    break;
+                case Head head:
+                    ChangeEquipment(characterWithItem, null, (y) => y.Head);
+                    break;
+                case Shoulder shoulder:
+                    ChangeEquipment(characterWithItem, null, (y) => y.Shoulder);
+                    break;
+                case Chest chest:
+                    ChangeEquipment(characterWithItem, null, (y) => y.Chest);
+                    break;
+                case Hand hand:
+                    ChangeEquipment(characterWithItem, null, (y) => y.Hand);
+                    break;
+                case Leg leg:
+                    ChangeEquipment(characterWithItem, null, (y) => y.Leg);
+                    break;
+                case Weapon weapon:
+                    ChangeEquipment(characterWithItem, null, (y) => y.Weapon);
+                    break;
+            }
             await _context.SaveChangesAsync();
         }
 

@@ -34,5 +34,11 @@ namespace InfiniteCreativity.Controllers
         { 
             await _characterService.EquipEquipment(characterId, itemId);
         }
+
+        [HttpPut, Route("unequip/{characterId}/{itemId}")]
+        public async Task UnequipEquipment(int characterId, int itemId)
+        {
+            await _characterService.UnequipEquipment(characterId, itemId);
+        }
     }
 }

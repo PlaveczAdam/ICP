@@ -7,6 +7,7 @@ import {
   TableCell,
   TableBody,
   LinearProgress,
+  Collapse,
 } from "@mui/material";
 import { useState, forwardRef, useEffect, useContext } from "react";
 import Dialog from "@mui/material/Dialog";
@@ -28,7 +29,9 @@ function Equipment(props) {
   const [equipment, setEquipment] = useState();
   const [armor, setArmor] = useState("");
   const [weapon, setWeapon] = useState("");
+
   const inventoryCTX = useContext(InventoryContext);
+
   async function getEquipment() {
     const res = await fetch(`/api/character/equipment/${props.characterID}`);
     let equipment = await res.json();
@@ -42,12 +45,22 @@ function Equipment(props) {
     );
     if (res.ok) {
       const key = armor || weapon;
-      setEquipment((old) => ({ ...old, [key]: {...item, isEquipped:true} }));
+      setEquipment((old) => ({ ...old, [key]: { ...item, isEquipped: true } }));
       inventoryCTX.refresh();
     }
   }
 
-
+  async function unEquip(item) {
+    const res = await fetch(
+      `/api/character/unequip/${props.characterID}/${item.id}`,
+      { method: "PUT" }
+    );
+    if (res.ok) {
+      const key = armor || weapon;
+      setEquipment((old) => ({ ...old, [key]: null }));
+      inventoryCTX.refresh();
+    }
+  }
   return (
     <Box>
       <Button
@@ -100,68 +113,133 @@ function Equipment(props) {
                     ))
                 : null}
             </Box>
-            <Box display="flex" flexDirection="column" gap="3px">
-              <Item
-                item={equipment.head}
-                onClick={() => {
-                  setArmor("head");
-                  setWeapon("");
-                }}
-                interactive
-              ></Item>
-              <Item
-                item={equipment.shoulder}
-                onClick={() => {
-                  setArmor("shoulder");
-                  setWeapon("");
-                }}
-                interactive
-              ></Item>
-
-              <Item
-                item={equipment.chest}
-                onClick={() => {
-                  setArmor("chest");
-                  setWeapon("");
-                }}
-                interactive
-              ></Item>
-
-              <Item
-                item={equipment.hand}
-                onClick={() => {
-                  setArmor("hand");
-                  setWeapon("");
-                }}
-                interactive
-              ></Item>
-
-              <Item
-                item={equipment.leg}
-                onClick={() => {
-                  setArmor("leg");
-                  setWeapon("");
-                }}
-                interactive
-              ></Item>
-
-              <Item
-                item={equipment.boot}
-                onClick={() => {
-                  setArmor("boot");
-                  setWeapon("");
-                }}
-                interactive
-              ></Item>
-
-              <Item
-                item={equipment.weapon}
-                onClick={() => {
-                  setWeapon("weapon");
-                  setArmor("");
-                }}
-                interactive
-              ></Item>
+            <Box display="flex" flexDirection="column" gap="3px" minWidth={220}>
+              <Box display="flex" flexDirection="row">
+                <Item
+                  item={equipment.head}
+                  onClick={() => {
+                    setArmor("head");
+                    setWeapon("");
+                  }}
+                  interactive
+                ></Item>
+                <Collapse
+                  in={equipment.head && armor === "head"}
+                  orientation="horizontal"
+                >
+                  <Button onClick={() => unEquip(equipment.head)}>
+                    Unequip
+                  </Button>
+                </Collapse>
+              </Box>
+              <Box display="flex" flexDirection="row">
+                <Item
+                  item={equipment.shoulder}
+                  onClick={() => {
+                    setArmor("shoulder");
+                    setWeapon("");
+                  }}
+                  interactive
+                ></Item>
+                <Collapse
+                  in={equipment.shoulder && armor === "shoulder"}
+                  orientation="horizontal"
+                >
+                  <Button onClick={() => unEquip(equipment.shoulder)}>
+                    Unequip
+                  </Button>
+                </Collapse>
+              </Box>
+              <Box display="flex" flexDirection="row">
+                <Item
+                  item={equipment.chest}
+                  onClick={() => {
+                    setArmor("chest");
+                    setWeapon("");
+                  }}
+                  interactive
+                ></Item>
+                <Collapse
+                  in={equipment.chest && armor === "chest"}
+                  orientation="horizontal"
+                >
+                  <Button onClick={() => unEquip(equipment.chest)}>
+                    Unequip
+                  </Button>
+                </Collapse>
+              </Box>
+              <Box display="flex" flexDirection="row">
+                <Item
+                  item={equipment.hand}
+                  onClick={() => {
+                    setArmor("hand");
+                    setWeapon("");
+                  }}
+                  interactive
+                ></Item>
+                <Collapse
+                  in={equipment.hand && armor === "hand"}
+                  orientation="horizontal"
+                >
+                  <Button onClick={() => unEquip(equipment.hand)}>
+                    Unequip
+                  </Button>
+                </Collapse>
+              </Box>
+              <Box display="flex" flexDirection="row">
+                <Item
+                  item={equipment.leg}
+                  onClick={() => {
+                    setArmor("leg");
+                    setWeapon("");
+                  }}
+                  interactive
+                ></Item>
+                <Collapse
+                  in={equipment.leg && armor === "leg"}
+                  orientation="horizontal"
+                >
+                  <Button onClick={() => unEquip(equipment.leg)}>
+                    Unequip
+                  </Button>
+                </Collapse>
+              </Box>
+              <Box display="flex" flexDirection="row">
+                <Item
+                  item={equipment.boot}
+                  onClick={() => {
+                    setArmor("boot");
+                    setWeapon("");
+                  }}
+                  interactive
+                ></Item>
+                <Collapse
+                  in={equipment.boot && armor === "boot"}
+                  orientation="horizontal"
+                >
+                  <Button onClick={() => unEquip(equipment.boot)}>
+                    Unequip
+                  </Button>
+                </Collapse>
+              </Box>
+              <Box display="flex" flexDirection="row">
+                <Item
+                  item={equipment.weapon}
+                  onClick={() => {
+                    setWeapon("weapon");
+                    setArmor("");
+                  }}
+                  interactive
+                ></Item>
+                <Collapse
+                  in={equipment.weapon && weapon === "weapon"}
+                  orientation="horizontal"
+                >
+                  <Button onClick={() => unEquip(equipment.weapon)}>
+                    Unequip
+                  </Button>
+                </Collapse>
+              </Box>
             </Box>
           </Box>
         ) : (

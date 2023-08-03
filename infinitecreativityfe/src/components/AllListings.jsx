@@ -10,7 +10,6 @@ function AllListings(props)
         const res = await fetch("/api/listing");
         const l = await res.json();
         setListings(l);
-        console.log(l);
     }
     useEffect(() => { getListings() }, []);
     return <Box>
