@@ -5,23 +5,27 @@ import { InventoryContext } from "./InventoryContextProvider";
 
 function Listing(props) {
   const userCTX = useContext(UserContext);
-
+  const inventoryCTX = useContext(InventoryContext);
   const currentDate = new Date();
   const parseDate = new Date(props.listing.listingDate);
   const timeDifference = currentDate.getTime() - parseDate.getTime();
   const daysPassed = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
 
   async function sell() {
-    const res = await fetch(`/api/listing/sold/${props.listing.id}`, { method: "PUT" });
+    const res = await fetch(`/api/listing/sold/${props.listing.id}`, {
+      method: "PUT",
+    });
     if (res.ok) {
-      userCTX.refresh();
+      inventoryCTX.refresh();
       props.getListings();
     }
   }
   async function cancel() {
-    const res = await fetch(`/api/listing/cancelled/${props.listing.id}`, { method: "PUT" });
+    const res = await fetch(`/api/listing/cancelled/${props.listing.id}`, {
+      method: "PUT",
+    });
     if (res.ok) {
-      userCTX.refresh();
+      inventoryCTX.refresh();
       props.getListings();
     }
   }
@@ -56,10 +60,10 @@ function Listing(props) {
       </Box>
       <Box flexShrink={1}>
         {userCTX.user.id !== props.listing.seller.id && (
-          <Button onClick={()=>sell()}>Buy</Button>
+          <Button onClick={() => sell()}>Buy</Button>
         )}
         {userCTX.user.id === props.listing.seller.id && (
-          <Button onClick={()=>cancel()}>Cancel</Button>
+          <Button onClick={() => cancel()}>Cancel</Button>
         )}
       </Box>
     </Box>

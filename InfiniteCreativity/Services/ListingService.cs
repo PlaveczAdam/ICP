@@ -38,10 +38,18 @@ namespace InfiniteCreativity.Services
             return _mapper.Map<ShowListingDTO>(newL);
         }
 
-        public async Task<IEnumerable<ShowListingDTO>> GetListings()
+        public async Task<IEnumerable<ShowListingDTO>> GetListings(ListingFilterDTO listingFilter)
         {
-            var ltings = await _context.Listing.Include((x) => x.Seller).Include((x) => x.Item).ToListAsync();
-            return _mapper.Map<List<ShowListingDTO>>(ltings);
+            IQueryable<Listing> ltings = _context.Listing.Include((x) => x.Seller).Include((x) => x.Item);
+            if (listingFilter is not null)
+            {
+                if (listingFilter.SellerId is not null)
+                {
+                    ltings = ltings.Where((x) => x.Seller.Id == listingFilter.SellerId);
+                }
+            }
+            var listingResult = await ltings.ToListAsync();
+            return _mapper.Map<List<ShowListingDTO>>(listingResult);
         }
 
         public async Task PurchaseListing(int id)

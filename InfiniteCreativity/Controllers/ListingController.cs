@@ -24,9 +24,9 @@ namespace InfiniteCreativity.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<ShowListingDTO>> GetListings()
+        public async Task<IEnumerable<ShowListingDTO>> GetListings([FromQuery]ListingFilterDTO listingFilter)
         {
-            return await _listingService.GetListings();
+            return await _listingService.GetListings(listingFilter);
         }
 
         [HttpPut, Route("sold/{id}")]
