@@ -114,7 +114,7 @@ function Equipment(props) {
                 : null}
             </Box>
             <Box display="flex" flexDirection="column" gap="3px" minWidth={220}>
-              <Box display="flex" flexDirection="row">
+              <Box display="flex" flexDirection="row" alignItems="center">
                 <Item
                   item={equipment.head}
                   onClick={() => {
@@ -132,7 +132,7 @@ function Equipment(props) {
                   </Button>
                 </Collapse>
               </Box>
-              <Box display="flex" flexDirection="row">
+              <Box display="flex" flexDirection="row" alignItems="center">
                 <Item
                   item={equipment.shoulder}
                   onClick={() => {
@@ -150,7 +150,7 @@ function Equipment(props) {
                   </Button>
                 </Collapse>
               </Box>
-              <Box display="flex" flexDirection="row">
+              <Box display="flex" flexDirection="row" alignItems="center">
                 <Item
                   item={equipment.chest}
                   onClick={() => {
@@ -168,7 +168,7 @@ function Equipment(props) {
                   </Button>
                 </Collapse>
               </Box>
-              <Box display="flex" flexDirection="row">
+              <Box display="flex" flexDirection="row" alignItems="center">
                 <Item
                   item={equipment.hand}
                   onClick={() => {
@@ -186,7 +186,7 @@ function Equipment(props) {
                   </Button>
                 </Collapse>
               </Box>
-              <Box display="flex" flexDirection="row">
+              <Box display="flex" flexDirection="row" alignItems="center">
                 <Item
                   item={equipment.leg}
                   onClick={() => {
@@ -204,7 +204,7 @@ function Equipment(props) {
                   </Button>
                 </Collapse>
               </Box>
-              <Box display="flex" flexDirection="row">
+              <Box display="flex" flexDirection="row" alignItems="center">
                 <Item
                   item={equipment.boot}
                   onClick={() => {
@@ -222,7 +222,7 @@ function Equipment(props) {
                   </Button>
                 </Collapse>
               </Box>
-              <Box display="flex" flexDirection="row">
+              <Box display="flex" flexDirection="row" alignItems="center">
                 <Item
                   item={equipment.weapon}
                   onClick={() => {
