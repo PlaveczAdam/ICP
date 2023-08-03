@@ -2,8 +2,9 @@ import { Box } from "@mui/material";
 import Listing from './Listing';
 import { useEffect, useState } from 'react';
 
-function MyListings(props) {
-    /* const [listings, setListings] = useState([]);
+function AllListings(props)
+{
+    const [listings, setListings] = useState([]);
 
     async function getListings() {
         const res = await fetch("/api/listing");
@@ -11,12 +12,12 @@ function MyListings(props) {
         setListings(l);
         console.log(l);
     }
-    useEffect(() => { getListings() }, []); */
+    useEffect(() => { getListings() }, []);
     return <Box>
-       {/*  {listings.map((x) => (
-            <Listing listing={x} key={x.id}></Listing>
-        ))} */}
+        {listings.map((x) => (
+            <Listing listing={x} key={x.id} getListings={getListings}></Listing>
+        ))}
     </Box>
 }
 
-export default MyListings;
+export default AllListings;

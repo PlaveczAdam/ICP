@@ -15,6 +15,7 @@ import Inventory from './components/Inventory';
 import Market from './components/Market';
 import CreateListing from './components/CreateListing';
 import MyListings from './components/MyListings';
+import AllListings from "./components/AllListings";
 
 const theme = createTheme({
   palette: {
@@ -344,6 +345,7 @@ function App() {
                     ></Route>
                     <Route path="/market" element={<Market></Market>}>
                       <Route path="createListing" element={<CreateListing></CreateListing>}></Route>
+                      <Route path="allListings" element={<AllListings></AllListings>}></Route>
                       <Route path="myListings" element={<MyListings></MyListings>}></Route>
                     </Route>
                     <Route path="/account" element={<Account />}>

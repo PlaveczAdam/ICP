@@ -35,6 +35,17 @@ function Market(props) {
                 width: "100%",
               }}
               component={Link}
+              to="allListings"
+            >
+              All Listings
+            </Button>
+            <Button
+              sx={{
+                justifyContent: "center",
+                height: "40px",
+                width: "100%",
+              }}
+              component={Link}
               to="myListings"
             >
               My Listings
