@@ -90,14 +90,14 @@ const globalTheme = createTheme(theme, {
     MuiOutlinedInput: {
       styleOverrides: {
         notchedOutline: {
-          borderColor: "teal",
+          borderColor: "rgba(0,105,93,1)",
         },
       },
     },
     MuiTextField: {
       styleOverrides: {
         root: {
-          borderColor: "teal",
+          borderColor: "rgba(0,105,93,1)",
         },
       },
     },

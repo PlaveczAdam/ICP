@@ -6,6 +6,10 @@ import Box from "@mui/material/Box";
 import { CircularProgress } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
+import InputAdornment from '@mui/material/InputAdornment';
+import IconButton from '@mui/material/IconButton';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from './UserContextProvider';
@@ -16,8 +20,15 @@ function Login(props) {
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isFailed, setIsFailed] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const userCTX = useContext(UserContext);
+
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
   
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -99,7 +110,19 @@ function Login(props) {
             fullWidth
             name="password"
             label="Password"
-            type="password"
+            type={showPassword ? 'text' : 'password'}
+            InputProps={{
+              endAdornment: <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={handleClickShowPassword}
+                  onMouseDown={handleMouseDownPassword}
+                  edge={"end"}
+                >
+                  {showPassword ? <VisibilityOff sx={{color: "rgba(0,105,93,1)"}}/> : <Visibility sx={{color: "rgba(0,105,93,1)"}}/>}
+                </IconButton>
+              </InputAdornment>
+            }}
             id="password"
             autoComplete="current-password"
             value={password}
