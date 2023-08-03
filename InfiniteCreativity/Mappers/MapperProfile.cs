@@ -29,6 +29,7 @@ namespace InfiniteCreativity.Mappers
             CreateMap<Player, CreatePlayerDTO>().ReverseMap();
             CreateMap<Character, CreateCharacterDTO>().ReverseMap();
             CreateMap<Quest, ShowQuestDTO>();
+            CreateMap<Player, ShowWalletDTO>();
 
             CreateMap<Player, ShowPlayerDTO>();
             CreateMap<Character, ShowCharacterDTO>();

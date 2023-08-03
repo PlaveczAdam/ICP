@@ -63,4 +63,7 @@
     border: 0px solid #2aa4ac;
   }
 
-  body{overflow: hidden;}
+  body{
+    overflow: hidden;
+    overflow-wrap: anywhere;
+  }

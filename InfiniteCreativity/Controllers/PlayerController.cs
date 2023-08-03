@@ -60,5 +60,12 @@ namespace InfiniteCreativity.Controllers
         { 
             return await _playerService.GetCurrentPlayerDTO();
         }
+
+        [Authorize]
+        [HttpGet, Route("wallet")]
+        public async Task<ShowWalletDTO> GetWallet()
+        {
+            return await _playerService.GetWallet();
+        }
     }
 }

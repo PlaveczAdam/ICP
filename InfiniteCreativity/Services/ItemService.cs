@@ -27,7 +27,7 @@ namespace InfiniteCreativity.Services
         {
             var currentPlayer = await _playerService.GetCurrentPlayer(true);
             var itemsToDelete = currentPlayer!.Inventory!.Where((x) => items.Items.Contains(x.Id));
-            currentPlayer.Purse += itemsToDelete.Sum(x => x.Value)??0;
+            currentPlayer.Money += itemsToDelete.Sum(x => x.Value)??0;
             _context.RemoveRange(itemsToDelete);
             await _context.SaveChangesAsync();
         }
