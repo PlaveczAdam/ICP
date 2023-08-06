@@ -8,7 +8,7 @@ function CreateListing(props) {
   const [item, setItem] = useState();
   const [price, setPrice] = useState(0);
   const [inventoryOpen, setInventoryOpen] = useState(false);
-
+  const [counter, setCounter] = useState(1);
   async function handleCreate() {
     const res = await fetch("/api/listing", {
       method: "POST",
@@ -29,8 +29,11 @@ function CreateListing(props) {
     handleCreate();
   }
   function handleSelection() {
+    setCounter(counter + 1);
+    console.log(counter);
     setItem();
-    setInventoryOpen(true);
+    if(counter % 2 === 0) setInventoryOpen(false);
+    else setInventoryOpen(true);
   }
 
   return (
