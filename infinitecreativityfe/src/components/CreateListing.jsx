@@ -34,8 +34,21 @@ function CreateListing(props) {
   }
 
   return (
-    <Box>
-      <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+    <Box minWidth={"40%"} display="flex" flexWrap={"wrap"} justifyContent="center">
+      <Box
+        minHeight={"30%"}
+        maxWidth={"70%"}
+        component="form"
+        onSubmit={handleSubmit}
+        noValidate
+        sx={{
+          mt: 1,
+          background: "linear-gradient(to bottom right, teal, rgba(0, 71, 71, 1))",
+          borderRadius: "10px",
+          padding: "10px",
+          boxShadow: "0px 15px 15px #101010",
+        }}
+      >
         <Item
           item={item}
           onClick={() => {
@@ -51,8 +64,8 @@ function CreateListing(props) {
                 key={x.id}
                 interactive
                 onClick={() => {
-                    setItem(x);
-                    setInventoryOpen(false);
+                  setItem(x);
+                  setInventoryOpen(false);
                 }}
               ></Item>
             ))}

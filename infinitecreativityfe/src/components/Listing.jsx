@@ -39,9 +39,9 @@ function Listing(props) {
   return (
     <Box
       sx={{
-        border: "2px solid rgb(0, 105,94,1)",
-        borderRadius: "5px",
-        background: "rgb(0,105,94,0.7)",
+        borderRadius: "10px",
+        background: "linear-gradient(to bottom right, teal, rgba(0,61,60,1))",
+        boxShadow: "0px 20px 20px #101010",
         display: "flex",
         flexDirection: "row",
         padding: "5px",
@@ -52,11 +52,11 @@ function Listing(props) {
         gap: "20px",
       }}
     >
-      <Box flexGrow={1}>
-        <Box>{`Seller: ${props.listing.seller.name}`}</Box>
-        <Box>Price: <DoubleDisplay value={props.listing.price} precision={0}></DoubleDisplay></Box>
-        <Box>{`Item: ${props.listing.item.name}`}</Box>
-        <Box sx={{ fontSize: "small" }}>{`${daysPassed} days ago`}</Box>
+      <Box flexGrow={1} padding="5px">
+        <Box display="flex" justifyContent="space-between" alignItems="flex-start"><Box>Seller:</Box><Box>{props.listing.seller.name}</Box></Box>
+        <Box display="flex" justifyContent="space-between"><Box>Price:</Box><Box><DoubleDisplay value={props.listing.price} precision={0}></DoubleDisplay></Box></Box>
+        <Box display="flex" justifyContent="space-between"><Box>Item:</Box><Box>{props.listing.item.name}</Box></Box>
+        <Box display="flex" justifyContent="space-between"><Box sx={{ fontSize: "small" }}>{`${daysPassed} days ago`}</Box></Box>
       </Box>
       <Box component="img" sx={{padding: "3px", border: "2px dashed black", width: "70px", borderRadius: "5px"}} src={itemImages[props.listing.item.imageName]}></Box>
       <Box flexShrink={1}>

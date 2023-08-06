@@ -185,6 +185,7 @@ function App() {
   const userCTX = useContext(UserContext);
   async function handleLogOut() {
     await fetch("/api/player/logout");
+    setActiveButton("home");
     userCTX.refresh();
   }
 
@@ -337,6 +338,7 @@ function App() {
                   padding="16px"
                   overflow="auto"
                   minHeight="0"
+                  justifyContent="center"
                 >
                   <Routes>
                     <Route
