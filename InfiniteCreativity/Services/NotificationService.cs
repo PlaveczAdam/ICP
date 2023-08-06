@@ -50,7 +50,11 @@ namespace InfiniteCreativity.Services
         public async Task OnDisconnected(HubCallerContext hubContext)
         {
             var connection = _context.Connection.Find(hubContext.ConnectionId);
-            connection.Connected = false;
+            if (connection is not null)
+            {
+                _context.Remove(connection);
+            }
+            
             await _context.SaveChangesAsync();
         }
     }
