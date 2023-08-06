@@ -30,7 +30,7 @@ function Item(props) {
             width: "70px",
             height: "70px",
             borderRadius: "5px",
-            border: "2px solid rgba(0,105,93,1)"
+            border: "2px solid #202020"
           },
           props.interactive && {
             cursor: "pointer",

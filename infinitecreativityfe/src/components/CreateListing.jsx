@@ -37,7 +37,7 @@ function CreateListing(props) {
   }
 
   return (
-    <Box minWidth={"40%"} display="flex" flexWrap={"wrap"} justifyContent="center">
+    <Box minWidth={"40%"} display="flex" flexWrap={"wrap"} justifyContent="center" maxHeight="0">
       <Box
         minHeight={"30%"}
         maxWidth={"70%"}
@@ -60,7 +60,7 @@ function CreateListing(props) {
           interactive
         ></Item>
         <Collapse in={inventoryOpen}>
-          <Box display="flex" flexWrap="wrap">
+          <Box display="flex" flexWrap="wrap" gap={"3px"}>
             {inventoryCTX.inventory.map((x) => (
               <Item
                 item={x}
