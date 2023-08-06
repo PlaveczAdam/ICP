@@ -9,6 +9,7 @@ import AnimatedNumber from "animated-number-react";
 function Market(props) {
   const userCTX = useContext(UserContext);
   const walletCTX = useContext(WalletContext);
+  const [activeButton, setActiveButton] = useState("home");
 
   if (!userCTX.user) {
     return null;
@@ -41,6 +42,12 @@ function Market(props) {
               height: "40px",
               width: "100%",
             }}
+            color={
+              activeButton === "create listing"
+                ? "activeButtonColor"
+                : "primary"
+            }
+            onClick={() => setActiveButton("create listing")}
             to="createListing"
           >
             Create Listing
@@ -51,6 +58,12 @@ function Market(props) {
               height: "40px",
               width: "100%",
             }}
+            color={
+              activeButton === "stock"
+                ? "activeButtonColor"
+                : "primary"
+            }
+            onClick={() => setActiveButton("stock")}
             component={Link}
             to="allListings"
           >
@@ -62,6 +75,12 @@ function Market(props) {
               height: "40px",
               width: "100%",
             }}
+            color={
+              activeButton === "my listing"
+                ? "activeButtonColor"
+                : "primary"
+            }
+            onClick={() => setActiveButton("my listing")}
             component={Link}
             to="myListings"
           >
