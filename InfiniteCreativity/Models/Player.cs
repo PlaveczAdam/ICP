@@ -1,4 +1,5 @@
-﻿using System.Reflection.PortableExecutable;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Reflection.PortableExecutable;
 
 namespace InfiniteCreativity.Models
 {
@@ -11,5 +12,10 @@ namespace InfiniteCreativity.Models
         public IEnumerable<Item>? Inventory { get; set; }
         public ICollection<Character> Characters { get; set; }
         public IEnumerable<Listing> Listing { get; set; }
+        public ICollection<Connection> Connections { get; set; }
+        [InverseProperty("Recipient")]
+        public ICollection<Message> RecievedMessages { get; set; }
+        [InverseProperty("Sender")]
+        public ICollection<Message> SentMessages { get; set; }
     }
 }

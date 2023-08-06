@@ -5,14 +5,17 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import UserContextProvider from "./components/UserContextProvider";
 import WalletContextProvider from "./components/WalletContextProvider";
+import NotificationContextProvider from "./components/NotificationContextProvider";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   /*  <React.StrictMode> */
   <UserContextProvider>
-    <WalletContextProvider>
-      <App />
-    </WalletContextProvider>
+    <NotificationContextProvider>
+      <WalletContextProvider>
+        <App />
+      </WalletContextProvider>
+    </NotificationContextProvider>
   </UserContextProvider>
   /*  </React.StrictMode> */
 );

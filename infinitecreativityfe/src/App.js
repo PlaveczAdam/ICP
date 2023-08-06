@@ -11,11 +11,13 @@ import { UserContext } from "./components/UserContextProvider";
 import { Box, Button } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { purple, teal } from "@mui/material/colors";
-import Inventory from './components/Inventory';
-import Market from './components/Market';
-import CreateListing from './components/CreateListing';
-import MyListings from './components/MyListings';
+import Inventory from "./components/Inventory";
+import Market from "./components/Market";
+import CreateListing from "./components/CreateListing";
+import MyListings from "./components/MyListings";
 import AllListings from "./components/AllListings";
+import Messages from "./components/Messages";
+import { ToastContainer } from "react-toastify";
 
 const theme = createTheme({
   palette: {
@@ -191,8 +193,20 @@ function App() {
   return (
     <ThemeProvider theme={globalTheme}>
       <div className="App">
+        <Box>
+          <ToastContainer
+            position="top-center"
+            autoClose={2000}
+            hideProgressBar={false}
+            closeOnClick={true}
+            pauseOnHover={true}
+            draggable={true}
+            theme="dark"
+            style={{userSelect:"none"}}
+          />
+        </Box>
         <Box className="App-header">
-          <Router>
+          <Router basename="/">
             <Box
               sx={{
                 display: "flex",
@@ -275,7 +289,13 @@ function App() {
                 </Box>
                 <Box sx={{ flexShrink: "1" }}>
                   {userCTX.user && (
-                    <Box sx={{ display: "flex", flexWrap: "wrap", alignItems: "center" }}>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexWrap: "wrap",
+                        alignItems: "center",
+                      }}
+                    >
                       <Box sx={{ paddingRight: "10px" }}>
                         {userCTX.user.name}
                       </Box>
@@ -344,9 +364,18 @@ function App() {
                       element={<Registration />}
                     ></Route>
                     <Route path="/market" element={<Market></Market>}>
-                      <Route path="createListing" element={<CreateListing></CreateListing>}></Route>
-                      <Route path="allListings" element={<AllListings></AllListings>}></Route>
-                      <Route path="myListings" element={<MyListings></MyListings>}></Route>
+                      <Route
+                        path="createListing"
+                        element={<CreateListing></CreateListing>}
+                      ></Route>
+                      <Route
+                        path="allListings"
+                        element={<AllListings></AllListings>}
+                      ></Route>
+                      <Route
+                        path="myListings"
+                        element={<MyListings></MyListings>}
+                      ></Route>
                     </Route>
                     <Route path="/account" element={<Account />}>
                       <Route path="characters" element={<Characters />}></Route>
@@ -359,6 +388,7 @@ function App() {
               </Box>
             </Box>
           </Router>
+          <Messages></Messages>
         </Box>
       </div>
     </ThemeProvider>

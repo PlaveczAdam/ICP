@@ -72,9 +72,6 @@ function Login(props) {
 
         }}
       >
-        <Box>
-          <ToastContainer position="absolute" />
-        </Box>
         <Typography component="h1" variant="h5">
           Sign In
         </Typography>
