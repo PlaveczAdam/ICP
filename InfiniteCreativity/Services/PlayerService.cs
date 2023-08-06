@@ -68,7 +68,7 @@ namespace InfiniteCreativity.Services
             return p.Id;
         }
 
-        public async Task<Player> GetCurrentPlayer(bool withInventory = false)
+        public async Task<Player> GetCurrentPlayer(bool withInventory = false, bool withMessages = false, bool withConnections = false)
         {
             var userId = int.Parse(
                 _contextAccessor.HttpContext!.User.Claims
@@ -79,6 +79,22 @@ namespace InfiniteCreativity.Services
             if (withInventory)
             {
                 userBase = userBase.Include(x => x.Inventory);
+            }
+            if (withMessages)
+            {
+                userBase = userBase
+                    .Include(x => x.RecievedMessages)
+                    .ThenInclude(x => x.Sender)
+                    .Include(x => x.RecievedMessages)
+                    .ThenInclude(x => x.Recipient)
+                    .Include(x => x.SentMessages)
+                    .ThenInclude(x => x.Sender)
+                    .Include(x => x.SentMessages)
+                    .ThenInclude(x => x.Recipient);
+            }
+            if (withConnections)
+            {
+                userBase = userBase.Include(x => x.Connections);
             }
             var user = await userBase.Include(x => x.Characters).FirstAsync(x => x.Id == userId); ;
             return user;
@@ -94,6 +110,15 @@ namespace InfiniteCreativity.Services
         {
             var player = await GetCurrentPlayer();
             return _mapper.Map<ShowWalletDTO>(player);
+        }
+
+        public async Task<Player?> GetPlayerByName(string name)
+        { 
+            return await _context.Player.Include(x => x.Connections).FirstOrDefaultAsync(x => x.Name == name);
+        }
+        public async Task<Player> GetPlayerById(int id)
+        {
+            return await _context.Player.Include(x => x.Connections).SingleAsync(x => x.Id == id);
         }
     }
 }

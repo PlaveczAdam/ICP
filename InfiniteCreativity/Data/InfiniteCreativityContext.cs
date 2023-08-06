@@ -24,6 +24,7 @@ namespace InfiniteCreativity.Data
         public DbSet<Leg> Leg { get; set; }
         public DbSet<Boot> Boot { get; set; }
         public DbSet<Listing> Listing { get; set; }
+        public DbSet<Connection> Connection { get; set; }
 
     }
 }

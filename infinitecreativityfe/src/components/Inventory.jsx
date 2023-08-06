@@ -34,9 +34,6 @@ function Inventory(props) {
 
   return (
     <Box display="flex" flexWrap="wrap" gap="2px">
-      <Box>
-          <ToastContainer autoClose={2000} closeOnClick transition={Slide} position="top-center" theme="dark"/>
-        </Box>
       <Portal container={() => document.getElementById("inventoryPanel")}>
         <Collapse in appear>
           <LoadingButton

@@ -3,6 +3,7 @@ using InfiniteCreativity.Models;
 using InfiniteCreativity.Models.Armor;
 using InfiniteCreativity.Models.DTO;
 using InfiniteCreativity.Models.DTO.Armor;
+using InfiniteCreativity.Models.DTO.Message;
 using InfiniteCreativity.Models.DTO.Weapon;
 using InfiniteCreativity.Models.Weapons;
 
@@ -30,12 +31,13 @@ namespace InfiniteCreativity.Mappers
             CreateMap<Character, CreateCharacterDTO>().ReverseMap();
             CreateMap<Quest, ShowQuestDTO>();
             CreateMap<Player, ShowWalletDTO>();
-
             CreateMap<Player, ShowPlayerDTO>();
             CreateMap<Character, ShowCharacterDTO>();
             CreateMap<Character, ShowEquipmentDTO>();
 
             CreateMap<Listing, ShowListingDTO>();
+
+            CreateMap<Message, ShowMessageDTO>();
 
             /*CreateMap<Item, ShowMeleeDTO>().ConstructUsing((source, context) => context.Mapper.Map<ShowMeleeDTO>(source as Melee));*/
         }

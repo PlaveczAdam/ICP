@@ -1,4 +1,5 @@
 using InfiniteCreativity.Data;
+using InfiniteCreativity.Hubs;
 using InfiniteCreativity.Mappers;
 using InfiniteCreativity.Middlewares;
 using InfiniteCreativity.Models;
@@ -7,6 +8,7 @@ using InfiniteCreativity.Services.ItemGeneratorNS;
 using InfiniteCreativity.Services.QuestGeneratorNS;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Converters;
@@ -46,7 +48,11 @@ else
 }
 
 builder.Services.AddDbContext<InfiniteCreativityContext>(
-    options => options.UseNpgsql(connectionString)
+    options => { 
+        options.UseNpgsql(connectionString);
+        options.ConfigureWarnings(warnings =>
+            warnings.Ignore(CoreEventId.NavigationBaseIncludeIgnored));
+    }
 );
 
 builder.Services.AddScoped<IPlayerService, PlayerService>();
@@ -54,6 +60,8 @@ builder.Services.AddScoped<IItemService, ItemService>();
 builder.Services.AddScoped<ICharacterService, CharacterService>();
 builder.Services.AddScoped<IQuestService, QuestService>();
 builder.Services.AddScoped<IListingService, ListingService>();
+builder.Services.AddScoped<IMessagesService, MessagesService>();
+builder.Services.AddScoped<INotificationService, NotificationService>();
 
 builder.Services.AddScoped<QuestGenerator>();
 builder.Services.AddScoped<ItemGenerator>();
@@ -79,6 +87,7 @@ builder.Services
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddScoped<PasswordHasher<Player>>();
 builder.Services.AddAutoMapper(typeof(MapperProfile).Assembly);
+builder.Services.AddSignalR();
 
 var app = builder.Build();
 
@@ -89,7 +98,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+/*app.UseHttpsRedirection();*/
 
 /*app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins("http://localhost:3000"));*/
 
@@ -98,5 +107,6 @@ app.UseAuthorization();
 
 app.UseMiddleware<ErrorHandlerMiddleware>();
 app.MapControllers();
+app.MapHub<NotificationHub>("/notification");
 
 app.Run();
