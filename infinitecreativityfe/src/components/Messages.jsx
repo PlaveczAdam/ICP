@@ -10,14 +10,25 @@ import Message from "./Message";
 import { UserContext } from "./UserContextProvider";
 import useNotification, { notificationTypes } from "../hooks/useNotification";
 import { toast } from "react-toastify";
+import { useLayoutEffect } from "react";
 
 function Messages(props) {
   const [messages, setMessages] = useState([]);
   const [recipient, setRecipient] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [body, setBody] = useState("");
+  const [offsetY, setOffsetY] = useState(0);
+  const [scrollRef, setScrollRef] = useState(null);
   const userCTX = useContext(UserContext);
   const lastUpdate = useNotification(notificationTypes.Message);
+
+  const scrollDown = () => {
+    let dialogContent = document.getElementById("lastMessage");
+    if (!dialogContent) {
+      return;
+    }
+    dialogContent.scrollIntoView({ behavior: "smooth" });
+  };
 
   async function getMessages() {
     const res = await fetch("api/messages");
@@ -47,6 +58,29 @@ function Messages(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userCTX.user?.id, lastUpdate]);
 
+  function calculateOffset(element) {
+    setOffsetY(element.scrollHeight - element.clientHeight - element.scrollTop);
+  }
+  useLayoutEffect(() => {
+    if (scrollRef === null) {
+      return;
+    }
+    function scrollHandler(e) {
+      calculateOffset(e.target);
+    }
+    scrollRef.addEventListener("scroll", scrollHandler, { passive: true });
+    return () => {
+      scrollRef.removeEventListener("scroll", scrollHandler, { passive: true });
+    };
+  }, [scrollRef]);
+
+  useLayoutEffect(()=>{
+    if(offsetY>99)
+    {
+      return;
+    }
+    window.requestAnimationFrame(scrollDown);
+  },[messages])
   if (!userCTX.user) {
     return null;
   }
@@ -56,6 +90,7 @@ function Messages(props) {
       onClickAway={() => {
         setIsOpen(false);
       }}
+      mouseEvent="onMouseDown"
     >
       <Box
         component="form"
@@ -77,11 +112,31 @@ function Messages(props) {
         >
           Chat
         </Box>
-        <Collapse in={isOpen}>
-          <Box height={500} overflow="auto">
+        <Collapse
+          in={isOpen}
+          /* timeout={600} */
+          onEntered={() => {
+            window.requestAnimationFrame(() => scrollDown());
+          }}
+        >
+          <Box
+            height={500}
+            overflow="auto"
+            position="relative"
+            ref={setScrollRef}
+          >
             {messages.map((x) => (
               <Message message={x} key={`${x.fromInbox}_${x.id}`}></Message>
             ))}
+            <Collapse in={offsetY > 100} sx={{position:"sticky", bottom:0}}>
+              <Box
+                onClick={scrollDown}
+                bgcolor="black"
+              >
+                To last message.
+              </Box>
+            </Collapse>
+            <Box id="lastMessage"></Box>
           </Box>
           <Box>
             <TextField
