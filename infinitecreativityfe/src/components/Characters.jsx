@@ -3,9 +3,15 @@ import { useContext } from "react";
 import { UserContext } from "./UserContextProvider";
 import Character from "./Character";
 import CharacterCreation from "./CharacterCreation";
+import { useMemo } from "react";
 
 function Characters(props) {
   const userCTX = useContext(UserContext);
+
+  let sortedCharacters = useMemo(()=>{
+    return userCTX.user.characters.slice().sort((a,b)=>a.id-b.id);
+  },[userCTX.user.characters]);
+
   if (!userCTX.user) {
     return null;
   }
@@ -20,7 +26,7 @@ function Characters(props) {
           gridAutoRows:"min-content"
         }}
       >
-        {userCTX.user.characters.map((x) => (
+        {sortedCharacters.map((x) => (
           <Character character={x} key={x.id}></Character>
         ))}
         <CharacterCreation></CharacterCreation>

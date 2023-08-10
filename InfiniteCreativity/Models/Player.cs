@@ -9,6 +9,8 @@ namespace InfiniteCreativity.Models
         public string Name { get; set; }
         public string Password { get; set; }
         public double Money { get; set; }
+        public int CharacterSlot { get; set; }
+        public int QuestSlot { get; set; }
         public IEnumerable<Item>? Inventory { get; set; }
         public ICollection<Character> Characters { get; set; }
         public IEnumerable<Listing> Listing { get; set; }

@@ -18,6 +18,8 @@ import MyListings from "./components/MyListings";
 import AllListings from "./components/AllListings";
 import Messages from "./components/Messages";
 import { ToastContainer } from "react-toastify";
+import { useEffect } from "react";
+import useNotification, { notificationTypes } from "./hooks/useNotification";
 
 const theme = createTheme({
   palette: {
@@ -190,6 +192,12 @@ function App() {
     setActiveButton("home");
     userCTX.refresh();
   }
+
+  let notification = useNotification(notificationTypes.QuestUpdate)
+  useEffect(()=>{
+    userCTX.refresh();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[notification]);
 
   return (
     <ThemeProvider theme={globalTheme}>

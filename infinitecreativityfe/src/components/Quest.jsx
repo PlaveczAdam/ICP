@@ -14,7 +14,7 @@ function Quest(props) {
   async function makeProgress() {
     setIsLoading(true);
     const p = await fetch(
-      `/api/quest/${props.quest.id}/${Math.round(Math.random() * 49) + 1}`,
+      `/api/quest/${props.quest.id}/${100}`,
       { method: "PUT" }
     );
     const newQuestState = await p.json();
@@ -58,7 +58,7 @@ function Quest(props) {
           loading={isLoading}
           disabled={props.quest.progression >= 100}
         >
-          <Box>PROGRESS 1-50</Box>
+          <Box>Complete Quest</Box>
         </LoadingButton>
       </TableCell>
     </TableRow>

@@ -18,6 +18,8 @@ namespace InfiniteCreativity.Services
         private PasswordHasher<Player> _passwordHasher;
 
         private const int _starterPurse = 10;
+        private const int _starterCharacterNumber = 5;
+        private const int _starterQuestSlot = 2;
 
         public PlayerService(
             IMapper mapper,
@@ -42,6 +44,8 @@ namespace InfiniteCreativity.Services
                 var player = _mapper.Map<Player>(newPlayer);
                 player.Money = _starterPurse;
                 player.Password = _passwordHasher.HashPassword(player, player.Password);
+                player.CharacterSlot = _starterCharacterNumber;
+                player.QuestSlot = _starterQuestSlot;
 
                 _context.Player.Add(player);
                 await _context.SaveChangesAsync();

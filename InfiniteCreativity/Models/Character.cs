@@ -13,7 +13,9 @@ namespace InfiniteCreativity.Models
         [NotMapped]
         public double Health => BaseHealth*Level;
         public double Level { get; set; }
+
         public IEnumerable<Quest>? Quests { get; set; }
+
         public Head? Head { get; set; }
         public Shoulder? Shoulder { get; set; }
         public Chest? Chest { get; set; }
@@ -21,6 +23,7 @@ namespace InfiniteCreativity.Models
         public Leg? Leg { get; set; }
         public Boot? Boot { get; set; }
         public Weapon? Weapon { get; set; }
+
         public Player Player { get; set; }
     }
 }
