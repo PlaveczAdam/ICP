@@ -2,10 +2,11 @@
 using InfiniteCreativity.Models.Weapons;
 using InfiniteCreativity.Models;
 using InfiniteCreativity.Models.Armor;
+using InfiniteCreativity.Models.Materials;
 
 namespace InfiniteCreativity.Services.ItemGeneratorNS
 {
-    public static class ItemBlueprints
+    public static class ItemBlueprintsCommon
     {
         public static List<Item> ItemDescriptions = new List<Item>()
         {
@@ -16,13 +17,13 @@ namespace InfiniteCreativity.Services.ItemGeneratorNS
                 Description = "nincs nemis volt",
                 ItemType = ItemType.Weapon,
                 WeaponType = WeaponType.Sword,
-                StackSize = 1,
                 Damage = 10,
                 AttackSpeed = 3,
                 CritChance = 3,
                 CritMultiplier = 100,
                 Range = 1,
-                Value = 10
+                Value = 10,
+                Rarity = RarityType.Common
             },
             new Ranged
             {
@@ -31,13 +32,13 @@ namespace InfiniteCreativity.Services.ItemGeneratorNS
                 Description = "nincs nemis volt123",
                 ItemType = ItemType.Weapon,
                 WeaponType = WeaponType.Bow,
-                StackSize = 1,
                 Damage = 5,
                 AttackSpeed = 2,
                 CritChance = 2,
                 CritMultiplier = 50,
                 Range = 10,
-                Value = 5
+                Value = 5,
+                Rarity = RarityType.Common
             },
             new Melee
             {
@@ -46,13 +47,13 @@ namespace InfiniteCreativity.Services.ItemGeneratorNS
                 Description = "nincs nemis volt",
                 ItemType = ItemType.Weapon,
                 WeaponType = WeaponType.Spear,
-                StackSize = 1,
                 Damage = 8,
                 AttackSpeed = 2,
                 CritChance = 3,
                 CritMultiplier = 75,
                 Range = 5,
-                Value = 15
+                Value = 15,
+                Rarity = RarityType.Common
             },
             new Head{ 
                 Name = "Bucket",
@@ -61,8 +62,8 @@ namespace InfiniteCreativity.Services.ItemGeneratorNS
                 ArmorType = ArmorType.Head,
                 ItemType = ItemType.Armor,
                 ArmorValue = 1,
-                StackSize = 1,
                 Value = 15,
+                Rarity = RarityType.Common
             },
             new Shoulder{
                 Name = "Stripe",
@@ -71,8 +72,8 @@ namespace InfiniteCreativity.Services.ItemGeneratorNS
                 ArmorType = ArmorType.Shoulder,
                 ItemType = ItemType.Armor,
                 ArmorValue = 1,
-                StackSize = 1,
                 Value = 15,
+                Rarity = RarityType.Common
             },
             new Chest{
                 Name = "Apron",
@@ -81,8 +82,8 @@ namespace InfiniteCreativity.Services.ItemGeneratorNS
                 ArmorType = ArmorType.Chest,
                 ItemType = ItemType.Armor,
                 ArmorValue = 1,
-                StackSize = 1,
                 Value = 15,
+                Rarity = RarityType.Common
             },
             new Hand{
                 Name = "HoboGloves",
@@ -91,8 +92,8 @@ namespace InfiniteCreativity.Services.ItemGeneratorNS
                 ArmorType = ArmorType.Hand,
                 ItemType = ItemType.Armor,
                 ArmorValue = 1,
-                StackSize = 1,
                 Value = 15,
+                Rarity = RarityType.Common
             },
             new Leg{
                 Name = "Shorts",
@@ -101,8 +102,8 @@ namespace InfiniteCreativity.Services.ItemGeneratorNS
                 ArmorType = ArmorType.Leg,
                 ItemType = ItemType.Armor,
                 ArmorValue = 1,
-                StackSize = 1,
                 Value = 15,
+                Rarity = RarityType.Common
             },
             new Boot{
                 Name = "FlipFlop",
@@ -111,8 +112,26 @@ namespace InfiniteCreativity.Services.ItemGeneratorNS
                 ArmorType = ArmorType.Boot,
                 ItemType = ItemType.Armor,
                 ArmorValue = 1,
-                StackSize = 1,
                 Value = 15,
+                Rarity = RarityType.Common
+            },
+            new Material{ 
+                Name = "Stóne",
+                ImageName = ImageName.Stone,
+                Description = "defenatly not The Rock",
+                ItemType = ItemType.Material,
+                StackableType = StackableType.Stone1,
+                Value = 1,
+                Rarity = RarityType.Common
+            },
+            new Material{
+                Name = "Fizsh",
+                ImageName = ImageName.Stone,
+                Description = "slap n eat",
+                ItemType = ItemType.Material,
+                StackableType = StackableType.Fish,
+                Value = 1,
+                Rarity = RarityType.Common
             },
         };
     }

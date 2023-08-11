@@ -193,11 +193,11 @@ function App() {
     userCTX.refresh();
   }
 
-  let notification = useNotification(notificationTypes.QuestUpdate)
-  useEffect(()=>{
+  let notification = useNotification(notificationTypes.QuestUpdate);
+  useEffect(() => {
     userCTX.refresh();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[notification]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [notification]);
 
   return (
     <ThemeProvider theme={globalTheme}>
@@ -211,7 +211,7 @@ function App() {
             pauseOnHover={true}
             draggable={true}
             theme="dark"
-            style={{userSelect:"none"}}
+            style={{ userSelect: "none" }}
           />
         </Box>
         <Box className="App-header">
@@ -236,12 +236,11 @@ function App() {
                   zIndex: 1000,
                   className: "navbarBox",
                   boxShadow: "2px 6px 11px 2px #101010",
+                  minHeight:70
                 }}
               >
-                <Box sx={{ flexShrink: "1" }}>
-                  <Link to="/">
-                    <img src={logo} alt="logo" width="70" height="70" />
-                  </Link>
+                <Box component={Link} to="/" display="flex" alignItems="center" paddingLeft={3}>
+                  <img src={logo} alt="logo" height="60" />
                 </Box>
                 <Box
                   sx={{

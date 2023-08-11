@@ -5,6 +5,7 @@ using InfiniteCreativity.Models.DTO;
 using InfiniteCreativity.Models.DTO.Armor;
 using InfiniteCreativity.Models.DTO.Message;
 using InfiniteCreativity.Models.DTO.Weapon;
+using InfiniteCreativity.Models.Materials;
 using InfiniteCreativity.Models.Weapons;
 
 namespace InfiniteCreativity.Mappers
@@ -26,6 +27,9 @@ namespace InfiniteCreativity.Mappers
             CreateMap<Hand, ShowHandDTO>();
             CreateMap<Leg, ShowLegDTO>();
             CreateMap<Boot, ShowBootDTO>();
+
+            CreateMap<Material, ShowMaterialDTO>();
+            CreateMap<Stackable, ShowStackableDTO>();
 
             CreateMap<Player, CreatePlayerDTO>().ReverseMap();
             CreateMap<Character, CreateCharacterDTO>().ReverseMap();

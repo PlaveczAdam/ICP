@@ -2,6 +2,7 @@
 using InfiniteCreativity.Models;
 using InfiniteCreativity.Models.Armor;
 using InfiniteCreativity.Models.Enums;
+using InfiniteCreativity.Models.Materials;
 using InfiniteCreativity.Models.Weapons;
 
 namespace InfiniteCreativity.Services.ItemGeneratorNS
@@ -9,16 +10,39 @@ namespace InfiniteCreativity.Services.ItemGeneratorNS
     public class ItemGenerator
     {
         private Random _random = new Random();
+        private int _superRareTreshold = 990;
+        private int _rareTreshold = 900;
+        private int _uncommonTreshold = 600;
 
         public Item Generate()
         {
-            var itemDesc = _random.Next(ItemBlueprints.ItemDescriptions).ShallowCopy();
-            switch (itemDesc)
+            Item item;
+            int rarity = _random.Next(1, 1000);
+            if (rarity >= _superRareTreshold)
+            {
+                item = _random.Next(ItemBlueprintsSuperRare.ItemDescriptions).ShallowCopy();
+            }
+            else if (rarity >= _rareTreshold)
+            {
+                item = _random.Next(ItemBlueprintsRare.ItemDescriptions).ShallowCopy();
+            }
+            else if (rarity >= _uncommonTreshold)
+            {
+                item = _random.Next(ItemBlueprintsUncommon.ItemDescriptions).ShallowCopy();
+            }
+            else
+            {
+                item = _random.Next(ItemBlueprintsCommon.ItemDescriptions).ShallowCopy();
+            }
+
+            switch (item)
             {
                 case Weapon weapon:
                     return GenerateWeapon(weapon);
                 case Armor armor:
                     return GenerateArmor(armor);
+                case Material material:
+                    return GenerateMaterial(material);
                 default:
                     throw new NotImplementedException();
             }
@@ -54,6 +78,10 @@ namespace InfiniteCreativity.Services.ItemGeneratorNS
         private Ranged GenerateRanged(Ranged itemDesc)
         {
             itemDesc.Reload *= _random.NextDouble(0.9, 1.1);
+            return itemDesc;
+        }
+        private Material GenerateMaterial(Material itemDesc)
+        {
             return itemDesc;
         }
     }

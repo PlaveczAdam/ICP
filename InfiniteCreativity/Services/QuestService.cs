@@ -3,6 +3,7 @@ using InfiniteCreativity.Data;
 using InfiniteCreativity.Exceptions;
 using InfiniteCreativity.Models;
 using InfiniteCreativity.Models.DTO;
+using InfiniteCreativity.Models.Enums;
 using InfiniteCreativity.Services.QuestGeneratorNS;
 using Microsoft.EntityFrameworkCore;
 
@@ -43,7 +44,7 @@ namespace InfiniteCreativity.Services
 
         public async Task<ShowQuestDTO> MakeQuestProgress(int questId, int amount)
         {
-            var currentPlayer = await _playerService.GetCurrentPlayer();
+            var currentPlayer = await _playerService.GetCurrentPlayer(withInventory:true);
             var q =
                 await _context.Quest
                 .Include(x => x.Rewards)
@@ -86,6 +87,7 @@ namespace InfiniteCreativity.Services
             await _context.Quest
                 .Include((x)=>x.Character)
                 .ThenInclude((x)=>x.Player)
+                .ThenInclude((x)=>x.Inventory)
                 .Include((x)=> x.Rewards)
                 .Where((x)=>!x.IsDone)
                 .ForEachAsync((x) => {
@@ -99,7 +101,32 @@ namespace InfiniteCreativity.Services
         {
             if (quest.Progression == 100)
             {
-                quest.Rewards.ToList().ForEach(x => x.Player = currentPlayer);
+                quest.Rewards.ToList().ForEach(x => {
+                    if (x is Stackable stackableReward)
+                    {
+                        Stackable? playerStack = (Stackable?)currentPlayer!.Inventory!.SingleOrDefault((y) =>
+                        {
+                            if (y is Stackable stackable)
+                            {
+                                return stackable.StackableType == stackableReward.StackableType;
+                            }
+                            return false;
+                        });
+                        if (playerStack is null)
+                        {
+                            x.Player = currentPlayer;
+                        }
+                        else
+                        {
+                            playerStack.Amount++;
+                            _context.Remove(x);
+                        }
+                    }
+                    else
+                    { 
+                        x.Player = currentPlayer;
+                    }
+                });
                 currentPlayer.Money += quest.CashReward;
                 character.Level += quest.LevelReward;
                 quest.IsDone = true;

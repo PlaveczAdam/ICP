@@ -3,6 +3,7 @@ using System;
 using InfiniteCreativity.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace InfiniteCreativity.Migrations
 {
     [DbContext(typeof(InfiniteCreativityContext))]
-    partial class InfiniteCreativityContextModelSnapshot : ModelSnapshot
+    [Migration("20230811170455_AddMaterial")]
+    partial class AddMaterial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -140,6 +143,9 @@ namespace InfiniteCreativity.Migrations
                         .HasColumnType("integer");
 
                     b.Property<int>("Rarity")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("StackSize")
                         .HasColumnType("integer");
 
                     b.Property<int?>("Value")
@@ -298,17 +304,11 @@ namespace InfiniteCreativity.Migrations
                     b.HasDiscriminator().HasValue("Equippable");
                 });
 
-            modelBuilder.Entity("InfiniteCreativity.Models.Stackable", b =>
+            modelBuilder.Entity("InfiniteCreativity.Models.Material", b =>
                 {
                     b.HasBaseType("InfiniteCreativity.Models.Item");
 
-                    b.Property<int>("Amount")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("StackableType")
-                        .HasColumnType("integer");
-
-                    b.HasDiscriminator().HasValue("Stackable");
+                    b.HasDiscriminator().HasValue("Material");
                 });
 
             modelBuilder.Entity("InfiniteCreativity.Models.Armor.Boot", b =>
@@ -424,13 +424,6 @@ namespace InfiniteCreativity.Migrations
                         .HasColumnType("integer");
 
                     b.HasDiscriminator().HasValue("Weapon");
-                });
-
-            modelBuilder.Entity("InfiniteCreativity.Models.Materials.Material", b =>
-                {
-                    b.HasBaseType("InfiniteCreativity.Models.Stackable");
-
-                    b.HasDiscriminator().HasValue("Material");
                 });
 
             modelBuilder.Entity("InfiniteCreativity.Models.Weapons.Melee", b =>
