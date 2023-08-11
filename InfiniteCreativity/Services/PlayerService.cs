@@ -3,6 +3,7 @@ using InfiniteCreativity.Data;
 using InfiniteCreativity.Exceptions;
 using InfiniteCreativity.Models;
 using InfiniteCreativity.Models.DTO;
+using InfiniteCreativity.Models.DTO.Game;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Numerics;
@@ -100,8 +101,33 @@ namespace InfiniteCreativity.Services
             {
                 userBase = userBase.Include(x => x.Connections);
             }
-            var user = await userBase.Include(x => x.Characters).FirstAsync(x => x.Id == userId); ;
+            var user = await userBase.Include(x => x.Characters).FirstAsync(x => x.Id == userId);
             return user;
+        }
+
+        public async Task<ShowGamePlayerDTO> GetCurrentPlayerAll()
+        {
+            var userId = int.Parse(
+                _contextAccessor.HttpContext!.User.Claims
+                    .FirstOrDefault(x => x.Type == ClaimTypes.Sid)!
+                    .Value
+            );
+            IQueryable<Player> userBase = _context.Player;
+            var res = await userBase.Include((x)=>x.Inventory).Include(x=>x.Characters)
+                    .ThenInclude((x) => x.Head)
+                    .Include(x => x.Characters)
+                    .ThenInclude((x) => x.Shoulder)
+                    .Include(x => x.Characters)
+                    .ThenInclude((x) => x.Chest)
+                    .Include(x => x.Characters)
+                    .ThenInclude((x) => x.Hand)
+                    .Include(x => x.Characters)
+                    .ThenInclude((x) => x.Leg)
+                    .Include(x => x.Characters)
+                    .ThenInclude((x) => x.Boot)
+                    .Include(x => x.Characters)
+                    .ThenInclude((x) => x.Weapon).FirstAsync(x => x.Id == userId);
+            return _mapper.Map<ShowGamePlayerDTO>(res);
         }
 
         public async Task<ShowPlayerDTO> GetCurrentPlayerDTO()

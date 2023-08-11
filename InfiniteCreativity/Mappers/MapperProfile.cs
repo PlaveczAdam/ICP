@@ -3,6 +3,7 @@ using InfiniteCreativity.Models;
 using InfiniteCreativity.Models.Armor;
 using InfiniteCreativity.Models.DTO;
 using InfiniteCreativity.Models.DTO.Armor;
+using InfiniteCreativity.Models.DTO.Game;
 using InfiniteCreativity.Models.DTO.Message;
 using InfiniteCreativity.Models.DTO.Weapon;
 using InfiniteCreativity.Models.Materials;
@@ -38,6 +39,8 @@ namespace InfiniteCreativity.Mappers
             CreateMap<Player, ShowPlayerDTO>();
             CreateMap<Character, ShowCharacterDTO>();
             CreateMap<Character, ShowEquipmentDTO>();
+            CreateMap<Player, ShowGamePlayerDTO>();
+            CreateMap<Character, ShowGameCharacterDTO>();
 
             CreateMap<Listing, ShowListingDTO>();
 
