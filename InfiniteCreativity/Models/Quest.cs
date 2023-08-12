@@ -13,5 +13,6 @@ namespace InfiniteCreativity.Models
         public double LevelReward { get; set; }
         public Character Character { get; set; }
         public bool IsDone { get; set; }
+        public TimeSpan Duration { get; set; }
     }
 }

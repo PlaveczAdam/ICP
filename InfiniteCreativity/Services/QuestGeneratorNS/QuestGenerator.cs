@@ -30,6 +30,7 @@ namespace InfiniteCreativity.Services.QuestGeneratorNS
             quest.Rewards = new List<Item> { _itemGenerator.Generate() };
             quest.CashReward = Math.Round(_random.NextDouble(10,50));
             quest.LevelReward = _random.NextDouble(0.1, 0.3);
+            quest.Duration = _random.NextTimeDuration(1, 5);
 
             return quest;
         }

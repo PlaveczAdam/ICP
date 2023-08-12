@@ -5,6 +5,7 @@ import { InventoryContext } from "./InventoryContextProvider";
 import { itemImages } from "../utils/ImportUtils";
 import {WalletContext} from "./WalletContextProvider";
 import DoubleDisplay from "./DoubleDisplay";
+import NumberSimplifyer from "./NumberSimplifyer";
 
 
 function Listing(props) {
@@ -54,7 +55,7 @@ function Listing(props) {
     >
       <Box flexGrow={1} padding="5px">
         <Box display="flex" justifyContent="space-between" alignItems="flex-start"><Box>Seller:</Box><Box>{props.listing.seller.name}</Box></Box>
-        <Box display="flex" justifyContent="space-between"><Box>Price:</Box><Box><DoubleDisplay value={props.listing.price} precision={0}></DoubleDisplay></Box></Box>
+        <Box display="flex" justifyContent="space-between"><Box>Price:</Box><Box><NumberSimplifyer value={props.listing.price}></NumberSimplifyer></Box></Box>
         <Box display="flex" justifyContent="space-between"><Box>Item:</Box><Box>{props.listing.item.name}</Box></Box>
         <Box display="flex" justifyContent="space-between"><Box sx={{ fontSize: "small" }}>{`${daysPassed} days ago`}</Box></Box>
       </Box>

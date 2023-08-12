@@ -84,9 +84,10 @@ function CreateListing(props) {
           value={price}
           onChange={(e) => setPrice(e.target.value)}
           type="number"
+          InputProps={{inputProps:{min:1}}}
         />
         <Button
-          disabled={!price || !item}
+          disabled={!price || !item || price<1}
           type="submit"
           fullWidth
           variant="contained"

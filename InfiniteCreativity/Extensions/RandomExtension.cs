@@ -11,5 +11,11 @@
         {
             return (random.NextDouble() * (max - min)) + min;
         }
+
+        public static TimeSpan NextTimeDuration(this Random random, int min, int max)
+        { 
+            var duration = random.Next(min,max);
+            return TimeSpan.FromMinutes(duration);
+        }
     }
 }

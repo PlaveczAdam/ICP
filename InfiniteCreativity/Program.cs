@@ -1,4 +1,5 @@
 using InfiniteCreativity.Data;
+using InfiniteCreativity.HostedServices;
 using InfiniteCreativity.Hubs;
 using InfiniteCreativity.Mappers;
 using InfiniteCreativity.Middlewares;
@@ -65,6 +66,7 @@ builder.Services.AddScoped<INotificationService, NotificationService>();
 
 builder.Services.AddScoped<QuestGenerator>();
 builder.Services.AddScoped<ItemGenerator>();
+builder.Services.AddHostedService<QuestScheduler>();
 
 builder.Services
     .AddAuthentication(options => options.DefaultScheme = "Cookies")

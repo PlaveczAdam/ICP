@@ -12,5 +12,8 @@
         public const string Hand = "hand.png";
         public const string Shoulder = "shoulder.png";
         public const string Chest = "chest.png";
+
+        public const string Stone = "stone.png";
+        public const string TheRock = "therock.png";
     }
 }

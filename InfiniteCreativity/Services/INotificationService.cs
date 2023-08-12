@@ -8,5 +8,6 @@ namespace InfiniteCreativity.Services
         public Task SendNotification(int playerId, NotificationType notificationType);
         public Task OnConnected(HubCallerContext hubContext);
         public Task OnDisconnected(HubCallerContext hubContext);
+        public Task SendNotificationToEveryone(NotificationType notificationType);
     }
 }

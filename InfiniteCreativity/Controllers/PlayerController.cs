@@ -1,5 +1,6 @@
 ﻿using InfiniteCreativity.Models;
 using InfiniteCreativity.Models.DTO;
+using InfiniteCreativity.Models.DTO.Game;
 using InfiniteCreativity.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
@@ -59,6 +60,13 @@ namespace InfiniteCreativity.Controllers
         public async Task<ShowPlayerDTO> GetCurrentPlayer()
         { 
             return await _playerService.GetCurrentPlayerDTO();
+        }
+
+        [Authorize]
+        [HttpGet, Route("game/current")]
+        public async Task<ShowGamePlayerDTO> GetCurrentPlayerAll()
+        {
+            return await _playerService.GetCurrentPlayerAll();
         }
 
         [Authorize]

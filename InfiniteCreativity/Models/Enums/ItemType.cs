@@ -3,6 +3,7 @@
     public enum ItemType
     {
         Weapon,
-        Armor
+        Armor,
+        Material
     }
 }

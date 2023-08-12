@@ -139,7 +139,7 @@ namespace InfiniteCreativity.Migrations
                     b.Property<int?>("QuestId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("StackSize")
+                    b.Property<int>("Rarity")
                         .HasColumnType("integer");
 
                     b.Property<int?>("Value")
@@ -225,6 +225,9 @@ namespace InfiniteCreativity.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("CharacterSlot")
+                        .HasColumnType("integer");
+
                     b.Property<double>("Money")
                         .HasColumnType("double precision");
 
@@ -235,6 +238,9 @@ namespace InfiniteCreativity.Migrations
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<int>("QuestSlot")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -258,6 +264,9 @@ namespace InfiniteCreativity.Migrations
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<TimeSpan>("Duration")
+                        .HasColumnType("interval");
 
                     b.Property<bool>("IsDone")
                         .HasColumnType("boolean");
@@ -287,6 +296,19 @@ namespace InfiniteCreativity.Migrations
                         .HasColumnType("integer");
 
                     b.HasDiscriminator().HasValue("Equippable");
+                });
+
+            modelBuilder.Entity("InfiniteCreativity.Models.Stackable", b =>
+                {
+                    b.HasBaseType("InfiniteCreativity.Models.Item");
+
+                    b.Property<int>("Amount")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("StackableType")
+                        .HasColumnType("integer");
+
+                    b.HasDiscriminator().HasValue("Stackable");
                 });
 
             modelBuilder.Entity("InfiniteCreativity.Models.Armor.Boot", b =>
@@ -402,6 +424,13 @@ namespace InfiniteCreativity.Migrations
                         .HasColumnType("integer");
 
                     b.HasDiscriminator().HasValue("Weapon");
+                });
+
+            modelBuilder.Entity("InfiniteCreativity.Models.Materials.Material", b =>
+                {
+                    b.HasBaseType("InfiniteCreativity.Models.Stackable");
+
+                    b.HasDiscriminator().HasValue("Material");
                 });
 
             modelBuilder.Entity("InfiniteCreativity.Models.Weapons.Melee", b =>

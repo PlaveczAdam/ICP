@@ -1,5 +1,6 @@
 ﻿using InfiniteCreativity.Models;
 using InfiniteCreativity.Models.DTO;
+using InfiniteCreativity.Models.DTO.Game;
 
 namespace InfiniteCreativity.Services
 {
@@ -8,6 +9,7 @@ namespace InfiniteCreativity.Services
         public Task CreatePlayer(CreatePlayerDTO newPlayer);
         public Task<int> GetPlayerIdIfValid(LoginPlayerDTO player);
         public Task<Player> GetCurrentPlayer(bool withInventory=false, bool withMessages=false, bool withConnections=false);
+        public Task<ShowGamePlayerDTO> GetCurrentPlayerAll();
         public Task<ShowPlayerDTO> GetCurrentPlayerDTO();
         public Task<ShowWalletDTO> GetWallet();
         public Task<Player?> GetPlayerByName(string name);

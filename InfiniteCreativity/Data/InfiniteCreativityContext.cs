@@ -2,6 +2,7 @@
 using InfiniteCreativity.Models;
 using InfiniteCreativity.Models.Weapons;
 using InfiniteCreativity.Models.Armor;
+using InfiniteCreativity.Models.Materials;
 
 namespace InfiniteCreativity.Data
 {
@@ -25,6 +26,8 @@ namespace InfiniteCreativity.Data
         public DbSet<Boot> Boot { get; set; }
         public DbSet<Listing> Listing { get; set; }
         public DbSet<Connection> Connection { get; set; }
+        public DbSet<Material> Material { get; set; }
+        public DbSet<Stackable> Stackable { get; set; }
 
     }
 }

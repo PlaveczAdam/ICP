@@ -7,7 +7,7 @@ namespace InfiniteCreativity.Services
     {
         public Task<ShowCharacterDTO> CreateCharacter(CreateCharacterDTO character);
         public Task<ShowEquipmentDTO> GetEquipment(int characterId);
-        public Task<Character> GetCharacterById(int characterId, Player currentPlayer, bool withEquipment = false);
+        public Task<Character> GetCharacterById(int characterId, Player currentPlayer, bool withEquipment = false, bool withQuest = false);
         public Task EquipEquipment(int characterId, int itemId);
         public Task UnequipItemFromAllCharacter(int itemId);
         public Task UnequipEquipment(int characterId, int itemId);

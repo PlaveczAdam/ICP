@@ -21,6 +21,7 @@ import Messages from "./components/Messages";
 import { ToastContainer } from "react-toastify";
 import Badge from "@mui/material/Badge";
 import MailIcon from "@mui/icons-material/Mail";
+import useNotification, { notificationTypes } from "./hooks/useNotification";
 
 const theme = createTheme({
   palette: {
@@ -225,6 +226,11 @@ function App() {
     }, [childData]);
 
  
+  let notification = useNotification(notificationTypes.QuestUpdate);
+  useEffect(() => {
+    userCTX.refresh();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [notification]);
 
   return (
     <ThemeProvider theme={globalTheme}>
@@ -263,12 +269,11 @@ function App() {
                   zIndex: 1000,
                   className: "navbarBox",
                   boxShadow: "2px 6px 11px 2px #101010",
+                  minHeight:70
                 }}
               >
-                <Box sx={{ flexShrink: "1" }}>
-                  <Link to="/">
-                    <img src={logo} alt="logo" width="70" height="70" />
-                  </Link>
+                <Box component={Link} to="/" display="flex" alignItems="center" paddingLeft={3}>
+                  <img src={logo} alt="logo" height="60" />
                 </Box>
                 <Box
                   sx={{

@@ -11,6 +11,7 @@ using Newtonsoft.Json.Linq;
 using System.Linq.Expressions;
 using System.Numerics;
 using System.Reflection;
+using System.Reflection.Metadata;
 using System.Runtime.CompilerServices;
 
 namespace InfiniteCreativity.Services
@@ -36,6 +37,10 @@ namespace InfiniteCreativity.Services
         public async Task<ShowCharacterDTO> CreateCharacter(CreateCharacterDTO character)
         {
             var currentPlayer = await _playerService.GetCurrentPlayer();
+            var numberOfCharacters = currentPlayer.Characters.Count;
+            if (numberOfCharacters >= currentPlayer.CharacterSlot)
+            { throw new LimitReachedException(); }
+
             var newCharacter = _mapper.Map<Character>(character);
 
             newCharacter.Level = 1;
@@ -86,27 +91,29 @@ namespace InfiniteCreativity.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task<Character> GetCharacterById(int characterId, Player currentPlayer, bool withEquipment=false)
+        public async Task<Character> GetCharacterById(int characterId, Player currentPlayer, bool withEquipment=false, bool withQuest=false)
         {
             var character = 
                 currentPlayer.Characters.FirstOrDefault(x => x.Id == characterId)
                 ?? throw new UnauthorizedOperationException();
-            if (!withEquipment)
-            {
-                return character;
-            }
+            IQueryable<Character> characterEntity = _context.Character;
+
             if (withEquipment)
             {
-                return await _context.Character
+                characterEntity = characterEntity
                     .Include((x) => x.Head)
                     .Include((x) => x.Shoulder)
                     .Include((x) => x.Chest)
                     .Include((x) => x.Hand)
                     .Include((x) => x.Leg)
                     .Include((x) => x.Boot)
-                    .Include((x) => x.Weapon).SingleAsync((x)=>x.Id == characterId);
+                    .Include((x) => x.Weapon);
             }
-            return character;
+            if (withQuest)
+            {
+                characterEntity = characterEntity.Include((x) => x.Quests);
+            }
+            return await characterEntity.SingleAsync((x)=>x.Id == characterId);
         }
 
         public async Task UnequipItemFromAllCharacter(int itemId)

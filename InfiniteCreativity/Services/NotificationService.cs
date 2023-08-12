@@ -34,6 +34,11 @@ namespace InfiniteCreativity.Services
             }
             
         }
+        public async Task SendNotificationToEveryone(NotificationType notificationType)
+        {
+            await _hubContext.Clients.All.SendAsync("Notification", notificationType.ToString());
+        }
+
         public async Task OnConnected(HubCallerContext hubContext)
         {
             var currentPlyer = await _playerService.GetCurrentPlayer(withConnections:true);

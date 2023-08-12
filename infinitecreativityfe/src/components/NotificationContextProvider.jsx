@@ -14,7 +14,6 @@ function NotificationContextProvider(props) {
     if (!userCTX.user /* || true */) {
       return;
     }
-    console.log("EKEZDTE");
     const connection = new signalR.HubConnectionBuilder()
       .withUrl("/notification")
       .configureLogging(signalR.LogLevel.Trace)

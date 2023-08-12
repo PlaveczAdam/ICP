@@ -3,5 +3,6 @@
     public enum NotificationType
     {
         Message,
+        QuestUpdate,
     }
 }
