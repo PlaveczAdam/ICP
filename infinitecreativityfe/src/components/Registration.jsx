@@ -123,7 +123,7 @@ function Registration(props) {
             fullWidth
             name="password"
             label="Password"
-            type="password"
+            type={showPassword ? 'text' : 'password'}
             InputProps={{
               endAdornment: <InputAdornment position="end">
                 <IconButton
