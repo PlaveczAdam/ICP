@@ -4,7 +4,7 @@ import { DateTime } from "luxon";
 function Message(props)
 {
     return <Box textAlign="left">
-        [{DateTime.fromISO(props.message.sendDate).toFormat("HH:mm")}] {props.message.sender.name} : {props.message.messageBody}
+        <span style={{color: "teal"}}>[{DateTime.fromISO(props.message.sendDate).toFormat("HH:mm")}]</span> <strong style={{color: "teal"}}>{props.message.sender.name}</strong>: {props.message.messageBody}
     </Box>
 }
 

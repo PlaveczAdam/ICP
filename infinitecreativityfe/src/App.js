@@ -1,8 +1,9 @@
 import "./App.css";
 import logo from "./img/logo.png";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Login from "./components/Login";
+import { DateTime } from 'luxon';
 import Registration from "./components/Registration";
 import Home from "./components/Home";
 import Account from "./components/Account";
@@ -18,6 +19,8 @@ import MyListings from "./components/MyListings";
 import AllListings from "./components/AllListings";
 import Messages from "./components/Messages";
 import { ToastContainer } from "react-toastify";
+import Badge from "@mui/material/Badge";
+import MailIcon from "@mui/icons-material/Mail";
 
 const theme = createTheme({
   palette: {
@@ -184,12 +187,44 @@ const globalTheme = createTheme(theme, {
 
 function App() {
   const [activeButton, setActiveButton] = useState("home");
+  const [childData, setChildData] = useState([]);
+  const [msgNumber, setMsgNumber] = useState(0);
+  const [loginDate, setLoginDate] = useState();
+  const [lastDate, setLastDate] = useState();
+  const [isOpen, setIsOpen] = useState(false);
+  const [checked, setChecked] = useState(false);
   const userCTX = useContext(UserContext);
+  let lDate = DateTime.utc();
+  let newMessagesCounter;
   async function handleLogOut() {
     await fetch("/api/player/logout");
     setActiveButton("home");
     userCTX.refresh();
+    localStorage.setItem(`${userCTX.user.name}Date`, lDate.toISO());
+    setChecked(false);
   }
+
+  function openMessages(){
+    setChecked(true);
+    if(isOpen) setIsOpen(false);
+    else setIsOpen(true);
+  }
+  
+  function handleChildData(data){ 
+    const lastLoginDate = localStorage.getItem(`${userCTX.user.name}Date`);
+    setLoginDate(DateTime.utc().toISO());
+    setLastDate(lastLoginDate);
+    setChildData(data);
+  }
+
+  useEffect(() => {
+      newMessagesCounter = childData.filter((x) => x.recipient.name === userCTX.user.name && x.sendDate >= lastDate && x.sendDate <= loginDate);
+      setTimeout(() => {
+        if(!checked)setMsgNumber(newMessagesCounter.length)
+      }, 200);
+    }, [childData]);
+
+ 
 
   return (
     <ThemeProvider theme={globalTheme}>
@@ -201,9 +236,9 @@ function App() {
             hideProgressBar={false}
             closeOnClick={true}
             pauseOnHover={true}
-            draggable={true}
+            draggable={true} 
             theme="dark"
-            style={{userSelect:"none"}}
+            style={{ userSelect: "none" }}
           />
         </Box>
         <Box className="App-header">
@@ -297,6 +332,23 @@ function App() {
                         alignItems: "center",
                       }}
                     >
+                      <Box sx={{ paddingRight: "20px" }}>
+                        <Badge badgeContent={msgNumber} color="error">
+                          <MailIcon
+                            style={{
+                              borderRadius: "50%",
+                              backgroundColor: "rgba(0, 105, 94, 0.4)",
+                              padding: "10px",
+                            }}
+                            sx={{"&:hover": { cursor: "pointer" }}}
+                            onClick={() =>{ 
+                              setMsgNumber(0); 
+                              openMessages();
+                            }}
+                            color="action"
+                          />
+                        </Badge>
+                      </Box>
                       <Box sx={{ paddingRight: "10px" }}>
                         {userCTX.user.name}
                       </Box>
@@ -390,7 +442,7 @@ function App() {
               </Box>
             </Box>
           </Router>
-          <Messages></Messages>
+          <Messages onDataPassed={handleChildData} new={msgNumber} isOpen={isOpen} setIsOpen={setIsOpen}></Messages>
         </Box>
       </div>
     </ThemeProvider>

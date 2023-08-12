@@ -30,7 +30,6 @@ function CreateListing(props) {
   }
   function handleSelection() {
     setCounter(counter + 1);
-    console.log(counter);
     setItem();
     if(counter % 2 === 0) setInventoryOpen(false);
     else setInventoryOpen(true);

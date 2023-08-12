@@ -23,6 +23,7 @@ function Messages(props) {
     const res = await fetch("api/messages");
     const msgs = await res.json();
     setMessages(msgs);
+    props.onDataPassed(msgs);
   }
 
   async function sendMessage() {
@@ -54,7 +55,11 @@ function Messages(props) {
   return (
     <ClickAwayListener
       onClickAway={() => {
-        setIsOpen(false);
+        if(props.isOpen !== isOpen) setIsOpen(props.isOpen);
+        else {
+          props.setIsOpen(false);
+          setIsOpen(false);
+        }
       }}
     >
       <Box
@@ -67,17 +72,24 @@ function Messages(props) {
         bottom={0}
         left={0}
         width={500}
-        bgcolor="#000"
+        bgcolor="rgba(20, 20, 20, 0.9)"
       >
         <Box
           bgcolor="#000"
           onClick={(x) => {
-            setIsOpen(true);
+            if(props.isOpen !== isOpen) setIsOpen(props.isOpen);
+        else {
+          props.setIsOpen(true);
+          setIsOpen(true);
+        }
+          }}
+          sx={{
+            "&:hover": {cursor: "pointer"},
           }}
         >
           Chat
         </Box>
-        <Collapse in={isOpen}>
+        <Collapse in={props.isOpen && isOpen}>
           <Box height={500} overflow="auto">
             {messages.map((x) => (
               <Message message={x} key={`${x.fromInbox}_${x.id}`}></Message>
