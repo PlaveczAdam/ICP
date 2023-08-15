@@ -25,7 +25,8 @@ namespace InfiniteCreativity.HostedServices
                     var questService = scope.ServiceProvider.GetRequiredService<IQuestService>();
                     await questService.TickQuests();
                     var notificationService = scope.ServiceProvider.GetRequiredService<INotificationService>();
-                    await notificationService.SendNotificationToEveryone(NotificationType.QuestUpdate);
+                    await notificationService.SendFeNotificationToEveryone(NotificationType.QuestUpdate);
+                    await notificationService.SendGNotificationToEveryone();
                 }
                     cancellationToken.WaitHandle.WaitOne(TimeSpan.FromMinutes(1));
             }

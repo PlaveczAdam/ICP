@@ -18,7 +18,8 @@ namespace InfiniteCreativity.Models
 
         public IEnumerable<Listing> Listing { get; set; }
 
-        public ICollection<Connection> Connections { get; set; }
+        public ICollection<FeConnection> FeConnections { get; set; }
+        public ICollection<GConnection> GConnections { get; set; }
         [InverseProperty("Recipient")]
         public ICollection<Message> RecievedMessages { get; set; }
         [InverseProperty("Sender")]

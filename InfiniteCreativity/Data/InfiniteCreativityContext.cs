@@ -25,9 +25,10 @@ namespace InfiniteCreativity.Data
         public DbSet<Leg> Leg { get; set; }
         public DbSet<Boot> Boot { get; set; }
         public DbSet<Listing> Listing { get; set; }
-        public DbSet<Connection> Connection { get; set; }
         public DbSet<Material> Material { get; set; }
         public DbSet<Stackable> Stackable { get; set; }
+        public DbSet<FeConnection> FeConnection { get; set; }
+        public DbSet<GConnection> GConnection { get; set; }
 
     }
 }

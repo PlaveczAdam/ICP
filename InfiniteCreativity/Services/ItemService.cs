@@ -4,6 +4,7 @@ using InfiniteCreativity.Models;
 using InfiniteCreativity.Models.DTO;
 using InfiniteCreativity.Models.Enums;
 using Microsoft.EntityFrameworkCore;
+using System.Numerics;
 
 namespace InfiniteCreativity.Services
 {
@@ -12,15 +13,18 @@ namespace InfiniteCreativity.Services
         private InfiniteCreativityContext _context;
         private IMapper _mapper;
         private IPlayerService _playerService;
+        private INotificationService _notificationService;
 
         public ItemService(
             InfiniteCreativityContext context,
             IMapper mapper,
-            IPlayerService playerService)
+            IPlayerService playerService,
+            INotificationService notificationService)
         {
             _context = context;
             _mapper = mapper;
             _playerService = playerService;
+            _notificationService = notificationService;
         }
 
         public async Task DeleteItems(DeleteItemsDTO items)
@@ -30,6 +34,7 @@ namespace InfiniteCreativity.Services
             currentPlayer.Money += itemsToDelete.Sum(x => x.Value)??0;
             _context.RemoveRange(itemsToDelete);
             await _context.SaveChangesAsync();
+            await _notificationService.SendGNotification(currentPlayer.Id);
         }
 
         public async Task<IEnumerable<ShowItemDTO>> GetAllItems()

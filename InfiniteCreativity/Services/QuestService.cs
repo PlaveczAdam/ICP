@@ -16,6 +16,7 @@ namespace InfiniteCreativity.Services
         private QuestGenerator _questGenerator;
         private InfiniteCreativityContext _context;
         private ICharacterService _characterService;
+        private INotificationService _notificationService;
 
         public QuestService(
             IMapper mapper,
@@ -23,13 +24,15 @@ namespace InfiniteCreativity.Services
             QuestGenerator questGenerator
 ,
             InfiniteCreativityContext context,
-            ICharacterService characterService)
+            ICharacterService characterService,
+            INotificationService notificationService)
         {
             _mapper = mapper;
             _playerService = playerService;
             _questGenerator = questGenerator;
             _context = context;
             _characterService = characterService;
+            _notificationService = notificationService;
         }
 
         public async Task<IEnumerable<ShowQuestDTO>> GetQuestByCharacterId(int characterId)
@@ -60,6 +63,8 @@ namespace InfiniteCreativity.Services
 
             HandleQuestCompletion(q, currentPlayer, character);
             await _context.SaveChangesAsync();
+            await _notificationService.SendGNotification(currentPlayer.Id);
+
             return _mapper.Map<ShowQuestDTO>(q);
         }
 
@@ -78,6 +83,7 @@ namespace InfiniteCreativity.Services
 
             _context.Quest.Add(quest);
             await _context.SaveChangesAsync();
+            await _notificationService.SendGNotification(currentPlayer.Id);
 
             return _mapper.Map<ShowQuestDTO>(quest);
         }

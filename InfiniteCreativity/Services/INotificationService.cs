@@ -5,9 +5,14 @@ namespace InfiniteCreativity.Services
 {
     public interface INotificationService
     {
-        public Task SendNotification(int playerId, NotificationType notificationType);
-        public Task OnConnected(HubCallerContext hubContext);
-        public Task OnDisconnected(HubCallerContext hubContext);
-        public Task SendNotificationToEveryone(NotificationType notificationType);
+        public Task SendFeNotification(int playerId, NotificationType notificationType);
+        public Task OnFeConnected(HubCallerContext hubContext);
+        public Task OnFeDisconnected(HubCallerContext hubContext);
+        public Task SendFeNotificationToEveryone(NotificationType notificationType);
+
+        public Task SendGNotification(int playerId);
+        public Task OnGConnected(HubCallerContext hubContext);
+        public Task OnGDisconnected(HubCallerContext hubContext);
+        public Task SendGNotificationToEveryone();
     }
 }

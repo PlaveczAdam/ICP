@@ -1,6 +1,9 @@
-﻿namespace InfiniteCreativity.Models
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace InfiniteCreativity.Models
 {
-    public class Connection
+    [PrimaryKey(nameof(ConnectionID))]
+    public class FeConnection
     {
         public string ConnectionID { get; set; }
         public string UserAgent { get; set; }

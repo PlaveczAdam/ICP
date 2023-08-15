@@ -47,7 +47,7 @@ namespace InfiniteCreativity.Services
             msg.MessageBody = message.MessageBody;
             _context.Add(msg);
             await _context.SaveChangesAsync();
-            await _notificationService.SendNotification(recipient.Id, NotificationType.Message);
+            await _notificationService.SendFeNotification(recipient.Id, NotificationType.Message);
             return _mapper.Map<ShowMessageDTO>(msg);
         }
     }

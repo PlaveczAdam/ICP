@@ -1,20 +1,13 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Collections.Concurrent;
-using Microsoft.AspNetCore.Authorization;
+﻿using InfiniteCreativity.Services;
 using Microsoft.AspNetCore.SignalR;
-using InfiniteCreativity.Services;
-using Microsoft.AspNetCore.Components;
 
 namespace InfiniteCreativity.Hubs
 {
-    [Authorize]
-    public class NotificationHub : Hub
+    public class GameNotificationHub : Hub
     {
         private INotificationService _notificationService;
 
-        public NotificationHub(INotificationService notificationService)
+        public GameNotificationHub(INotificationService notificationService)
         {
             _notificationService = notificationService;
         }
