@@ -11,6 +11,7 @@ import { UserContext } from "./UserContextProvider";
 import useNotification, { notificationTypes } from "../hooks/useNotification";
 import { toast } from "react-toastify";
 import { useLayoutEffect } from "react";
+import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
 
 function Messages(props) {
   const [messages, setMessages] = useState([]);
@@ -75,13 +76,12 @@ function Messages(props) {
     };
   }, [scrollRef]);
 
-  useLayoutEffect(()=>{
-    if(offsetY>99)
-    {
+  useLayoutEffect(() => {
+    if (offsetY > 99) {
       return;
     }
     window.requestAnimationFrame(scrollDown);
-  },[messages])
+  }, [messages]);
   if (!userCTX.user) {
     return null;
   }
@@ -89,13 +89,13 @@ function Messages(props) {
   return (
     <ClickAwayListener
       onClickAway={() => {
-        if(props.isOpen !== isOpen) setIsOpen(props.isOpen);
+        if (props.isOpen !== isOpen) setIsOpen(props.isOpen);
         else {
           props.setIsOpen(false);
           setIsOpen(false);
         }
       }}
-      mouseEvent="onMouseDown"
+      //mouseEvent="onMouseDown"
     >
       <Box
         component="form"
@@ -112,14 +112,16 @@ function Messages(props) {
         <Box
           bgcolor="#000"
           onClick={(x) => {
-            if(props.isOpen !== isOpen) setIsOpen(props.isOpen);
-        else {
-          props.setIsOpen(true);
-          setIsOpen(true);
-        }
+            if (props.isOpen !== isOpen) setIsOpen(props.isOpen);
+            else {
+              props.setIsOpen(true);
+              setIsOpen(true);
+            }
+            props.setMsgNumber(0);
+            props.setChecked(true);
           }}
           sx={{
-            "&:hover": {cursor: "pointer"},
+            "&:hover": { cursor: "pointer" },
           }}
         >
           Chat
@@ -140,12 +142,11 @@ function Messages(props) {
             {messages.map((x) => (
               <Message message={x} key={`${x.fromInbox}_${x.id}`}></Message>
             ))}
-            <Collapse in={offsetY > 100} sx={{position:"sticky", bottom:0}}>
-              <Box
-                onClick={scrollDown}
-                bgcolor="black"
-              >
-                To last message.
+            <Collapse in={offsetY > 100} sx={{ position: "sticky", bottom: 0}}>
+              <Box justifyContent={"space-evenly"} alignItems={"center"} display="flex" sx={{ borderRadius: "10px 10px 0px 0px", background: "#303030", "&:hover": {cursor: "pointer"}}} onClick={scrollDown} bgcolor="black">
+                <KeyboardDoubleArrowDownIcon/>
+                <Box sx={{fontSize: "small"}}>Jump to latest</Box>
+                <KeyboardDoubleArrowDownIcon/>
               </Box>
             </Collapse>
             <Box id="lastMessage"></Box>
@@ -153,11 +154,13 @@ function Messages(props) {
           <Box>
             <TextField
               value={recipient}
+              placeholder="target"
               onChange={(e) => {
                 setRecipient(e.target.value);
               }}
             ></TextField>
             <TextField
+            placeholder="message"
               value={body}
               onChange={(e) => {
                 setBody(e.target.value);

@@ -20,6 +20,8 @@ import Quest from "./Quest";
 import ScrollTop from "./ToTopButton";
 import { UserContext } from "./UserContextProvider";
 import useNotification, { notificationTypes } from "../hooks/useNotification";
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -58,8 +60,9 @@ function Quests(props) {
       method: "POST",
     });
 
-    //toast later
     if (!res.ok) {
+      //toast later
+      notify();
       getQuests();
       return;
     }
@@ -69,6 +72,19 @@ function Quests(props) {
     setQuests(newQuests);
   }
   const questUpdate = useNotification(notificationTypes.QuestUpdate);
+
+  const notify = () => {
+    toast.error("Unable to take quests at the time. Please try again later!", {
+      position: "top-center",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+    });
+  };
 
   useEffect(()=>{
     if(!isModalOpen)

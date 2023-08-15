@@ -11,6 +11,20 @@ function Inventory(props) {
   const inventoryCTX = useContext(InventoryContext);
   const [selectedItems, setSelectedItems] = useState([]);
   let price = selectedItems.map(x => x.value).reduce((x, y) => x + y, 0);
+  const groupedItems = {};
+  inventoryCTX.inventory.forEach((x) => {
+    const {rarityType, stackableType, amount} = x;
+    const key = `${rarityType}-${stackableType}`;
+    if(!groupedItems[key]){
+      groupedItems[key] = {
+        key,
+        rarityType, 
+        stackableType, 
+        totalAmount: 0,
+      };
+    }
+    groupedItems[key].totalAmount += amount;
+  });
   
   async function handleDelete() {
     let res = await toast.promise(fetch("/api/item", {

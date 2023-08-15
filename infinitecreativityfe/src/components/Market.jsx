@@ -1,6 +1,6 @@
 import { Box, Portal, Button } from "@mui/material";
 import InventoryContextProvider from "./InventoryContextProvider";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { Link, Outlet } from "react-router-dom";
 import { UserContext } from "./UserContextProvider";
 import { WalletContext } from "./WalletContextProvider";

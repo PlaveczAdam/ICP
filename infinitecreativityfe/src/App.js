@@ -3,7 +3,7 @@ import logo from "./img/logo.png";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import Login from "./components/Login";
-import { DateTime } from 'luxon';
+import { DateTime } from "luxon";
 import Registration from "./components/Registration";
 import Home from "./components/Home";
 import Account from "./components/Account";
@@ -21,6 +21,8 @@ import Messages from "./components/Messages";
 import { ToastContainer } from "react-toastify";
 import Badge from "@mui/material/Badge";
 import MailIcon from "@mui/icons-material/Mail";
+import ChatIcon from '@mui/icons-material/Chat';
+import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
 import useNotification, { notificationTypes } from "./hooks/useNotification";
 
 const theme = createTheme({
@@ -205,13 +207,13 @@ function App() {
     setChecked(false);
   }
 
-  function openMessages(){
+  function openMessages() {
     setChecked(true);
-    if(isOpen) setIsOpen(false);
+    if (isOpen) setIsOpen(false);
     else setIsOpen(true);
   }
-  
-  function handleChildData(data){ 
+
+  function handleChildData(data) {
     const lastLoginDate = localStorage.getItem(`${userCTX.user.name}Date`);
     setLoginDate(DateTime.utc().toISO());
     setLastDate(lastLoginDate);
@@ -219,13 +221,17 @@ function App() {
   }
 
   useEffect(() => {
-      newMessagesCounter = childData.filter((x) => x.recipient.name === userCTX.user.name && x.sendDate >= lastDate && x.sendDate <= loginDate);
-      setTimeout(() => {
-        if(!checked)setMsgNumber(newMessagesCounter.length)
-      }, 200);
-    }, [childData]);
+    newMessagesCounter = childData.filter(
+      (x) =>
+        x.recipient.name === userCTX.user.name &&
+        x.sendDate >= lastDate &&
+        x.sendDate <= loginDate
+    );
+    setTimeout(() => {
+      if (!checked) setMsgNumber(newMessagesCounter.length);
+    }, 200);
+  }, [childData]);
 
- 
   let notification = useNotification(notificationTypes.QuestUpdate);
   useEffect(() => {
     userCTX.refresh();
@@ -242,7 +248,7 @@ function App() {
             hideProgressBar={false}
             closeOnClick={true}
             pauseOnHover={true}
-            draggable={true} 
+            draggable={true}
             theme="dark"
             style={{ userSelect: "none" }}
           />
@@ -269,10 +275,16 @@ function App() {
                   zIndex: 1000,
                   className: "navbarBox",
                   boxShadow: "2px 6px 11px 2px #101010",
-                  minHeight:70
+                  minHeight: 70,
                 }}
               >
-                <Box component={Link} to="/" display="flex" alignItems="center" paddingLeft={3}>
+                <Box
+                  component={Link}
+                  to="/"
+                  display="flex"
+                  alignItems="center"
+                  paddingLeft={3}
+                >
                   <img src={logo} alt="logo" height="60" />
                 </Box>
                 <Box
@@ -339,15 +351,18 @@ function App() {
                     >
                       <Box sx={{ paddingRight: "20px" }}>
                         <Badge badgeContent={msgNumber} color="error">
-                          <MailIcon
+                          <QuestionAnswerIcon
                             style={{
-                              borderRadius: "50%",
+                              color: "",
+                              borderRadius: "15%",
                               backgroundColor: "rgba(0, 105, 94, 0.4)",
                               padding: "10px",
+                              border: "1px solid #202020",
+                              boxShadow: "0px 5px 8px #101010"
                             }}
-                            sx={{"&:hover": { cursor: "pointer" }}}
-                            onClick={() =>{ 
-                              setMsgNumber(0); 
+                            sx={{ "&:hover": { cursor: "pointer" } }}
+                            onClick={() => {
+                              setMsgNumber(0);
                               openMessages();
                             }}
                             color="action"
@@ -447,7 +462,13 @@ function App() {
               </Box>
             </Box>
           </Router>
-          <Messages onDataPassed={handleChildData} new={msgNumber} isOpen={isOpen} setIsOpen={setIsOpen}></Messages>
+          <Messages
+            onDataPassed={handleChildData}
+            setChecked={setChecked}
+            setMsgNumber={setMsgNumber}
+            isOpen={isOpen}
+            setIsOpen={setIsOpen}
+          ></Messages>
         </Box>
       </div>
     </ThemeProvider>
