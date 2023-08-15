@@ -8,7 +8,7 @@ namespace InfiniteCreativity.Models.DTO
         public string ImageName { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public RarityType RarityType { get; set; }
+        public RarityType Rarity { get; set; }
         public int? Value { get; set; }
         public ItemType ItemType { get; init; }
     }

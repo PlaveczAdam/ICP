@@ -17,6 +17,8 @@ namespace InfiniteCreativity.Mappers
         {
             CreateMap<Item, ShowItemDTO>().IncludeAllDerived();
             CreateMap<Equippable, ShowEquippableDTO>();
+            CreateMap<Stackable, ShowStackableDTO>();
+
             CreateMap<Weapon, ShowWeaponDTO>();
             CreateMap<Melee, ShowMeleeDTO>();
             CreateMap<Ranged, ShowRangedDTO>();
@@ -30,17 +32,18 @@ namespace InfiniteCreativity.Mappers
             CreateMap<Boot, ShowBootDTO>();
 
             CreateMap<Material, ShowMaterialDTO>();
-            CreateMap<Stackable, ShowStackableDTO>();
 
             CreateMap<Player, CreatePlayerDTO>().ReverseMap();
-            CreateMap<Character, CreateCharacterDTO>().ReverseMap();
-            CreateMap<Quest, ShowQuestDTO>();
+            CreateMap<Player, ShowGamePlayerDTO>();
             CreateMap<Player, ShowWalletDTO>();
             CreateMap<Player, ShowPlayerDTO>();
+
+            CreateMap<Character, CreateCharacterDTO>().ReverseMap();
             CreateMap<Character, ShowCharacterDTO>();
             CreateMap<Character, ShowEquipmentDTO>();
-            CreateMap<Player, ShowGamePlayerDTO>();
             CreateMap<Character, ShowGameCharacterDTO>();
+
+            CreateMap<Quest, ShowQuestDTO>();
 
             CreateMap<Listing, ShowListingDTO>();
 

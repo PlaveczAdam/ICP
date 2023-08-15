@@ -1,5 +1,4 @@
 import { Box, Tooltip } from "@mui/material";
-import { itemTypeName } from "../utils/OptionNames";
 import { itemImages } from "../utils/ImportUtils";
 import PriceCheckOutlinedIcon from "@mui/icons-material/PriceCheckOutlined";
 import StarRoundedIcon from '@mui/icons-material/StarRounded';
@@ -11,6 +10,8 @@ function Item(props) {
         <Box>Description:</Box> <Box>{props.item.description}</Box>
         <Box>Price:</Box> <Box>{props.item.value}</Box>
         <Box>ItemType:</Box> <Box>{props.item.itemType}</Box>
+        <Box>Rarity:</Box> <Box>{props.item.rarity}</Box>
+        <Box>Amount:</Box> <Box>{props.item.amount}</Box>
       </Box>
     </Box>
   ) : null;
