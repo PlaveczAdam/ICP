@@ -14,12 +14,14 @@ namespace InfiniteCreativity.Services
         private IMapper _mapper;
         private IPlayerService _playerService;
         private IHubContext<NotificationHub> _hubContext;
+        private GameNotificationHub _gameNotificationHub;
 
-        public NotificationService(IPlayerService playerService, IHubContext<NotificationHub> hubContext, InfiniteCreativityContext context)
+        public NotificationService(IPlayerService playerService, IHubContext<NotificationHub> hubContext, InfiniteCreativityContext context, GameNotificationHub gameNotificationHub)
         {
             _playerService = playerService;
             _hubContext = hubContext;
             _context = context;
+            _gameNotificationHub = gameNotificationHub;
         }
 
         public async Task SendFeNotification(int playerId, NotificationType notificationType)
@@ -91,7 +93,7 @@ namespace InfiniteCreativity.Services
             var connections = whom.GConnections;
             foreach (var connection in connections)
             {
-                await _hubContext.Clients
+                await _gameNotificationHub.Clients
                     .Client(connection.ConnectionID)
                     .SendAsync("Notification");
             }
@@ -99,7 +101,7 @@ namespace InfiniteCreativity.Services
 
         public async Task SendGNotificationToEveryone()
         {
-            await _hubContext.Clients.All.SendAsync("Notification");
+            await _gameNotificationHub.Clients.All.SendAsync("Notification");
         }
     }
 }
