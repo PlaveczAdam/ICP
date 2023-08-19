@@ -14,9 +14,9 @@ namespace InfiniteCreativity.Services
         private IMapper _mapper;
         private IPlayerService _playerService;
         private IHubContext<NotificationHub> _hubContext;
-        private GameNotificationHub _gameNotificationHub;
+        private IHubContext<GameNotificationHub> _gameNotificationHub;
 
-        public NotificationService(IPlayerService playerService, IHubContext<NotificationHub> hubContext, InfiniteCreativityContext context, GameNotificationHub gameNotificationHub)
+        public NotificationService(IPlayerService playerService, IHubContext<NotificationHub> hubContext, InfiniteCreativityContext context, IHubContext<GameNotificationHub> gameNotificationHub)
         {
             _playerService = playerService;
             _hubContext = hubContext;
