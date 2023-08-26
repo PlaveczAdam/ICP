@@ -9,10 +9,11 @@ namespace InfiniteCreativity.Models
     {
         public int Id { get; set; }
         public string? Name { get; set; }
+        public double Level { get; set; }
+
         public double BaseHealth { get; set; }
         [NotMapped]
         public double Health => BaseHealth*Level;
-        public double Level { get; set; }
 
         public IEnumerable<Quest>? Quests { get; set; }
 

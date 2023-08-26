@@ -110,5 +110,6 @@ app.UseAuthorization();
 app.UseMiddleware<ErrorHandlerMiddleware>();
 app.MapControllers();
 app.MapHub<NotificationHub>("/notification");
+app.MapHub<GameNotificationHub>("/gnotification");
 
 app.Run();

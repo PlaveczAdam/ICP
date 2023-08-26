@@ -20,6 +20,7 @@ namespace InfiniteCreativity.Services
     {
         private IPlayerService _playerService;
         private IMapper _mapper;
+        private INotificationService _notificationService;
 
         private readonly InfiniteCreativityContext _context;
 
@@ -27,11 +28,13 @@ namespace InfiniteCreativity.Services
             IPlayerService playerService,
             IMapper mapper
 ,
-            InfiniteCreativityContext context)
+            InfiniteCreativityContext context,
+            INotificationService notificationService)
         {
             _playerService = playerService;
             _mapper = mapper;
             _context = context;
+            _notificationService = notificationService;
         }
 
         public async Task<ShowCharacterDTO> CreateCharacter(CreateCharacterDTO character)
@@ -48,6 +51,7 @@ namespace InfiniteCreativity.Services
 
             currentPlayer.Characters.Add(newCharacter);
             await _context.SaveChangesAsync();
+            await _notificationService.SendGNotification(currentPlayer.Id);
             return _mapper.Map<ShowCharacterDTO>(newCharacter);
         }
 
@@ -89,6 +93,7 @@ namespace InfiniteCreativity.Services
                     break;
             }
             await _context.SaveChangesAsync();
+            await _notificationService.SendGNotification(currentPlayer.Id);
         }
 
         public async Task<Character> GetCharacterById(int characterId, Player currentPlayer, bool withEquipment=false, bool withQuest=false)
@@ -167,6 +172,7 @@ namespace InfiniteCreativity.Services
             }
             );
             await _context.SaveChangesAsync();
+            await _notificationService.SendGNotification(currentPlayer.Id);
         }
 
         public async Task UnequipEquipment(int characterId, int itemId)
@@ -201,9 +207,10 @@ namespace InfiniteCreativity.Services
                     break;
             }
             await _context.SaveChangesAsync();
+            await _notificationService.SendGNotification(currentPlayer.Id);
         }
 
-        private void ChangeEquipment(Character character ,Equippable changeTo, Expression<Func<Character, Equippable>>selector)
+        private void ChangeEquipment(Character character ,Equippable? changeTo, Expression<Func<Character, Equippable?>>selector)
         {
             var func = selector.Compile();
             var old = func(character);

@@ -13,13 +13,15 @@ namespace InfiniteCreativity.Services
         private ICharacterService _characterService;
         private IPlayerService _playerService;
         private IMapper _mapper;
+        private INotificationService _notificationService;
 
-        public ListingService(InfiniteCreativityContext context, IMapper mapper, ICharacterService characterService, IPlayerService playerService)
+        public ListingService(InfiniteCreativityContext context, IMapper mapper, ICharacterService characterService, IPlayerService playerService, INotificationService notificationService)
         {
             _context = context;
             _mapper = mapper;
             _characterService = characterService;
             _playerService = playerService;
+            _notificationService = notificationService;
         }
 
         public async Task<ShowListingDTO> CreateListing(CreateListingDTO newListing)
@@ -35,6 +37,7 @@ namespace InfiniteCreativity.Services
             await _characterService.UnequipItemFromAllCharacter(newListing.ItemId);
             _context.Listing.Add(newL);
             await _context.SaveChangesAsync();
+            await _notificationService.SendGNotification(player.Id);
             return _mapper.Map<ShowListingDTO>(newL);
         }
 
@@ -72,6 +75,8 @@ namespace InfiniteCreativity.Services
             lting.Item.Player = player;
             _context.Remove(lting);
             await _context.SaveChangesAsync();
+            await _notificationService.SendGNotification(player.Id);
+            await _notificationService.SendGNotification(lting.Seller.Id);
         }
         public async Task CancelListing(int id)
         {
@@ -89,6 +94,7 @@ namespace InfiniteCreativity.Services
             lting.Item.Player = player;
             _context.Remove(lting);
             await _context.SaveChangesAsync();
+            await _notificationService.SendGNotification(player.Id);
 
         }
     }
