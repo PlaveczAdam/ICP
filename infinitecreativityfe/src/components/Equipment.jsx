@@ -94,7 +94,7 @@ function Equipment(props) {
           </Toolbar>
         </AppBar>
         {equipment ? (
-          <Box display="flex">
+          <Box display="flex" alignItems= "flex-start">
             <Box display="flex" flexGrow={1} gap={2} flexWrap="wrap">
               {armor || weapon
                 ? inventoryCTX.inventory

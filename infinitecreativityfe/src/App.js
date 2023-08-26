@@ -24,6 +24,24 @@ import MailIcon from "@mui/icons-material/Mail";
 import ChatIcon from '@mui/icons-material/Chat';
 import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
 import useNotification, { notificationTypes } from "./hooks/useNotification";
+import {
+  Chart as ChartJS,
+  RadialLinearScale,
+  PointElement,
+  LineElement,
+  Filler,
+  Tooltip,
+  Legend,
+} from 'chart.js';
+
+ChartJS.register(
+  RadialLinearScale,
+  PointElement,
+  LineElement,
+  Filler,
+  Tooltip,
+  Legend
+);
 
 const theme = createTheme({
   palette: {
@@ -142,6 +160,81 @@ const globalTheme = createTheme(theme, {
         },
       },
     },
+    MuiMenu: {
+      styleOverrides:{
+        list:{
+          backgroundColor:"black",
+        }
+      }
+    },
+    MuiIconButton: {
+      styleOverrides:{
+        root:{
+          color:"white"
+        }
+      }
+    },
+    MuiListItemIcon: {
+      styleOverrides:{
+        root:{
+          color:"white"
+        }
+      }
+    },
+    MuiDataGrid: {
+      styleOverrides:{
+        menu:{
+          "& .MuiDataGrid-menuList":{
+            backgroundColor:"black",
+            border:"solid 1px white",
+            borderRadius:"4px"
+          }
+        },
+        root:{
+          borderColor:"transparent"
+        },
+        withBorderColor:{
+          borderColor: "rgb(85 32 91)",
+        }
+      }
+    },
+    MuiSelect: {
+      styleOverrides:{
+        select:{
+          color:"white"
+        },
+        icon:{
+          color:"white"
+        }
+      }
+    },
+    MuiTablePagination:{
+      styleOverrides:{
+        select:{
+          "&,&:focus":{
+          border: "solid 1px",
+          borderRadius:"4px",
+          borderColor: "white"
+          }
+        }
+      }
+    },
+    MuiMenuItem: {
+      styleOverrides:{
+        root:{
+          "&:hover": {
+            color: theme.palette.secondary.contrastText,
+            backgroundColor: theme.palette.secondary.light,
+            borderColor: theme.palette.secondary.main,
+          },
+          "&.Mui-selected, &.Mui-selected:hover": {
+            color: theme.palette.secondary.contrastText,
+            backgroundColor: theme.palette.secondary.light,
+            borderColor: theme.palette.secondary.main,
+          },
+        }
+      }
+    },
     MuiButton: {
       defaultProps: {
         color: "primary",
@@ -186,6 +279,47 @@ const globalTheme = createTheme(theme, {
       ],
     },
   },
+  typography:{
+    body1:{
+      color:"white"
+    },
+    body2:{
+      color:"white"
+    },
+    h1:{
+      color:"white"
+    },
+    h2:{
+      color:"white"
+    },
+    h3:{
+      color:"white"
+    },
+    h4:{
+      color:"white"
+    },
+    h5:{
+      color:"white"
+    },
+    h6:{
+      color:"white"
+    },
+    subtitle1:{
+      color:"white"
+    },
+    subtitle2:{
+      color:"white"
+    },
+    button:{
+      color:"white"
+    },
+    caption:{
+      color:"white"
+    },
+    overline:{
+      color:"white"
+    },
+  }
 });
 
 function App() {
@@ -238,7 +372,7 @@ function App() {
     userCTX.refresh();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [notification]);
-
+  
   return (
     <ThemeProvider theme={globalTheme}>
       <div className="App">

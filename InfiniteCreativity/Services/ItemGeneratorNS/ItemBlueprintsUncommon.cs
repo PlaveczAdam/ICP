@@ -1,4 +1,4 @@
-﻿using InfiniteCreativity.Models.Armor;
+﻿using InfiniteCreativity.Models.ArmorNs;
 using InfiniteCreativity.Models.Enums;
 using InfiniteCreativity.Models.Weapons;
 using InfiniteCreativity.Models;
@@ -62,6 +62,7 @@ namespace InfiniteCreativity.Services.ItemGeneratorNS
                 ArmorType = ArmorType.Head,
                 ItemType = ItemType.Armor,
                 ArmorValue = 1,
+                Health = 1.1,
                 Value = 15,
                 Rarity = RarityType.UnCommon
             },
@@ -72,6 +73,7 @@ namespace InfiniteCreativity.Services.ItemGeneratorNS
                 ArmorType = ArmorType.Shoulder,
                 ItemType = ItemType.Armor,
                 ArmorValue = 1,
+                Health = 1.1,
                 Value = 15,
                 Rarity = RarityType.UnCommon
             },
@@ -82,6 +84,7 @@ namespace InfiniteCreativity.Services.ItemGeneratorNS
                 ArmorType = ArmorType.Chest,
                 ItemType = ItemType.Armor,
                 ArmorValue = 1,
+                Health = 1.1,
                 Value = 15,
                 Rarity = RarityType.UnCommon
             },
@@ -92,6 +95,7 @@ namespace InfiniteCreativity.Services.ItemGeneratorNS
                 ArmorType = ArmorType.Hand,
                 ItemType = ItemType.Armor,
                 ArmorValue = 1,
+                Health = 1.1,
                 Value = 15,
                 Rarity = RarityType.UnCommon
             },
@@ -102,6 +106,7 @@ namespace InfiniteCreativity.Services.ItemGeneratorNS
                 ArmorType = ArmorType.Leg,
                 ItemType = ItemType.Armor,
                 ArmorValue = 1,
+                Health = 1.1,
                 Value = 15,
                 Rarity = RarityType.UnCommon
             },
@@ -112,6 +117,8 @@ namespace InfiniteCreativity.Services.ItemGeneratorNS
                 ArmorType = ArmorType.Boot,
                 ItemType = ItemType.Armor,
                 ArmorValue = 1,
+                Health = 1.1,
+                Movement = 1,
                 Value = 15,
                 Rarity = RarityType.UnCommon
             },

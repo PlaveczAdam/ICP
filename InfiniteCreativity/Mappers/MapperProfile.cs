@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using InfiniteCreativity.Models;
-using InfiniteCreativity.Models.Armor;
+using InfiniteCreativity.Models.ArmorNs;
 using InfiniteCreativity.Models.DTO;
 using InfiniteCreativity.Models.DTO.Armor;
 using InfiniteCreativity.Models.DTO.Game;
@@ -42,6 +42,7 @@ namespace InfiniteCreativity.Mappers
             CreateMap<Character, ShowCharacterDTO>();
             CreateMap<Character, ShowEquipmentDTO>();
             CreateMap<Character, ShowGameCharacterDTO>();
+            CreateMap<Character, ShowCharacterWithStatDTO>();
 
             CreateMap<Quest, ShowQuestDTO>();
 

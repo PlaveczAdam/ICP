@@ -40,7 +40,7 @@ namespace InfiniteCreativity.Services
         public async Task<IEnumerable<ShowItemDTO>> GetAllItems()
         {
             var currentPlayer = await _playerService.GetCurrentPlayer();
-            var contItem = await _context.Item.Where((x)=>x.Player!=null && x.Player.Id==currentPlayer.Id).ToListAsync();
+            var contItem = await _context.Item.Where((x)=>x.Player!=null && x.Player.Id==currentPlayer.Id).OrderBy(x=>x.Id).ToListAsync();
             var mappedItem = _mapper.Map<List<ShowItemDTO>>(contItem);
             return mappedItem;
         }

@@ -2,7 +2,7 @@
 using InfiniteCreativity.Data;
 using InfiniteCreativity.Exceptions;
 using InfiniteCreativity.Models;
-using InfiniteCreativity.Models.Armor;
+using InfiniteCreativity.Models.ArmorNs;
 using InfiniteCreativity.Models.DTO;
 using InfiniteCreativity.Models.Enums;
 using InfiniteCreativity.Models.Weapons;
@@ -47,7 +47,6 @@ namespace InfiniteCreativity.Services
             var newCharacter = _mapper.Map<Character>(character);
 
             newCharacter.Level = 1;
-            newCharacter.BaseHealth = 100;
 
             currentPlayer.Characters.Add(newCharacter);
             await _context.SaveChangesAsync();
@@ -119,6 +118,12 @@ namespace InfiniteCreativity.Services
                 characterEntity = characterEntity.Include((x) => x.Quests);
             }
             return await characterEntity.SingleAsync((x)=>x.Id == characterId);
+        }
+
+        public async Task<ShowCharacterWithStatDTO> GetCharacterDTOById(int characterId)
+        {
+            var currentPlayer = await _playerService.GetCurrentPlayer();
+            return _mapper.Map<ShowCharacterWithStatDTO>(await GetCharacterById(characterId, currentPlayer, withEquipment: true));
         }
 
         public async Task UnequipItemFromAllCharacter(int itemId)
