@@ -10,7 +10,7 @@ import 'react-toastify/dist/ReactToastify.css';
 function Inventory(props) {
   const inventoryCTX = useContext(InventoryContext);
   const [selectedItems, setSelectedItems] = useState([]);
-  let price = selectedItems.map(x => x.value).reduce((x, y) => x + y, 0);
+  let price = selectedItems.map(x => x.amount ? x.value * x.amount : x.value).reduce((x, y) => x + y, 0);
   const groupedItems = {};
   inventoryCTX.inventory.forEach((x) => {
     const {rarityType, stackableType, amount} = x;

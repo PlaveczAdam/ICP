@@ -199,6 +199,7 @@ function App() {
   const userCTX = useContext(UserContext);
   let lDate = DateTime.utc();
   let newMessagesCounter;
+  
   async function handleLogOut() {
     await fetch("/api/player/logout");
     setActiveButton("home");
