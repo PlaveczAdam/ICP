@@ -1,7 +1,7 @@
 ﻿using InfiniteCreativity.Models.Enums;
 using InfiniteCreativity.Models.Weapons;
 using InfiniteCreativity.Models;
-using InfiniteCreativity.Models.Armor;
+using InfiniteCreativity.Models.ArmorNs;
 using InfiniteCreativity.Models.Materials;
 
 namespace InfiniteCreativity.Services.ItemGeneratorNS
@@ -55,13 +55,14 @@ namespace InfiniteCreativity.Services.ItemGeneratorNS
                 Value = 15,
                 Rarity = RarityType.Common
             },
-            new Head{ 
+            new Head{
                 Name = "Bucket",
                 ImageName = ImageName.Head,
                 Description = "without water",
                 ArmorType = ArmorType.Head,
                 ItemType = ItemType.Armor,
                 ArmorValue = 1,
+                Health = 1.1,
                 Value = 15,
                 Rarity = RarityType.Common
             },
@@ -72,6 +73,7 @@ namespace InfiniteCreativity.Services.ItemGeneratorNS
                 ArmorType = ArmorType.Shoulder,
                 ItemType = ItemType.Armor,
                 ArmorValue = 1,
+                Health = 1.1,
                 Value = 15,
                 Rarity = RarityType.Common
             },
@@ -82,6 +84,7 @@ namespace InfiniteCreativity.Services.ItemGeneratorNS
                 ArmorType = ArmorType.Chest,
                 ItemType = ItemType.Armor,
                 ArmorValue = 1,
+                Health = 1.1,
                 Value = 15,
                 Rarity = RarityType.Common
             },
@@ -92,6 +95,7 @@ namespace InfiniteCreativity.Services.ItemGeneratorNS
                 ArmorType = ArmorType.Hand,
                 ItemType = ItemType.Armor,
                 ArmorValue = 1,
+                Health = 1.1,
                 Value = 15,
                 Rarity = RarityType.Common
             },
@@ -102,6 +106,7 @@ namespace InfiniteCreativity.Services.ItemGeneratorNS
                 ArmorType = ArmorType.Leg,
                 ItemType = ItemType.Armor,
                 ArmorValue = 1,
+                Health = 1.1,
                 Value = 15,
                 Rarity = RarityType.Common
             },
@@ -112,6 +117,8 @@ namespace InfiniteCreativity.Services.ItemGeneratorNS
                 ArmorType = ArmorType.Boot,
                 ItemType = ItemType.Armor,
                 ArmorValue = 1,
+                Health = 1.1,
+                Movement = 1,
                 Value = 15,
                 Rarity = RarityType.Common
             },

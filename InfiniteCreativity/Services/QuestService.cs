@@ -105,8 +105,9 @@ namespace InfiniteCreativity.Services
         }
         private void HandleQuestCompletion(Quest quest, Player currentPlayer, Character character)
         {
-            if (quest.Progression == 100)
+            if (quest.Progression >= 99.9)
             {
+                quest.Progression = 100;
                 quest.Rewards.ToList().ForEach(x => {
                     if (x is Stackable stackableReward)
                     {

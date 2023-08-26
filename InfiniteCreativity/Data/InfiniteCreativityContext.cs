@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using InfiniteCreativity.Models;
 using InfiniteCreativity.Models.Weapons;
-using InfiniteCreativity.Models.Armor;
+using InfiniteCreativity.Models.ArmorNs;
 using InfiniteCreativity.Models.Materials;
 
 namespace InfiniteCreativity.Data

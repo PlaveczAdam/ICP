@@ -3,6 +3,7 @@ using System;
 using InfiniteCreativity.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace InfiniteCreativity.Migrations
 {
     [DbContext(typeof(InfiniteCreativityContext))]
-    partial class InfiniteCreativityContextModelSnapshot : ModelSnapshot
+    [Migration("20230826115503_AddRaceProfession")]
+    partial class AddRaceProfession
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -329,7 +332,7 @@ namespace InfiniteCreativity.Migrations
                     b.HasDiscriminator().HasValue("Stackable");
                 });
 
-            modelBuilder.Entity("InfiniteCreativity.Models.ArmorNs.Boot", b =>
+            modelBuilder.Entity("InfiniteCreativity.Models.Armor.Boot", b =>
                 {
                     b.HasBaseType("InfiniteCreativity.Models.Equippable");
 
@@ -340,18 +343,11 @@ namespace InfiniteCreativity.Migrations
                     b.Property<double>("ArmorValue")
                         .ValueGeneratedOnUpdateSometimes()
                         .HasColumnType("double precision");
-
-                    b.Property<double>("Health")
-                        .ValueGeneratedOnUpdateSometimes()
-                        .HasColumnType("double precision");
-
-                    b.Property<int>("Movement")
-                        .HasColumnType("integer");
 
                     b.HasDiscriminator().HasValue("Boot");
                 });
 
-            modelBuilder.Entity("InfiniteCreativity.Models.ArmorNs.Chest", b =>
+            modelBuilder.Entity("InfiniteCreativity.Models.Armor.Chest", b =>
                 {
                     b.HasBaseType("InfiniteCreativity.Models.Equippable");
 
@@ -360,17 +356,13 @@ namespace InfiniteCreativity.Migrations
                         .HasColumnType("integer");
 
                     b.Property<double>("ArmorValue")
-                        .ValueGeneratedOnUpdateSometimes()
-                        .HasColumnType("double precision");
-
-                    b.Property<double>("Health")
                         .ValueGeneratedOnUpdateSometimes()
                         .HasColumnType("double precision");
 
                     b.HasDiscriminator().HasValue("Chest");
                 });
 
-            modelBuilder.Entity("InfiniteCreativity.Models.ArmorNs.Hand", b =>
+            modelBuilder.Entity("InfiniteCreativity.Models.Armor.Hand", b =>
                 {
                     b.HasBaseType("InfiniteCreativity.Models.Equippable");
 
@@ -379,17 +371,13 @@ namespace InfiniteCreativity.Migrations
                         .HasColumnType("integer");
 
                     b.Property<double>("ArmorValue")
-                        .ValueGeneratedOnUpdateSometimes()
-                        .HasColumnType("double precision");
-
-                    b.Property<double>("Health")
                         .ValueGeneratedOnUpdateSometimes()
                         .HasColumnType("double precision");
 
                     b.HasDiscriminator().HasValue("Hand");
                 });
 
-            modelBuilder.Entity("InfiniteCreativity.Models.ArmorNs.Head", b =>
+            modelBuilder.Entity("InfiniteCreativity.Models.Armor.Head", b =>
                 {
                     b.HasBaseType("InfiniteCreativity.Models.Equippable");
 
@@ -398,17 +386,13 @@ namespace InfiniteCreativity.Migrations
                         .HasColumnType("integer");
 
                     b.Property<double>("ArmorValue")
-                        .ValueGeneratedOnUpdateSometimes()
-                        .HasColumnType("double precision");
-
-                    b.Property<double>("Health")
                         .ValueGeneratedOnUpdateSometimes()
                         .HasColumnType("double precision");
 
                     b.HasDiscriminator().HasValue("Head");
                 });
 
-            modelBuilder.Entity("InfiniteCreativity.Models.ArmorNs.Leg", b =>
+            modelBuilder.Entity("InfiniteCreativity.Models.Armor.Leg", b =>
                 {
                     b.HasBaseType("InfiniteCreativity.Models.Equippable");
 
@@ -417,17 +401,13 @@ namespace InfiniteCreativity.Migrations
                         .HasColumnType("integer");
 
                     b.Property<double>("ArmorValue")
-                        .ValueGeneratedOnUpdateSometimes()
-                        .HasColumnType("double precision");
-
-                    b.Property<double>("Health")
                         .ValueGeneratedOnUpdateSometimes()
                         .HasColumnType("double precision");
 
                     b.HasDiscriminator().HasValue("Leg");
                 });
 
-            modelBuilder.Entity("InfiniteCreativity.Models.ArmorNs.Shoulder", b =>
+            modelBuilder.Entity("InfiniteCreativity.Models.Armor.Shoulder", b =>
                 {
                     b.HasBaseType("InfiniteCreativity.Models.Equippable");
 
@@ -436,10 +416,6 @@ namespace InfiniteCreativity.Migrations
                         .HasColumnType("integer");
 
                     b.Property<double>("ArmorValue")
-                        .ValueGeneratedOnUpdateSometimes()
-                        .HasColumnType("double precision");
-
-                    b.Property<double>("Health")
                         .ValueGeneratedOnUpdateSometimes()
                         .HasColumnType("double precision");
 
@@ -497,23 +473,23 @@ namespace InfiniteCreativity.Migrations
 
             modelBuilder.Entity("InfiniteCreativity.Models.Character", b =>
                 {
-                    b.HasOne("InfiniteCreativity.Models.ArmorNs.Boot", "Boot")
+                    b.HasOne("InfiniteCreativity.Models.Armor.Boot", "Boot")
                         .WithMany()
                         .HasForeignKey("BootId");
 
-                    b.HasOne("InfiniteCreativity.Models.ArmorNs.Chest", "Chest")
+                    b.HasOne("InfiniteCreativity.Models.Armor.Chest", "Chest")
                         .WithMany()
                         .HasForeignKey("ChestId");
 
-                    b.HasOne("InfiniteCreativity.Models.ArmorNs.Hand", "Hand")
+                    b.HasOne("InfiniteCreativity.Models.Armor.Hand", "Hand")
                         .WithMany()
                         .HasForeignKey("HandId");
 
-                    b.HasOne("InfiniteCreativity.Models.ArmorNs.Head", "Head")
+                    b.HasOne("InfiniteCreativity.Models.Armor.Head", "Head")
                         .WithMany()
                         .HasForeignKey("HeadId");
 
-                    b.HasOne("InfiniteCreativity.Models.ArmorNs.Leg", "Leg")
+                    b.HasOne("InfiniteCreativity.Models.Armor.Leg", "Leg")
                         .WithMany()
                         .HasForeignKey("LegId");
 
@@ -523,7 +499,7 @@ namespace InfiniteCreativity.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("InfiniteCreativity.Models.ArmorNs.Shoulder", "Shoulder")
+                    b.HasOne("InfiniteCreativity.Models.Armor.Shoulder", "Shoulder")
                         .WithMany()
                         .HasForeignKey("ShoulderId");
 
