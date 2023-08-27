@@ -12,6 +12,8 @@ import useNotification, { notificationTypes } from "../hooks/useNotification";
 import { toast } from "react-toastify";
 import { useLayoutEffect } from "react";
 import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
+import { DateTime } from "luxon";
+
 
 function Messages(props) {
   const [messages, setMessages] = useState([]);
@@ -116,6 +118,7 @@ function Messages(props) {
             else {
               props.setIsOpen(true);
               setIsOpen(true);
+              localStorage.setItem(`${userCTX.user.name}Date`, DateTime.utc().toISO());
             }
             props.setMsgNumber(0);
             props.setChecked(true);

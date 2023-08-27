@@ -20,8 +20,6 @@ import AllListings from "./components/AllListings";
 import Messages from "./components/Messages";
 import { ToastContainer } from "react-toastify";
 import Badge from "@mui/material/Badge";
-import MailIcon from "@mui/icons-material/Mail";
-import ChatIcon from '@mui/icons-material/Chat';
 import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
 import useNotification, { notificationTypes } from "./hooks/useNotification";
 
@@ -192,32 +190,30 @@ function App() {
   const [activeButton, setActiveButton] = useState("home");
   const [childData, setChildData] = useState([]);
   const [msgNumber, setMsgNumber] = useState(0);
-  const [loginDate, setLoginDate] = useState();
-  const [lastDate, setLastDate] = useState();
+  const [openDate, setOpenDate] = useState();
+  const [lastOpenDate, setlastOpenDate] = useState();
   const [isOpen, setIsOpen] = useState(false);
   const [checked, setChecked] = useState(false);
   const userCTX = useContext(UserContext);
-  let lDate = DateTime.utc();
   let newMessagesCounter;
   
   async function handleLogOut() {
     await fetch("/api/player/logout");
     setActiveButton("home");
     userCTX.refresh();
-    localStorage.setItem(`${userCTX.user.name}Date`, lDate.toISO());
     setChecked(false);
   }
-
+  
   function openMessages() {
     setChecked(true);
     if (isOpen) setIsOpen(false);
-    else setIsOpen(true);
+    else {setIsOpen(true); localStorage.setItem(`${userCTX.user.name}Date`, DateTime.utc().toISO());}
   }
 
   function handleChildData(data) {
-    const lastLoginDate = localStorage.getItem(`${userCTX.user.name}Date`);
-    setLoginDate(DateTime.utc().toISO());
-    setLastDate(lastLoginDate);
+    const lastDate = localStorage.getItem(`${userCTX.user.name}Date`);
+    setOpenDate(DateTime.utc().toISO());
+    setlastOpenDate(lastDate);
     setChildData(data);
   }
 
@@ -225,8 +221,8 @@ function App() {
     newMessagesCounter = childData.filter(
       (x) =>
         x.recipient.name === userCTX.user.name &&
-        x.sendDate >= lastDate &&
-        x.sendDate <= loginDate
+        x.sendDate >= lastOpenDate &&
+        x.sendDate <= openDate
     );
     setTimeout(() => {
       if (!checked) setMsgNumber(newMessagesCounter.length);
