@@ -1,6 +1,6 @@
 ﻿using InfiniteCreativity.Extensions;
 using InfiniteCreativity.Models;
-using InfiniteCreativity.Models.Armor;
+using InfiniteCreativity.Models.ArmorNs;
 using InfiniteCreativity.Models.Enums;
 using InfiniteCreativity.Models.Materials;
 using InfiniteCreativity.Models.Weapons;
@@ -67,6 +67,7 @@ namespace InfiniteCreativity.Services.ItemGeneratorNS
         private Armor GenerateArmor(Armor itemDesc)
         {
             itemDesc.ArmorValue *= _random.NextDouble(0.9, 1.1);
+            itemDesc.Health *= _random.NextDouble(0.9, 1.1);
             return itemDesc;
         }
 

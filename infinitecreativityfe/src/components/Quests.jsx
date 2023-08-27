@@ -16,12 +16,14 @@ import Typography from "@mui/material/Typography";
 import CloseIcon from "@mui/icons-material/Close";
 import Slide from "@mui/material/Slide";
 import LinearProgress from "@mui/material/LinearProgress";
-import Quest from "./Quest";
 import ScrollTop from "./ToTopButton";
 import { UserContext } from "./UserContextProvider";
 import useNotification, { notificationTypes } from "../hooks/useNotification";
 import { ToastContainer, toast } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
+import "react-toastify/dist/ReactToastify.css";
+import { DataGrid } from "@mui/x-data-grid";
+import Item from "./Item";
+import DoubleDisplay from "./DoubleDisplay";
 
 const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -86,13 +88,64 @@ function Quests(props) {
     });
   };
 
-  useEffect(()=>{
-    if(!isModalOpen)
-    {return}
+  useEffect(() => {
+    if (!isModalOpen) {
+      return;
+    }
     getQuests();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[isModalOpen, questUpdate])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isModalOpen, questUpdate]);
 
+  const columns = useMemo(() => {
+    return [
+      { field: "name", headerName: "Name", flex:1 },
+      { field: "description", headerName: "Description", flex:1 },
+      {
+        field: "progression",
+        headerName: "Progression",
+        width: 200,
+        renderCell: (params) => (
+          <Box display="flex" alignItems="center"minHeight={50}>
+            <Box width={100} >
+              <LinearProgress variant="determinate" value={params.value} />
+            </Box>
+            <Box minWidth={60}><DoubleDisplay value={params.value}></DoubleDisplay>%</Box>
+          </Box>
+        ),
+      },
+      {
+        field: "reward",
+        headerName: "Reward",
+        flex:1,
+        valueGetter: (params) => {
+          return {
+            isDone: params.row.isDone,
+            levelReward: params.row.levelReward,
+            cashReward: params.row.cashReward,
+            rewards: params.row.rewards,
+          };
+        },
+        renderCell: (params) => (
+          <>
+            {!params.value.isDone ? (
+              <Box>
+                <Box>
+                  {params.value.rewards.map((x) => (
+                    <Item item={x} key={x.id}></Item>
+                  ))}
+                </Box>
+
+                <Box>GÓD: {params.value.cashReward}</Box>
+                <Box>XP: {params.value.levelReward.toFixed(2)}</Box>
+              </Box>
+            ) : (
+              <Box>Claimed</Box>
+            )}
+          </>
+        ),
+      },
+    ];
+  }, []);
   return (
     <Box>
       <Button
@@ -126,7 +179,8 @@ function Quests(props) {
               onClick={() => takeQuest()}
               sx={{ boxShadow: "-3px 7px 9px -1px rgba(0,0,0,0.54)" }}
               disabled={
-                quests?.filter((x) => !x.isDone).length >= userCTX.user.questSlot
+                quests?.filter((x) => !x.isDone).length >=
+                userCTX.user.questSlot
               }
             >
               Take Quest
@@ -135,30 +189,11 @@ function Quests(props) {
         </AppBar>
 
         {quests ? (
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>Name</TableCell>
-                <TableCell>Description</TableCell>
-                <TableCell>Progress</TableCell>
-                <TableCell>Reward</TableCell>
-                <TableCell></TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {orderedQuests.map((x) => (
-                <Quest
-                  quest={x}
-                  onQuestChange={handleQuestChange}
-                  key={x.id}
-                ></Quest>
-              ))}
-            </TableBody>
-          </Table>
+          <DataGrid rows={orderedQuests} columns={columns} getRowHeight={() => 'auto'}/>
         ) : (
           <LinearProgress />
         )}
-        <ScrollTop toId="dialogContent"></ScrollTop>
+        {/* <ScrollTop toId="dialogContent"></ScrollTop> */}
       </Dialog>
     </Box>
   );

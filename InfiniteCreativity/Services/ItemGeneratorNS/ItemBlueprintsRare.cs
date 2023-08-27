@@ -1,5 +1,5 @@
 ﻿using InfiniteCreativity.Models;
-using InfiniteCreativity.Models.Armor;
+using InfiniteCreativity.Models.ArmorNs;
 using InfiniteCreativity.Models.Enums;
 using InfiniteCreativity.Models.Materials;
 using InfiniteCreativity.Models.Weapons;
@@ -62,6 +62,7 @@ namespace InfiniteCreativity.Services.ItemGeneratorNS
                 ArmorType = ArmorType.Head,
                 ItemType = ItemType.Armor,
                 ArmorValue = 1,
+                Health = 1.1,
                 Value = 15,
                 Rarity = RarityType.Rare
             },
@@ -72,6 +73,7 @@ namespace InfiniteCreativity.Services.ItemGeneratorNS
                 ArmorType = ArmorType.Shoulder,
                 ItemType = ItemType.Armor,
                 ArmorValue = 1,
+                Health = 1.1,
                 Value = 15,
                 Rarity = RarityType.Rare
             },
@@ -82,6 +84,7 @@ namespace InfiniteCreativity.Services.ItemGeneratorNS
                 ArmorType = ArmorType.Chest,
                 ItemType = ItemType.Armor,
                 ArmorValue = 1,
+                Health = 1.1,
                 Value = 15,
                 Rarity = RarityType.Rare
             },
@@ -102,6 +105,7 @@ namespace InfiniteCreativity.Services.ItemGeneratorNS
                 ArmorType = ArmorType.Leg,
                 ItemType = ItemType.Armor,
                 ArmorValue = 1,
+                Health = 1.1,
                 Value = 15,
                 Rarity = RarityType.Rare
             },
@@ -112,6 +116,8 @@ namespace InfiniteCreativity.Services.ItemGeneratorNS
                 ArmorType = ArmorType.Boot,
                 ItemType = ItemType.Armor,
                 ArmorValue = 1,
+                Health = 1.1,
+                Movement = 1,
                 Value = 15,
                 Rarity = RarityType.Rare
             },

@@ -1,6 +1,7 @@
-﻿using InfiniteCreativity.Models.Armor;
+﻿using InfiniteCreativity.Models.ArmorNs;
 using InfiniteCreativity.Models.DTO.Armor;
 using InfiniteCreativity.Models.DTO.Weapon;
+using InfiniteCreativity.Models.Enums;
 
 namespace InfiniteCreativity.Models.DTO
 {
@@ -8,9 +9,8 @@ namespace InfiniteCreativity.Models.DTO
     {
         public int Id { get; set; }
         public string? Name { get; set; }
-        public double Health { get; set; }
+        public Race Race { get; set; }
+        public Profession Profession { get; set; }
         public double Level { get; set; }
-        public int Purse { get; set; }
-        public IEnumerable<ShowQuestDTO>? Quests { get; set; }
     }
 }
