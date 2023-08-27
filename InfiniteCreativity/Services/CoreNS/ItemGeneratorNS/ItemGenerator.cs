@@ -3,7 +3,6 @@ using InfiniteCreativity.Models.CoreNS;
 using InfiniteCreativity.Models.CoreNS.ArmorNs;
 using InfiniteCreativity.Models.CoreNS.Materials;
 using InfiniteCreativity.Models.CoreNS.Weapons;
-using InfiniteCreativity.Models.Enums;
 
 namespace InfiniteCreativity.Services.CoreNS.ItemGeneratorNS
 {

@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.Reflection.PortableExecutable;
 using InfiniteCreativity.Models.GameNS;
 
 namespace InfiniteCreativity.Models.CoreNS

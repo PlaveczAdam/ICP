@@ -1,10 +1,7 @@
 ﻿using AutoMapper;
 using InfiniteCreativity.Data;
 using InfiniteCreativity.DTO;
-using InfiniteCreativity.Models;
-using InfiniteCreativity.Models.Enums;
 using Microsoft.EntityFrameworkCore;
-using System.Numerics;
 
 namespace InfiniteCreativity.Services.CoreNS
 {

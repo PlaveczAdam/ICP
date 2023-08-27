@@ -1,25 +1,27 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using DataObjects;
-using Entities;
+﻿using Entities;
 using Extensions;
-using UnityEngine;
-using Random = UnityEngine.Random;
+using InfiniteCreativity.DTO.Game;
+using InfiniteCreativity.Extensions;
+using InfiniteCreativity.Models.CoreNS;
+using InfiniteCreativity.Models.Enums.GameNS;
+using InfiniteCreativity.Models.GameNS;
+using InfiniteCreativity.Services.GameNS;
 
 namespace Map
 {
-    public class MapGenerator : MonoBehaviour
+    public class MapGenerator
     {
-        [SerializeField] public int rows = 10;
-        [SerializeField] public int columns = 10;
-        [SerializeField, Range(0, 1f)] private float landBias = 0.45f;
-        [SerializeField] private float waterFrequency = 2f;
-        [SerializeField] [Range(0, 1f)] private float treeToLandRatio = 0.25f;
-        [SerializeField] private int treeBatchMax = 10;
-        [SerializeField] private string mapOverride = "";
+        public int rows = 25;
+        public int columns = 25;
+        private float landBias = 0.45f;
+        private float waterFrequency = 2f;
+        private float treeToLandRatio = 0.25f;
+        private int treeBatchMax = 10;
+        private string mapOverride = "";
         private HexTileDataObject startTile;
+        private Random _rnd = new Random();
 
-        public MapDataObject GenerateAndPlacePlayer(List<CharacterDataObject> playersDataObjects)
+        public MapDataObject GenerateAndPlacePlayer(List<Character> playersDataObjects)
         {
             if (mapOverride.Length > 0)
             {
@@ -27,11 +29,11 @@ namespace Map
                 InitPlayers(playersDataObjects);
                 return md;
             }
-            var mapData = new MapDataObject()
+            var mapData = new MapRaw()
             {
                 Columns = columns,
                 Rows = rows,
-                HexTiles = new List<List<HexTileDataObject>>(),
+                HexTiles = new(),
             };
 
             for (var row = 0; row < rows; row++)
@@ -45,7 +47,7 @@ namespace Map
                         RowIdx = row,
                         IsDiscovered = false,
                         TileContent = TileContent.Water,
-                        Map = mapData
+                        MapRaw = mapData
                     };
                     hexTiles.Add(hexTile);
                 }
@@ -55,8 +57,13 @@ namespace Map
 
             PopulateMap(mapData);
             InitPlayers(playersDataObjects);
-
-            return mapData;
+            var mdo = new MapDataObject()
+            {
+                Columns = mapData.Columns,
+                Rows = mapData.Rows,
+                HexTiles = mapData.HexTiles.SelectMany(x => x).ToList(),
+            };
+            return mdo;
         }
 
         private MapDataObject ProcessOverride()
@@ -64,12 +71,13 @@ namespace Map
             var lists = mapOverride.Split('|')
                 .Select(x => x.Split(";").ToList())
                 .ToList();
-            var mapData = new MapDataObject()
+            var mapData = new MapRaw()
             {
                 Columns = lists[0].Count,
                 Rows = lists.Count,
-                HexTiles = new List<List<HexTileDataObject>>(),
+                HexTiles = new(),
             };
+
             var rowIdx = 0;
             lists.ForEach((row) =>
             {
@@ -83,7 +91,7 @@ namespace Map
                         ColIdx = colIdx,
                         RowIdx = rowIdx,
                         IsDiscovered = false,
-                        Map = mapData,
+                        MapRaw = mapData,
                         TileContent = col switch
                         {
                             "W" => TileContent.Water,
@@ -102,10 +110,15 @@ namespace Map
                 });
                 rowIdx++;
             });
-            return mapData;
+            var md = new MapDataObject() {
+                Columns = mapData.Columns,
+                Rows = mapData.Rows,
+                HexTiles = mapData.HexTiles.SelectMany(x => x).ToList(),
+            };
+            return md;
         }
 
-        private void InitPlayers(List<CharacterDataObject> players)
+        private void InitPlayers(List<Character> players)
         {
             players.ForEach(x =>
             {
@@ -114,14 +127,13 @@ namespace Map
             });
         }
 
-        private void PopulateMap(MapDataObject mapData)
+        private void PopulateMap(MapRaw mapData)
         {
             GenerateIslands(mapData);
 
-            startTile = mapData.HexTiles
+            startTile = _rnd.Next(mapData.HexTiles
                 .SelectMany(x => x)
-                .Where(x => x.TileContent == TileContent.Empty).ToList()
-                .GetRandom();
+                .Where(x => x.TileContent == TileContent.Empty).ToList());
             startTile.IsDiscovered = true;
             startTile.TileContent = TileContent.City;
             var startCity = new CityEntityDataObject()
@@ -135,50 +147,48 @@ namespace Map
             GenerateTrees(mapData);
         }
 
-        private void GenerateIslands(MapDataObject mapData)
+        private void GenerateIslands(MapRaw mapData)
         {
-            var offsetX = Random.value * 10000f;
-            var offsetY = Random.value * 10000f;
+            var offsetX = _rnd.NextDouble(0,10000);
+            var offsetY = _rnd.NextDouble(0, 10000);
+            float[,] values = SimplexNoise.Noise.Calc2D(rows, columns, waterFrequency);
             foreach (var hexTile in mapData.HexTiles.SelectMany(hexTiles => hexTiles))
             {
-                if (Mathf.PerlinNoise(offsetX + hexTile.ColIdx / (float)columns * waterFrequency,
-                        offsetY + hexTile.RowIdx / (float)rows * waterFrequency) > 1 - landBias)
+                if (values[hexTile.ColIdx, hexTile.RowIdx] > 1 - landBias)
                 {
                     hexTile.TileContent = TileContent.Empty;
                 }
             }
         }
 
-        private List<HexTileDataObject> GetAvailableLandTiles(MapDataObject mapData)
+        private List<HexTileDataObject> GetAvailableLandTiles(MapRaw mapData)
         {
             return mapData.HexTiles.SelectMany(hexTiles => hexTiles)
                 .Where(hexTile => hexTile.TileContent == TileContent.Empty && !hexTile.ReservedForPath)
                 .ToList();
         }
 
-        private void GenerateTrees(MapDataObject mapData)
+        private void GenerateTrees(MapRaw mapData)
         {
             var treeCount = (int)(GetAvailableLandTiles(mapData).Count * treeToLandRatio);
             var treePlaced = 0;
 
             while (treePlaced < treeCount)
             {
-                var avaliable = GetAvailableLandTiles(mapData).ShuffleInPlace();
+                var avaliable = GetAvailableLandTiles(mapData).ShuffleInPlace(_rnd);
                 var start = avaliable.FirstOrDefault();
                 if (start is null)
                 {
-                    this.LogWarning("no more land tiles");
                     return;
                 }
 
-                var treeBatch = RandomExtensions.NextIntInclusive(1, treeBatchMax);
+                var treeBatch = _rnd.Next(1, treeBatchMax+1);
                 var current = start;
                 start.ReservedForPath = true;
                 for (var i = 0; i < treeBatch; ++i)
                 {
-                    current.TileContent = TileContentExtensions.RandomTree();
-                    var next = current.GetNeighbours().Where(x => !x.ReservedForPath && avaliable.Contains(x)).ToList()
-                        .GetRandom();
+                    current.TileContent = TileContentExtensions.RandomTree(_rnd);
+                    var next = _rnd.Next(current.GetNeighbours().Where(x => !x.ReservedForPath && avaliable.Contains(x)).ToList());
                     current.GetNeighbours().ForEach(x => x.ReservedForPath = true);
                     if (next is null)
                     {
@@ -189,7 +199,7 @@ namespace Map
                     treePlaced++;
                 }
 
-                current.TileContent = TileContentExtensions.RandomTree();
+                current.TileContent = TileContentExtensions.RandomTree(_rnd);
                 current.GetNeighbours().ForEach(x => x.ReservedForPath = true);
             }
         }

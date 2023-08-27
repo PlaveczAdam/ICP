@@ -1,11 +1,5 @@
-﻿using InfiniteCreativity.Models.ArmorNs;
-using InfiniteCreativity.Models.Materials;
-using InfiniteCreativity.Models.Weapons;
-using InfiniteCreativity.Models;
-using InfiniteCreativity.Services.ItemGeneratorNS;
-using System;
-using InfiniteCreativity.Extensions;
-using InfiniteCreativity.Models.Enums;
+﻿using InfiniteCreativity.Extensions;
+using InfiniteCreativity.Models.Enums.CoreNS;
 using InfiniteCreativity.Models.GameNS.Enemys;
 
 namespace InfiniteCreativity.Services.GameNS.EnemyGeneratorNS

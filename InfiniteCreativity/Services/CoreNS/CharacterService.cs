@@ -5,14 +5,9 @@ using InfiniteCreativity.Exceptions;
 using InfiniteCreativity.Models.CoreNS;
 using InfiniteCreativity.Models.CoreNS.ArmorNs;
 using InfiniteCreativity.Models.CoreNS.Weapons;
-using InfiniteCreativity.Models.Enums;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json.Linq;
 using System.Linq.Expressions;
-using System.Numerics;
 using System.Reflection;
-using System.Reflection.Metadata;
-using System.Runtime.CompilerServices;
 
 namespace InfiniteCreativity.Services.CoreNS
 {

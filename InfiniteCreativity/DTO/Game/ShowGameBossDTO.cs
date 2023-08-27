@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace InfiniteCreativity.DTO.Game
+﻿namespace InfiniteCreativity.DTO.Game
 {
     public class ShowGameBossDTO : ShowGameEnemyDTO
     {

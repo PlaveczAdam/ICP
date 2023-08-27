@@ -2,6 +2,6 @@
 {
     public class CreateGameDTO
     {
-        IEnumerable<int> CharacterIds { get; set; }
+        public IEnumerable<int> CharacterIds { get; set; }
     }
 }

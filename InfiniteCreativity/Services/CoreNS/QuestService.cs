@@ -3,8 +3,7 @@ using InfiniteCreativity.Data;
 using InfiniteCreativity.DTO;
 using InfiniteCreativity.Exceptions;
 using InfiniteCreativity.Models.CoreNS;
-using InfiniteCreativity.Models.Enums;
-using InfiniteCreativity.Services.QuestGeneratorNS;
+using InfiniteCreativity.Services.CoreNS.QuestGeneratorNS;
 using Microsoft.EntityFrameworkCore;
 
 namespace InfiniteCreativity.Services.CoreNS

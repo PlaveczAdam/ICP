@@ -1,6 +1,5 @@
 ﻿using InfiniteCreativity.DTO;
 using InfiniteCreativity.DTO.Game;
-using InfiniteCreativity.Models;
 using InfiniteCreativity.Services.CoreNS;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;

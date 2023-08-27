@@ -1,6 +1,4 @@
-﻿using InfiniteCreativity.Models.DTO;
-
-namespace InfiniteCreativity.Models.CoreNS
+﻿namespace InfiniteCreativity.Models.CoreNS
 {
     public class Quest
     {

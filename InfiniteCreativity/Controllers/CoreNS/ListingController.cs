@@ -1,7 +1,6 @@
 ﻿using InfiniteCreativity.DTO;
 using InfiniteCreativity.Services.CoreNS;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InfiniteCreativity.Controllers.CoreNS

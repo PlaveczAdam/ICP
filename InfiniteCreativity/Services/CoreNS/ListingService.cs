@@ -3,7 +3,6 @@ using InfiniteCreativity.Data;
 using InfiniteCreativity.DTO;
 using InfiniteCreativity.Models.CoreNS;
 using Microsoft.EntityFrameworkCore;
-using System.Runtime.CompilerServices;
 
 namespace InfiniteCreativity.Services.CoreNS
 {

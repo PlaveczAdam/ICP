@@ -1,7 +1,5 @@
-﻿using InfiniteCreativity.Models.Enums;
+﻿using InfiniteCreativity.Models.Enums.CoreNS;
 using InfiniteCreativity.Models.GameNS;
-using InfiniteCreativity.Services;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace InfiniteCreativity.DTO.Game
 {

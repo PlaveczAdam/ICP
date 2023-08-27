@@ -5,6 +5,8 @@ using InfiniteCreativity.Models.CoreNS.Materials;
 using InfiniteCreativity.Models.GameNS.Enemys;
 using InfiniteCreativity.Models.CoreNS;
 using InfiniteCreativity.Models.GameNS;
+using Entities;
+using DataObjects;
 
 namespace InfiniteCreativity.Data
 {
@@ -33,5 +35,8 @@ namespace InfiniteCreativity.Data
         public DbSet<GConnection> GConnection { get; set; }
         public DbSet<Enemy> Enemy { get; set; }
         public DbSet<Boss> Boss { get; set; }
+        public DbSet<MapDataObject> Map { get; set; }
+        public DbSet<HexTileDataObject> HexTiles { get; set; }
+        public DbSet<EntityBaseDataObject> EntityBase { get; set; }
     }
 }

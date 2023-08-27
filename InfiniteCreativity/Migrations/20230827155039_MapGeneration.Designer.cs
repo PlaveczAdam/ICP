@@ -3,6 +3,7 @@ using System;
 using InfiniteCreativity.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace InfiniteCreativity.Migrations
 {
     [DbContext(typeof(InfiniteCreativityContext))]
-    partial class InfiniteCreativityContextModelSnapshot : ModelSnapshot
+    [Migration("20230827155039_MapGeneration")]
+    partial class MapGeneration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -402,7 +405,7 @@ namespace InfiniteCreativity.Migrations
                     b.Property<int>("ColIdx")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("DetailEntityId")
+                    b.Property<int>("DetailEntityId")
                         .HasColumnType("integer");
 
                     b.Property<bool>("IsDiscovered")
@@ -778,7 +781,9 @@ namespace InfiniteCreativity.Migrations
                 {
                     b.HasOne("DataObjects.EntityBaseDataObject", "DetailEntity")
                         .WithMany()
-                        .HasForeignKey("DetailEntityId");
+                        .HasForeignKey("DetailEntityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Entities.MapDataObject", "MapDataObject")
                         .WithMany("HexTiles")

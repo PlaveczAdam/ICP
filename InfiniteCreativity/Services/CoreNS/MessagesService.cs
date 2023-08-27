@@ -3,7 +3,7 @@ using InfiniteCreativity.Data;
 using InfiniteCreativity.DTO.Message;
 using InfiniteCreativity.Exceptions;
 using InfiniteCreativity.Models.CoreNS;
-using InfiniteCreativity.Models.Enums;
+using InfiniteCreativity.Models.Enums.CoreNS;
 
 namespace InfiniteCreativity.Services.CoreNS
 {

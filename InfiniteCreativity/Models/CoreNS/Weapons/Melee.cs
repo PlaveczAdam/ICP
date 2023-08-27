@@ -1,5 +1,4 @@
-﻿using AutoMapper.Configuration.Annotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace InfiniteCreativity.Models.CoreNS.Weapons
 {

@@ -1,7 +1,4 @@
-﻿using InfiniteCreativity.Data;
-using InfiniteCreativity.DTO;
-using InfiniteCreativity.Models;
-using InfiniteCreativity.Models.Weapons;
+﻿using InfiniteCreativity.DTO;
 using InfiniteCreativity.Services.CoreNS;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

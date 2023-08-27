@@ -1,8 +1,8 @@
-﻿using InfiniteCreativity.Models.ArmorNs;
-using InfiniteCreativity.Models.Enums;
-using InfiniteCreativity.Models.Weapons;
-using InfiniteCreativity.Models.Materials;
-using InfiniteCreativity.Models.CoreNS;
+﻿using InfiniteCreativity.Models.CoreNS;
+using InfiniteCreativity.Models.CoreNS.Weapons;
+using InfiniteCreativity.Models.CoreNS.ArmorNs;
+using InfiniteCreativity.Models.CoreNS.Materials;
+using InfiniteCreativity.Models.Enums.CoreNS;
 
 namespace InfiniteCreativity.Services.CoreNS.ItemGeneratorNS
 {

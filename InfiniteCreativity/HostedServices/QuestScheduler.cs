@@ -1,4 +1,4 @@
-﻿using InfiniteCreativity.Models.Enums;
+﻿using InfiniteCreativity.Models.Enums.CoreNS;
 using InfiniteCreativity.Services.CoreNS;
 
 namespace InfiniteCreativity.HostedServices

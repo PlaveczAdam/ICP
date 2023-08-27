@@ -2,7 +2,6 @@
 using InfiniteCreativity.Services.CoreNS;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Runtime.CompilerServices;
 
 namespace InfiniteCreativity.Controllers.CoreNS
 {

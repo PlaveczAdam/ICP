@@ -1,4 +1,4 @@
-﻿namespace InfiniteCreativity.Models.Enums
+﻿namespace InfiniteCreativity.Models.Enums.CoreNS
 {
     public enum StackableType
     {

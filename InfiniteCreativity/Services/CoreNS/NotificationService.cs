@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
 using InfiniteCreativity.Data;
 using InfiniteCreativity.Hubs;
-using InfiniteCreativity.Models;
-using InfiniteCreativity.Models.Enums;
+using InfiniteCreativity.Models.CoreNS;
+using InfiniteCreativity.Models.Enums.CoreNS;
+using InfiniteCreativity.Models.GameNS;
 using Microsoft.AspNetCore.SignalR;
-using System.Runtime.CompilerServices;
 
 namespace InfiniteCreativity.Services.CoreNS
 {

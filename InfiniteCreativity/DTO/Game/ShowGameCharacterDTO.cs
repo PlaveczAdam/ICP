@@ -1,6 +1,6 @@
 ﻿using InfiniteCreativity.DTO.Armor;
 using InfiniteCreativity.DTO.Weapon;
-using InfiniteCreativity.Models.Enums;
+using InfiniteCreativity.Models.Enums.CoreNS;
 
 namespace InfiniteCreativity.DTO.Game
 {

@@ -1,8 +1,7 @@
-﻿using InfiniteCreativity.Models.ArmorNs;
-using InfiniteCreativity.Models.Enums;
-using InfiniteCreativity.Models.Weapons;
-using InfiniteCreativity.Services;
-using System.Collections;
+﻿using InfiniteCreativity.Models.CoreNS.ArmorNs;
+using InfiniteCreativity.Models.CoreNS.Weapons;
+using InfiniteCreativity.Models.Enums.CoreNS;
+using InfiniteCreativity.Services.CoreNS;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace InfiniteCreativity.Models.CoreNS
@@ -69,5 +68,9 @@ namespace InfiniteCreativity.Models.CoreNS
         public Weapon? Weapon { get; set; }
 
         public Player Player { get; set; }
+
+
+        public int? Row { get; set; }
+        public int? Col { get; set; }
     }
 }

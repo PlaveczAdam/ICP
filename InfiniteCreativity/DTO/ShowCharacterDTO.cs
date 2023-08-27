@@ -1,7 +1,4 @@
-﻿using InfiniteCreativity.Models.ArmorNs;
-using InfiniteCreativity.Models.DTO.Armor;
-using InfiniteCreativity.Models.DTO.Weapon;
-using InfiniteCreativity.Models.Enums;
+﻿using InfiniteCreativity.Models.Enums.CoreNS;
 
 namespace InfiniteCreativity.DTO
 {

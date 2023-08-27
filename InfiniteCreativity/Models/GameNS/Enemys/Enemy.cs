@@ -1,5 +1,5 @@
-﻿using InfiniteCreativity.Models.Enums;
-using InfiniteCreativity.Services;
+﻿using InfiniteCreativity.Models.Enums.CoreNS;
+using InfiniteCreativity.Services.CoreNS;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace InfiniteCreativity.Models.GameNS.Enemys
