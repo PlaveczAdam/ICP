@@ -16,5 +16,7 @@ namespace InfiniteCreativity.Models.DTO
         public double AbilityDamage { get; set; }
         public double AbilityResource { get; set; }
         public double AbilityResourceGain { get; set; }
+        public double CriticalChance { get; set; }
+        public double CriticalMultiplier { get; set; }
     }
 }

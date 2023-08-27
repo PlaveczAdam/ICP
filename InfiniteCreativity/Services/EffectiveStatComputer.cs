@@ -1,4 +1,5 @@
 ﻿using InfiniteCreativity.Models.ArmorNs;
+using InfiniteCreativity.Models.Enums;
 using InfiniteCreativity.Models.Weapons;
 
 namespace InfiniteCreativity.Services
@@ -18,6 +19,24 @@ namespace InfiniteCreativity.Services
         internal static double ComputeEffectiveAbilityResourceGain(double baseAbilityResourceGain)
         {
             return baseAbilityResourceGain;
+        }
+
+        internal static double ComputeEffectiveCriticalChance(double baseCriticalChance, Weapon? weapon)
+        {
+            if(weapon == null)
+            {
+                return baseCriticalChance;
+            }
+            return weapon.CritChance * baseCriticalChance;
+        }
+
+        internal static double ComputeEffectiveCritMultiplier(double baseCriticalMultiplier, Weapon? weapon)
+        {
+            if (weapon == null)
+            {
+                return baseCriticalMultiplier;
+            }
+            return weapon.CritMultiplier * baseCriticalMultiplier;
         }
 
         internal static double ComputeEffectiveDamage(double baseDamage, Weapon? weapon)

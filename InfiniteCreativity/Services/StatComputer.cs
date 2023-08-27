@@ -11,6 +11,8 @@ namespace InfiniteCreativity.Services
         private static double _baseAbilityDamage = 1;
         private static double _baseAbilityResource = 10;
         private static double _baseAbilityResourceGain = 1;
+        private static double _baseCriticalChance = 0.01;
+        private static double _baseCriticalMultiplier = 1.5;
 
         private static Dictionary<Race, double> _raceHealth = new() {
             { Race.Human, 1 },
@@ -77,7 +79,20 @@ namespace InfiniteCreativity.Services
             { Profession.Mage, 1.5 },
             { Profession.Support, 1.25 },
         };
-        
+
+        private static Dictionary<Profession, double> _professionCriticalChance = new() {
+            { Profession.Warrior, 0.075 },
+            { Profession.Ranger, 0.2 },
+            { Profession.Mage, 0.1 },
+            { Profession.Support, 0.05 },
+        };
+
+        private static Dictionary<Profession, double> _professionCriticalMultiplier = new() {
+            { Profession.Warrior, 1.25 },
+            { Profession.Ranger, 1.5 },
+            { Profession.Mage, 1.5 },
+            { Profession.Support, 1.25 },
+        };
 
         public static double ComputeBaseHealth(Race race, Profession profession, double level)
         { 
@@ -102,6 +117,16 @@ namespace InfiniteCreativity.Services
         internal static double ComputeBaseAbilityResourceGain(Race race, Profession profession)
         {
             return _baseAbilityResourceGain * _raceAbilityResourceGain[race] * _professionAbilityResourceGain[profession];
+        }
+
+        internal static double ComputeBaseCriticalChance(Profession profession)
+        {
+            return _professionCriticalChance[profession];
+        }
+
+        internal static double ComputeBaseCriticalMultiplier(Profession profession)
+        {
+            return _professionCriticalMultiplier[profession];
         }
     }
 }
