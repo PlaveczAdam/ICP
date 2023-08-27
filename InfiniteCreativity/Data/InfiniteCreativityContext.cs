@@ -1,9 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using InfiniteCreativity.Models;
-using InfiniteCreativity.Models.Weapons;
-using InfiniteCreativity.Models.ArmorNs;
-using InfiniteCreativity.Models.Materials;
-using InfiniteCreativity.Models.Enemys;
+using InfiniteCreativity.Models.CoreNS.ArmorNs;
+using InfiniteCreativity.Models.CoreNS.Weapons;
+using InfiniteCreativity.Models.CoreNS.Materials;
+using InfiniteCreativity.Models.GameNS.Enemys;
+using InfiniteCreativity.Models.CoreNS;
+using InfiniteCreativity.Models.GameNS;
 
 namespace InfiniteCreativity.Data
 {

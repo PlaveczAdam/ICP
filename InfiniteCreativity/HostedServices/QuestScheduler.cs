@@ -1,5 +1,5 @@
 ﻿using InfiniteCreativity.Models.Enums;
-using InfiniteCreativity.Services;
+using InfiniteCreativity.Services.CoreNS;
 
 namespace InfiniteCreativity.HostedServices
 {
