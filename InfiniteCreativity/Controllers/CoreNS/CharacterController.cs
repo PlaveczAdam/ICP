@@ -33,13 +33,13 @@ namespace InfiniteCreativity.Controllers.CoreNS
             return await _characterService.GetCharacterDTOById(characterId);
         }
         [HttpPut, Route("equipment/{characterId}/{itemId}")]
-        public async Task EquipEquipment(int characterId, int itemId)
+        public async Task EquipEquipment(int characterId, Guid itemId)
         {
             await _characterService.EquipEquipment(characterId, itemId);
         }
 
         [HttpPut, Route("unequip/{characterId}/{itemId}")]
-        public async Task UnequipEquipment(int characterId, int itemId)
+        public async Task UnequipEquipment(int characterId, Guid itemId)
         {
             await _characterService.UnequipEquipment(characterId, itemId);
         }

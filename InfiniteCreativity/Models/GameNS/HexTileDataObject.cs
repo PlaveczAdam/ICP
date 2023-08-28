@@ -8,7 +8,7 @@ namespace InfiniteCreativity.Models.GameNS
 {
     public class HexTileDataObject
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public MapDataObject MapDataObject { get; set; }
         [NotMapped]
         public MapRaw MapRaw { get; set; }

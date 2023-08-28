@@ -21,5 +21,11 @@ namespace InfiniteCreativity.Controllers.GameNS
         {
             return _gameService.StartGame(createGameDTO);
         }
+
+        [HttpGet]
+        public Task<ShowGameMapDTO> GetMap()
+        {
+            return _gameService.GetMap();
+        }
     }
 }

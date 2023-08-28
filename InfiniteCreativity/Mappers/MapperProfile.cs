@@ -8,6 +8,7 @@ using InfiniteCreativity.Models.CoreNS;
 using InfiniteCreativity.Models.CoreNS.ArmorNs;
 using InfiniteCreativity.Models.CoreNS.Materials;
 using InfiniteCreativity.Models.CoreNS.Weapons;
+using InfiniteCreativity.Models.GameNS;
 using InfiniteCreativity.Models.GameNS.Enemys;
 
 namespace InfiniteCreativity.Mappers
@@ -44,6 +45,9 @@ namespace InfiniteCreativity.Mappers
             CreateMap<Character, ShowEquipmentDTO>();
             CreateMap<Character, ShowGameCharacterDTO>();
             CreateMap<Character, ShowCharacterWithStatDTO>();
+
+            CreateMap<GameMapAccessor, ShowGameMapDTO>();
+            CreateMap<HexTileDataObject, ShowGameHexTileDataObjectDTO>();
 
             CreateMap<Enemy, ShowGameEnemyDTO>();
             CreateMap<Boss, ShowGameBossDTO>();

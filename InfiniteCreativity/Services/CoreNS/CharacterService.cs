@@ -56,7 +56,7 @@ namespace InfiniteCreativity.Services.CoreNS
             return _mapper.Map<ShowEquipmentDTO>(character);
         }
 
-        public async Task EquipEquipment(int characterId, int itemId)
+        public async Task EquipEquipment(int characterId, Guid itemId)
         {
             var currentPlayer = await _playerService.GetCurrentPlayer();
             var item = await _context.Item.SingleAsync((x) => x.Id == itemId && x.Player != null && x.Player.Id == currentPlayer.Id);
@@ -121,7 +121,7 @@ namespace InfiniteCreativity.Services.CoreNS
             return _mapper.Map<ShowCharacterWithStatDTO>(await GetCharacterById(characterId, currentPlayer, withEquipment: true));
         }
 
-        public async Task UnequipItemFromAllCharacter(int itemId)
+        public async Task UnequipItemFromAllCharacter(Guid itemId)
         {
             var currentPlayer = await _playerService.GetCurrentPlayer();
             var item = await _context.Item.FindAsync(itemId);
@@ -177,7 +177,7 @@ namespace InfiniteCreativity.Services.CoreNS
             await _notificationService.SendGNotification(currentPlayer.Id);
         }
 
-        public async Task UnequipEquipment(int characterId, int itemId)
+        public async Task UnequipEquipment(int characterId, Guid itemId)
         {
             var currentPlayer = await _playerService.GetCurrentPlayer();
             var item = await _context.Item.FindAsync(itemId);

@@ -2,6 +2,6 @@
 {
     public class DeleteItemsDTO
     {
-        public IEnumerable<int> Items { get; set; }
+        public IEnumerable<Guid> Items { get; set; }
     }
 }
