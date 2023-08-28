@@ -7,6 +7,7 @@ using InfiniteCreativity.Models.CoreNS;
 using InfiniteCreativity.Models.GameNS;
 using Entities;
 using DataObjects;
+using System.Reflection.Metadata;
 
 namespace InfiniteCreativity.Data
 {
@@ -38,5 +39,15 @@ namespace InfiniteCreativity.Data
         public DbSet<MapDataObject> Map { get; set; }
         public DbSet<HexTileDataObject> HexTiles { get; set; }
         public DbSet<EntityBaseDataObject> EntityBase { get; set; }
+        public DbSet<GameCharacter> GameCharacter { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<MapDataObject>()
+                .HasOne(e => e.GConnection)
+                .WithOne(e => e.Map)
+                .HasForeignKey<MapDataObject>(e => e.GConnectionId)
+                .IsRequired();
+        }
     }
 }

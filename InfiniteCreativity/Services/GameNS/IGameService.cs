@@ -4,7 +4,10 @@ namespace InfiniteCreativity.Services.GameNS
 {
     public interface IGameService
     {
-        Task<ShowGameMapDTO> GetMap();
-        Task StartGame(CreateGameDTO createGameDTO);
+        public Task EndGame();
+        public Task<ShowGameMapDTO> GetMap();
+        public Task<ShowGameTurnDTO> GetTurn();
+        public Task<ShowGameTurnDTO> ProgressTurn();
+        public Task StartGame(CreateGameDTO createGameDTO);
     }
 }

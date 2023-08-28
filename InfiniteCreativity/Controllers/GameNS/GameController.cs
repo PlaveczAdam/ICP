@@ -27,5 +27,21 @@ namespace InfiniteCreativity.Controllers.GameNS
         {
             return _gameService.GetMap();
         }
+
+        [HttpGet, Route("turn")]
+        public Task<ShowGameTurnDTO> GetTurn()
+        {
+            return _gameService.GetTurn();
+        }
+        [HttpPut, Route("turn")]
+        public Task<ShowGameTurnDTO> ProgressTurn()
+        {
+            return _gameService.ProgressTurn();
+        }
+        [HttpDelete]
+        public Task EndGame()
+        {
+            return _gameService.EndGame();
+        }
     }
 }

@@ -3,6 +3,7 @@ using System;
 using InfiniteCreativity.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace InfiniteCreativity.Migrations
 {
     [DbContext(typeof(InfiniteCreativityContext))]
-    partial class InfiniteCreativityContextModelSnapshot : ModelSnapshot
+    [Migration("20230828212831_AddOneToOneMapToGConn")]
+    partial class AddOneToOneMapToGConn
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -46,15 +49,16 @@ namespace InfiniteCreativity.Migrations
                     b.Property<int>("Columns")
                         .HasColumnType("integer");
 
-                    b.Property<int>("GConnectionId")
-                        .HasColumnType("integer");
+                    b.Property<string>("GConnectionConnectionID")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<int>("Rows")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("GConnectionId")
+                    b.HasIndex("GConnectionConnectionID")
                         .IsUnique();
 
                     b.ToTable("Map");
@@ -136,18 +140,11 @@ namespace InfiniteCreativity.Migrations
 
             modelBuilder.Entity("InfiniteCreativity.Models.CoreNS.FeConnection", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    b.Property<string>("ConnectionID")
+                        .HasColumnType("text");
 
                     b.Property<bool>("Connected")
                         .HasColumnType("boolean");
-
-                    b.Property<string>("ConnectionID")
-                        .IsRequired()
-                        .HasColumnType("text");
 
                     b.Property<int?>("PlayerId")
                         .HasColumnType("integer");
@@ -156,7 +153,7 @@ namespace InfiniteCreativity.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.HasKey("Id");
+                    b.HasKey("ConnectionID");
 
                     b.HasIndex("PlayerId");
 
@@ -358,8 +355,8 @@ namespace InfiniteCreativity.Migrations
                     b.Property<int>("EnemyType")
                         .HasColumnType("integer");
 
-                    b.Property<int>("GConnectionId")
-                        .HasColumnType("integer");
+                    b.Property<string>("GConnectionConnectionID")
+                        .HasColumnType("text");
 
                     b.Property<double>("Health")
                         .HasColumnType("double precision");
@@ -369,7 +366,7 @@ namespace InfiniteCreativity.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("GConnectionId");
+                    b.HasIndex("GConnectionConnectionID");
 
                     b.ToTable("Enemy");
 
@@ -380,14 +377,7 @@ namespace InfiniteCreativity.Migrations
 
             modelBuilder.Entity("InfiniteCreativity.Models.GameNS.GConnection", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
                     b.Property<string>("ConnectionID")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<int?>("PlayerId")
@@ -396,7 +386,7 @@ namespace InfiniteCreativity.Migrations
                     b.Property<int>("Turn")
                         .HasColumnType("integer");
 
-                    b.HasKey("Id");
+                    b.HasKey("ConnectionID");
 
                     b.HasIndex("PlayerId");
 
@@ -412,8 +402,8 @@ namespace InfiniteCreativity.Migrations
                     b.Property<int>("CharacterId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("ConnectionId")
-                        .HasColumnType("integer");
+                    b.Property<string>("ConnectionID")
+                        .HasColumnType("text");
 
                     b.Property<int>("Order")
                         .HasColumnType("integer");
@@ -422,7 +412,7 @@ namespace InfiniteCreativity.Migrations
 
                     b.HasIndex("CharacterId");
 
-                    b.HasIndex("ConnectionId");
+                    b.HasIndex("ConnectionID");
 
                     b.ToTable("GameCharacter");
                 });
@@ -663,7 +653,7 @@ namespace InfiniteCreativity.Migrations
                 {
                     b.HasOne("InfiniteCreativity.Models.GameNS.GConnection", "GConnection")
                         .WithOne("Map")
-                        .HasForeignKey("Entities.MapDataObject", "GConnectionId")
+                        .HasForeignKey("Entities.MapDataObject", "GConnectionConnectionID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -796,9 +786,7 @@ namespace InfiniteCreativity.Migrations
                 {
                     b.HasOne("InfiniteCreativity.Models.GameNS.GConnection", "GConnection")
                         .WithMany()
-                        .HasForeignKey("GConnectionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("GConnectionConnectionID");
 
                     b.Navigation("GConnection");
                 });
@@ -820,9 +808,7 @@ namespace InfiniteCreativity.Migrations
 
                     b.HasOne("InfiniteCreativity.Models.GameNS.GConnection", "Connection")
                         .WithMany("Characters")
-                        .HasForeignKey("ConnectionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ConnectionID");
 
                     b.Navigation("Character");
 

@@ -1,6 +1,7 @@
 using InfiniteCreativity.Models.GameNS;
 using MoreLinq;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Reflection.Metadata.Ecma335;
 
 namespace Entities
@@ -12,5 +13,6 @@ namespace Entities
         public ICollection<HexTileDataObject> HexTiles { get; set; }
         public int Rows { get; set; }
         public int Columns { get; set; }
+        public int GConnectionId { get; set; }
     }
 }
