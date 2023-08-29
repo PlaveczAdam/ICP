@@ -1,4 +1,5 @@
 ﻿using Entities;
+using InfiniteCreativity.Models.GameNS.Enemys;
 using Microsoft.EntityFrameworkCore;
 
 namespace InfiniteCreativity.Models.GameNS
@@ -10,5 +11,6 @@ namespace InfiniteCreativity.Models.GameNS
         public int Turn { get; set; } = 1;
         public ICollection<GameCharacter> Characters { get; set; }
         public MapDataObject Map { get; set; }
+        public ICollection<Enemy> Enemies { get; set; }
     }
 }

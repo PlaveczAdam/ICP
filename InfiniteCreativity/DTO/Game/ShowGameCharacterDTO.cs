@@ -14,6 +14,7 @@ namespace InfiniteCreativity.DTO.Game
         public double Health { get; set; }
         public double Defense { get; set; }
         public int Movement { get; set; }
+        public int CurrentMovement { get; set; }
         public double Damage { get; set; }
         public double AbilityDamage { get; set; }
         public double AbilityResource { get; set; }
@@ -28,5 +29,6 @@ namespace InfiniteCreativity.DTO.Game
         public ShowLegDTO Leg { get; set; }
         public ShowBootDTO Boot { get; set; }
         public ShowWeaponDTO Weapon { get; set; }
+        public bool IsInCombat { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using InfiniteCreativity.Models.CoreNS.ArmorNs;
+﻿using AutoMapper.Configuration.Conventions;
+using InfiniteCreativity.Models.CoreNS.ArmorNs;
 using InfiniteCreativity.Models.CoreNS.Weapons;
 using InfiniteCreativity.Models.Enums.CoreNS;
 using InfiniteCreativity.Services.CoreNS;
@@ -13,6 +14,7 @@ namespace InfiniteCreativity.Models.CoreNS
         public double Level { get; set; }
         public Race Race { get; set; }
         public Profession Profession { get; set; }
+        public int CurrentMovement { get; set; }
 
         public double CurrentHealth { get; set; }
 
@@ -36,7 +38,7 @@ namespace InfiniteCreativity.Models.CoreNS
         [NotMapped]
         public double Health => EffectiveStatComputer.ComputeEffectiveHealth(BaseHealth, Armor);
         [NotMapped]
-        public double Movement => EffectiveStatComputer.ComputeEffectiveMovement(BaseMovement, Boot);
+        public int Movement => EffectiveStatComputer.ComputeEffectiveMovement(BaseMovement, Boot);
         [NotMapped]
         public double Damage => EffectiveStatComputer.ComputeEffectiveDamage(BaseDamage, Weapon);
         [NotMapped]
@@ -59,6 +61,7 @@ namespace InfiniteCreativity.Models.CoreNS
 
         public IEnumerable<Quest>? Quests { get; set; }
 
+        public bool IsInCombat { get; set; }
         public Head? Head { get; set; }
         public Shoulder? Shoulder { get; set; }
         public Chest? Chest { get; set; }

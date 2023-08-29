@@ -3,6 +3,7 @@ using System;
 using InfiniteCreativity.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace InfiniteCreativity.Migrations
 {
     [DbContext(typeof(InfiniteCreativityContext))]
-    partial class InfiniteCreativityContextModelSnapshot : ModelSnapshot
+    [Migration("20230829182656_AddEnemyAndMovement")]
+    partial class AddEnemyAndMovement
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -88,9 +91,6 @@ namespace InfiniteCreativity.Migrations
 
                     b.Property<Guid?>("HeadId")
                         .HasColumnType("uuid");
-
-                    b.Property<bool>("IsInCombat")
-                        .HasColumnType("boolean");
 
                     b.Property<Guid?>("LegId")
                         .HasColumnType("uuid");
@@ -445,7 +445,7 @@ namespace InfiniteCreativity.Migrations
                     b.Property<int?>("DetailEntityId")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("EnemyId")
+                    b.Property<int>("EnemyId")
                         .HasColumnType("integer");
 
                     b.Property<bool>("IsDiscovered")
@@ -806,7 +806,7 @@ namespace InfiniteCreativity.Migrations
             modelBuilder.Entity("InfiniteCreativity.Models.GameNS.Enemys.Enemy", b =>
                 {
                     b.HasOne("InfiniteCreativity.Models.GameNS.GConnection", "GConnection")
-                        .WithMany("Enemies")
+                        .WithMany("Enemys")
                         .HasForeignKey("GConnectionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -848,7 +848,9 @@ namespace InfiniteCreativity.Migrations
 
                     b.HasOne("InfiniteCreativity.Models.GameNS.Enemys.Enemy", "Enemy")
                         .WithMany()
-                        .HasForeignKey("EnemyId");
+                        .HasForeignKey("EnemyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Entities.MapDataObject", "MapDataObject")
                         .WithMany("HexTiles")
@@ -899,7 +901,7 @@ namespace InfiniteCreativity.Migrations
                 {
                     b.Navigation("Characters");
 
-                    b.Navigation("Enemies");
+                    b.Navigation("Enemys");
 
                     b.Navigation("Map")
                         .IsRequired();

@@ -8,6 +8,7 @@ using InfiniteCreativity.Services.CoreNS;
 using InfiniteCreativity.Services.CoreNS.ItemGeneratorNS;
 using InfiniteCreativity.Services.CoreNS.QuestGeneratorNS;
 using InfiniteCreativity.Services.GameNS;
+using InfiniteCreativity.Services.GameNS.EnemyGeneratorNS;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
@@ -62,6 +63,7 @@ builder.Services.AddScoped<IMessagesService, MessagesService>();
 builder.Services.AddScoped<INotificationService, NotificationService>();
 builder.Services.AddScoped<IGameService,  GameService>();
 
+builder.Services.AddScoped<EnemyGenerator>();
 builder.Services.AddScoped<QuestGenerator>();
 builder.Services.AddScoped<ItemGenerator>();
 builder.Services.AddHostedService<QuestScheduler>();

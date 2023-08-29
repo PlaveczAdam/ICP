@@ -43,5 +43,10 @@ namespace InfiniteCreativity.Controllers.GameNS
         {
             return _gameService.EndGame();
         }
+        [HttpPut, Route("walk")]
+        public Task<ShowWalkResultDTO> WalkPlayerRoute(CreatePlayerRouteDTO playerRoute)
+        {
+            return _gameService.WalkPlayerRoute(playerRoute);
+        }
     }
 }

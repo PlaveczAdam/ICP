@@ -9,5 +9,6 @@ namespace InfiniteCreativity.Services.GameNS
         public Task<ShowGameTurnDTO> GetTurn();
         public Task<ShowGameTurnDTO> ProgressTurn();
         public Task StartGame(CreateGameDTO createGameDTO);
+        Task<ShowWalkResultDTO> WalkPlayerRoute(CreatePlayerRouteDTO playerRoute);
     }
 }

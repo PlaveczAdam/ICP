@@ -1,10 +1,15 @@
 ﻿using AutoMapper;
+using Extensions;
 using InfiniteCreativity.Data;
 using InfiniteCreativity.DTO.Game;
+using InfiniteCreativity.Extensions;
+using InfiniteCreativity.Models.Enums.GameNS;
 using InfiniteCreativity.Models.GameNS;
 using InfiniteCreativity.Services.CoreNS;
+using InfiniteCreativity.Services.GameNS.EnemyGeneratorNS;
 using Map;
 using Microsoft.EntityFrameworkCore;
+using MoreLinq;
 
 namespace InfiniteCreativity.Services.GameNS
 {
@@ -14,13 +19,16 @@ namespace InfiniteCreativity.Services.GameNS
         private ICharacterService _characterService;
         private IPlayerService _playerService;
         private IMapper _mapper;
+        private EnemyGenerator _enemyGenerator;
+        private Random _rnd = new Random();
 
-        public GameService(InfiniteCreativityContext context, ICharacterService characterService, IPlayerService playerService, IMapper mapper)
+        public GameService(InfiniteCreativityContext context, ICharacterService characterService, IPlayerService playerService, IMapper mapper, EnemyGenerator enemyGenerator)
         {
             _context = context;
             _characterService = characterService;
             _playerService = playerService;
             _mapper = mapper;
+            _enemyGenerator = enemyGenerator;
         }
 
         public async Task EndGame()
@@ -30,6 +38,9 @@ namespace InfiniteCreativity.Services.GameNS
                 .Include(x=>x.Characters)
                 .Include(x=>x.Map)
                 .ThenInclude(x=>x.HexTiles)
+                .ThenInclude(x=>x.Enemy)
+                .Include(x => x.Map)
+                .ThenInclude(x => x.HexTiles)
                 .ThenInclude(x=>x.DetailEntity)
                 .FirstOrDefault(x=>x.ConnectionID==currentPlayer.GConnections.First().ConnectionID);
             _context.GConnection.Remove(gconn);
@@ -47,14 +58,58 @@ namespace InfiniteCreativity.Services.GameNS
             return _mapper.Map<ShowGameMapDTO>(mapAccessor);
         }
 
-        public Task<ShowGameTurnDTO> GetTurn()
+        public async Task<ShowGameTurnDTO> GetTurn()
         {
-            throw new NotImplementedException();
+            var gconn = await GetGameConnectionDetailed(withGameCharacters: true);
+            var characters = gconn.Characters.OrderBy(x=>x.Order).ToList();
+            var currInd = (gconn.Turn - 1) % gconn.Characters.Count();
+            var gTurnDTO = new ShowGameTurnDTO() { 
+                Turn = gconn.Turn,
+                NextInTurnCharacterId = characters[currInd].Id
+            };
+            return gTurnDTO;
+        }
+        private async Task<GConnection> GetGameConnectionDetailed(bool withGameCharacters = false, bool withCharacterDetail = false, bool withMap = false, bool withEnemy=false)
+        {
+            var currentPlayer = await _playerService.GetCurrentPlayer(withGConnections: true);
+            var gconn = _context.GConnection.AsQueryable();
+            if (withGameCharacters)
+            {
+                if (withCharacterDetail)
+                {
+                    gconn = gconn.Include(x => x.Characters).ThenInclude(x=>x.Character);
+                }
+                else
+                {
+                    gconn = gconn.Include(x => x.Characters);
+                }
+            }
+            if (withMap)
+            {
+                gconn = gconn.Include(x => x.Map).ThenInclude(x=>x.HexTiles).ThenInclude(x=>x.Enemy);
+            }
+            if (withEnemy)
+            {
+                gconn = gconn.Include(x => x.Enemies);
+            }
+            return await gconn.SingleAsync(x => x.Id == currentPlayer.GConnections.First().Id);
         }
 
-        public Task<ShowGameTurnDTO> ProgressTurn()
+        public async Task<ShowGameTurnDTO> ProgressTurn()
         {
-            throw new NotImplementedException();
+            var gconn = await GetGameConnectionDetailed(withGameCharacters: true, withCharacterDetail: true);
+            var characters = gconn.Characters.OrderBy(x => x.Order).ToList();
+            gconn.Turn++;
+            var currInd = (gconn.Turn - 1) % gconn.Characters.Count();
+            var character = characters[currInd];
+            character.Character.CurrentMovement = character.Character.Movement;
+            var gTurnDTO = new ShowGameTurnDTO()
+            {
+                Turn = gconn.Turn,
+                NextInTurnCharacterId = characters[currInd].Id
+            };
+            await _context.SaveChangesAsync();
+            return gTurnDTO;
         }
 
         public async  Task StartGame(CreateGameDTO createGameDTO)
@@ -81,8 +136,87 @@ namespace InfiniteCreativity.Services.GameNS
                 Connection = map.GConnection
             })) ;
             characters.ForEach(x => x.CurrentHealth = x.Health);
+            characters.ForEach(x => x.CurrentMovement = x.Movement);
             _context.Map.Add(map);
+            await GenerateAndPlaceEnemys();
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<ShowWalkResultDTO> WalkPlayerRoute(CreatePlayerRouteDTO playerRoute)
+        {
+            if (playerRoute.Route.Count() < 1)
+            { throw new InvalidOperationException(); }
+            var walkRes = new ShowWalkResultDTO();
+
+            var gconn = await GetGameConnectionDetailed(withGameCharacters: true, withCharacterDetail: true);
+            var characters = gconn.Characters.OrderBy(x => x.Order).ToList();
+            var currInd = (gconn.Turn - 1) % gconn.Characters.Count();
+            var character = characters[currInd];
+            var ch = character.Character;
+
+            var gma = new GameMapAccessor(gconn.Map);
+            var walkedTiles = new List<HexTileDataObject>();
+
+            var currentTile = gma.GetTileByIndex(ch.Row!.Value, ch.Col!.Value);
+            var currentTileIsWater = currentTile!.IsWater();
+
+            var remainingMovementPoints = ch.CurrentMovement;
+
+            foreach (var tile in playerRoute.Route) {
+                if (remainingMovementPoints < 1)
+                { throw new InvalidOperationException(); }
+                var tileData = gma.GetTileByIndex(tile.RowIndex, tile.ColIndex);
+                if (tileData is null)
+                { throw new InvalidOperationException(); }
+                if (!tileData.TileContent.IsWalkable())
+                { throw new InvalidOperationException(); }
+                if(!currentTile.GetNeighbours().Contains(tileData))
+                { throw new InvalidOperationException(); }
+                var cost = tileData.IsWater() != currentTile.IsWater() ? ch.CurrentMovement : 1;
+                remainingMovementPoints -= cost;
+                if (tileData.Enemy is not null)
+                {
+                    walkRes.InCombat = true;
+                    ch.CurrentMovement = remainingMovementPoints;
+                    ch.Col = tileData.ColIdx;
+                    ch.Row = tileData.RowIdx;
+                    walkRes.RemainingMovementPoints = ch.CurrentMovement;
+                    walkRes.EndColumn = ch.Col.Value;
+                    walkRes.EndRow = ch.Row.Value;
+                    ch.IsInCombat = true;
+                    await _context.SaveChangesAsync();
+
+                    return walkRes;
+                }
+            }
+            var lastTile = playerRoute.Route.Last();
+            ch.CurrentMovement = remainingMovementPoints;
+            ch.Col = lastTile.ColIndex;
+            ch.Row = lastTile.RowIndex;
+            walkRes.RemainingMovementPoints = ch.CurrentMovement;
+            walkRes.EndColumn = ch.Col.Value;
+            walkRes.EndRow = ch.Row.Value;
+            await _context.SaveChangesAsync();
+
+            return walkRes;
+        }
+        private async Task GenerateAndPlaceEnemys()
+        {
+            var gconn = await GetGameConnectionDetailed(withGameCharacters: true, withCharacterDetail: true, withEnemy:true);
+            gconn.Enemies.Clear();
+            var characters = gconn.Characters.OrderBy(x => x.Order).ToList();
+            var level = characters.Average(x => x.Character.Level);
+            var gma = new GameMapAccessor(gconn.Map);
+
+            var emptyTiles = gma.HexTiles.SelectMany(hexTiles => hexTiles)
+                .Where(hexTile => hexTile.TileContent.IsWalkable() && !characters.Any(y=>(y.Character.Col == hexTile.ColIdx && y.Character.Row == hexTile.RowIdx)))
+                .ToList().ShuffleInPlace(_rnd);
+
+            var enemyTiles = Enumerable.Range(0, (int)_rnd.NextDouble(emptyTiles.Count() * 0.1, emptyTiles.Count() * 0.5)).Select(x => emptyTiles[x]);
+            enemyTiles.ForEach(x => { 
+                x.Enemy = _enemyGenerator.Generate(level);
+                x.Enemy.GConnection = gconn;
+            });
         }
     }
 }

@@ -29,7 +29,7 @@ namespace Map
                 InitPlayers(playersDataObjects);
                 return md;
             }
-            var mapData = new MapRaw()
+            var mapData = new GameMapAccessor()
             {
                 Columns = columns,
                 Rows = rows,
@@ -47,7 +47,7 @@ namespace Map
                         RowIdx = row,
                         IsDiscovered = false,
                         TileContent = TileContent.Water,
-                        MapRaw = mapData
+                        MapAccessor = mapData
                     };
                     hexTiles.Add(hexTile);
                 }
@@ -71,7 +71,7 @@ namespace Map
             var lists = mapOverride.Split('|')
                 .Select(x => x.Split(";").ToList())
                 .ToList();
-            var mapData = new MapRaw()
+            var mapData = new GameMapAccessor()
             {
                 Columns = lists[0].Count,
                 Rows = lists.Count,
@@ -91,7 +91,7 @@ namespace Map
                         ColIdx = colIdx,
                         RowIdx = rowIdx,
                         IsDiscovered = false,
-                        MapRaw = mapData,
+                        MapAccessor = mapData,
                         TileContent = col switch
                         {
                             "W" => TileContent.Water,
@@ -127,7 +127,7 @@ namespace Map
             });
         }
 
-        private void PopulateMap(MapRaw mapData)
+        private void PopulateMap(GameMapAccessor mapData)
         {
             GenerateIslands(mapData);
 
@@ -147,7 +147,7 @@ namespace Map
             GenerateTrees(mapData);
         }
 
-        private void GenerateIslands(MapRaw mapData)
+        private void GenerateIslands(GameMapAccessor mapData)
         {
             var offsetX = _rnd.NextDouble(0,10000);
             var offsetY = _rnd.NextDouble(0, 10000);
@@ -161,14 +161,14 @@ namespace Map
             }
         }
 
-        private List<HexTileDataObject> GetAvailableLandTiles(MapRaw mapData)
+        private List<HexTileDataObject> GetAvailableLandTiles(GameMapAccessor mapData)
         {
             return mapData.HexTiles.SelectMany(hexTiles => hexTiles)
                 .Where(hexTile => hexTile.TileContent == TileContent.Empty && !hexTile.ReservedForPath)
                 .ToList();
         }
 
-        private void GenerateTrees(MapRaw mapData)
+        private void GenerateTrees(GameMapAccessor mapData)
         {
             var treeCount = (int)(GetAvailableLandTiles(mapData).Count * treeToLandRatio);
             var treePlaced = 0;

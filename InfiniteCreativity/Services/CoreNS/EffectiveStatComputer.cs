@@ -57,7 +57,7 @@ namespace InfiniteCreativity.Services.CoreNS
             return baseHealth * armor.Aggregate(1.0, (prev, curr) => prev * curr.Health);
         }
 
-        internal static double ComputeEffectiveMovement(int baseMovement, Boot? boot)
+        internal static int ComputeEffectiveMovement(int baseMovement, Boot? boot)
         {
             if (boot == null)
             {
