@@ -62,6 +62,7 @@ builder.Services.AddScoped<IListingService, ListingService>();
 builder.Services.AddScoped<IMessagesService, MessagesService>();
 builder.Services.AddScoped<INotificationService, NotificationService>();
 builder.Services.AddScoped<IGameService,  GameService>();
+builder.Services.AddScoped<IGameEndService, GameEndService>();
 
 builder.Services.AddScoped<EnemyGenerator>();
 builder.Services.AddScoped<QuestGenerator>();

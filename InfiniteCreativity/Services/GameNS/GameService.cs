@@ -21,36 +21,26 @@ namespace InfiniteCreativity.Services.GameNS
         private IMapper _mapper;
         private EnemyGenerator _enemyGenerator;
         private Random _rnd = new Random();
+        private IGameEndService _gameEndService;
 
-        public GameService(InfiniteCreativityContext context, ICharacterService characterService, IPlayerService playerService, IMapper mapper, EnemyGenerator enemyGenerator)
+        public GameService(InfiniteCreativityContext context, ICharacterService characterService, IPlayerService playerService, IMapper mapper, EnemyGenerator enemyGenerator, IGameEndService gameEndService)
         {
             _context = context;
             _characterService = characterService;
             _playerService = playerService;
             _mapper = mapper;
             _enemyGenerator = enemyGenerator;
+            _gameEndService = gameEndService;
         }
 
         public async Task EndGame()
         {
             var currentPlayer = await _playerService.GetCurrentPlayer(withGConnections: true);
-            await Endgame(currentPlayer.GConnections.First().ConnectionID);
+            await _gameEndService.Endgame(currentPlayer.GConnections.First().ConnectionID);
             await _context.SaveChangesAsync();
         }
 
-        public async Task Endgame(string gConnectionId)
-        {
-            var gconn = _context.GConnection
-               .Include(x => x.Characters)
-               .Include(x => x.Map)
-               .ThenInclude(x => x.HexTiles)
-               .ThenInclude(x => x.Enemy)
-               .Include(x => x.Map)
-               .ThenInclude(x => x.HexTiles)
-               .ThenInclude(x => x.DetailEntity)
-               .FirstOrDefault(x => x.ConnectionID == gConnectionId);
-            _context.GConnection.Remove(gconn);
-        }
+       
 
         public async Task<ShowGameMapDTO> GetMap()
         {

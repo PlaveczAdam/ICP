@@ -16,15 +16,15 @@ namespace InfiniteCreativity.Services.CoreNS
         private IPlayerService _playerService;
         private IHubContext<NotificationHub> _hubContext;
         private IHubContext<GameNotificationHub> _gameNotificationHub;
-        private IGameService _gameService;
+        private IGameEndService _gameEndService;
 
-        public NotificationService(IPlayerService playerService, IHubContext<NotificationHub> hubContext, InfiniteCreativityContext context, IHubContext<GameNotificationHub> gameNotificationHub, IGameService gameService)
+        public NotificationService(IPlayerService playerService, IHubContext<NotificationHub> hubContext, InfiniteCreativityContext context, IHubContext<GameNotificationHub> gameNotificationHub, IGameEndService gameEndService)
         {
             _playerService = playerService;
             _hubContext = hubContext;
             _context = context;
             _gameNotificationHub = gameNotificationHub;
-            _gameService = gameService;
+            _gameEndService = gameEndService;
         }
 
         public async Task SendFeNotification(int playerId, NotificationType notificationType)
@@ -81,7 +81,7 @@ namespace InfiniteCreativity.Services.CoreNS
 
         public async Task OnGDisconnected(HubCallerContext hubContext)
         {
-            await _gameService.Endgame(hubContext.ConnectionId);
+            await _gameEndService.Endgame(hubContext.ConnectionId);
             await _context.SaveChangesAsync();
         }
 
