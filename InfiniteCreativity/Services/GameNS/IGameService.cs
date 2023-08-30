@@ -5,6 +5,7 @@ namespace InfiniteCreativity.Services.GameNS
     public interface IGameService
     {
         public Task EndGame();
+        public Task Endgame(string gConnectionId);
         public Task<ShowGameMapDTO> GetMap();
         public Task<ShowGameTurnDTO> GetTurn();
         public Task<ShowGameTurnDTO> ProgressTurn();

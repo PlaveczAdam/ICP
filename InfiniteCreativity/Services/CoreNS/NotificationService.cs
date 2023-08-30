@@ -4,6 +4,7 @@ using InfiniteCreativity.Hubs;
 using InfiniteCreativity.Models.CoreNS;
 using InfiniteCreativity.Models.Enums.CoreNS;
 using InfiniteCreativity.Models.GameNS;
+using InfiniteCreativity.Services.GameNS;
 using Microsoft.AspNetCore.SignalR;
 
 namespace InfiniteCreativity.Services.CoreNS
@@ -15,13 +16,15 @@ namespace InfiniteCreativity.Services.CoreNS
         private IPlayerService _playerService;
         private IHubContext<NotificationHub> _hubContext;
         private IHubContext<GameNotificationHub> _gameNotificationHub;
+        private IGameService _gameService;
 
-        public NotificationService(IPlayerService playerService, IHubContext<NotificationHub> hubContext, InfiniteCreativityContext context, IHubContext<GameNotificationHub> gameNotificationHub)
+        public NotificationService(IPlayerService playerService, IHubContext<NotificationHub> hubContext, InfiniteCreativityContext context, IHubContext<GameNotificationHub> gameNotificationHub, IGameService gameService)
         {
             _playerService = playerService;
             _hubContext = hubContext;
             _context = context;
             _gameNotificationHub = gameNotificationHub;
+            _gameService = gameService;
         }
 
         public async Task SendFeNotification(int playerId, NotificationType notificationType)
@@ -78,12 +81,7 @@ namespace InfiniteCreativity.Services.CoreNS
 
         public async Task OnGDisconnected(HubCallerContext hubContext)
         {
-            var connection = _context.GConnection.Find(hubContext.ConnectionId);
-            if (connection is not null)
-            {
-                _context.Remove(connection);
-            }
-
+            await _gameService.Endgame(hubContext.ConnectionId);
             await _context.SaveChangesAsync();
         }
 
