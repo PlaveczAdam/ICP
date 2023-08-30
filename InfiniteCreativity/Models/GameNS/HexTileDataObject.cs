@@ -20,6 +20,7 @@ namespace InfiniteCreativity.Models.GameNS
         public bool ReservedForPath { get; set; }
         public EntityBaseDataObject? DetailEntity { get; set; }
         public Enemy? Enemy { get; set; }
+        public int? DetailEntityId { get; set; }
 
         public List<HexTileDataObject> GetNeighbours()
         {

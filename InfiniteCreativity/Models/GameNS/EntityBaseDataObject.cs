@@ -1,4 +1,5 @@
 ﻿using InfiniteCreativity.Models.Enums.GameNS;
+using InfiniteCreativity.Models.GameNS;
 using System;
 
 namespace DataObjects
@@ -7,5 +8,6 @@ namespace DataObjects
     {
         public int Id { get; set; }
         public virtual TileContent Type => TileContent.Empty; 
+        public HexTileDataObject HexTileDataObject { get; set; }
     }
 }

@@ -48,6 +48,12 @@ namespace InfiniteCreativity.Data
                 .WithOne(e => e.Map)
                 .HasForeignKey<MapDataObject>(e => e.GConnectionId)
                 .IsRequired();
+
+            modelBuilder.Entity<HexTileDataObject>()
+                .HasOne(e => e.DetailEntity)
+                .WithOne(e => e.HexTileDataObject)
+                .HasForeignKey<HexTileDataObject>(e => e.DetailEntityId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }
