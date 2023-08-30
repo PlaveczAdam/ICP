@@ -3,6 +3,7 @@ using Entities;
 using InfiniteCreativity.Models.Enums.GameNS;
 using InfiniteCreativity.Models.GameNS.Enemys;
 using InfiniteCreativity.Services.GameNS;
+using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace InfiniteCreativity.Models.GameNS
@@ -20,7 +21,6 @@ namespace InfiniteCreativity.Models.GameNS
         public bool ReservedForPath { get; set; }
         public EntityBaseDataObject? DetailEntity { get; set; }
         public Enemy? Enemy { get; set; }
-        public int? DetailEntityId { get; set; }
 
         public List<HexTileDataObject> GetNeighbours()
         {
