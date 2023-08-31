@@ -14,7 +14,7 @@ namespace Map
         public int rows = 25;
         public int columns = 25;
         private float landBias = 0.45f;
-        private float waterFrequency = 2f;
+        private float waterFrequency = 10f;
         private float treeToLandRatio = 0.25f;
         private int treeBatchMax = 10;
         private string mapOverride = "";
@@ -154,7 +154,7 @@ namespace Map
             float[,] values = SimplexNoise.Noise.Calc2D(rows, columns, waterFrequency);
             foreach (var hexTile in mapData.HexTiles.SelectMany(hexTiles => hexTiles))
             {
-                if (values[hexTile.ColIdx, hexTile.RowIdx] > 1 - landBias)
+                if (values[hexTile.ColIdx, hexTile.RowIdx]/255 > 1 - landBias)
                 {
                     hexTile.TileContent = TileContent.Empty;
                 }
