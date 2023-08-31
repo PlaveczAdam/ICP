@@ -30,5 +30,7 @@ namespace InfiniteCreativity.DTO.Game
         public ShowBootDTO Boot { get; set; }
         public ShowWeaponDTO Weapon { get; set; }
         public bool IsInCombat { get; set; }
+        public int? Row { get; set; }
+        public int? Col { get; set; }
     }
 }
