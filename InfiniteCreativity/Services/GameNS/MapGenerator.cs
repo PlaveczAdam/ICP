@@ -149,8 +149,7 @@ namespace Map
 
         private void GenerateIslands(GameMapAccessor mapData)
         {
-            var offsetX = _rnd.NextDouble(0,10000);
-            var offsetY = _rnd.NextDouble(0, 10000);
+            SimplexNoise.Noise.Seed = _rnd.Next(0, 10000);
             float[,] values = SimplexNoise.Noise.Calc2D(rows, columns, waterFrequency);
             foreach (var hexTile in mapData.HexTiles.SelectMany(hexTiles => hexTiles))
             {
