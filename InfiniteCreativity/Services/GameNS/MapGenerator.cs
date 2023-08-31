@@ -13,7 +13,7 @@ namespace Map
     {
         public int rows = 25;
         public int columns = 25;
-        private float landBias = 0.7f;
+        private float landBias = 0.5f;
         private float waterFrequency = 0.001f;
         private float treeToLandRatio = 0.25f;
         private int treeBatchMax = 10;
