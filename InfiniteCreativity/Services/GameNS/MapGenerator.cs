@@ -149,8 +149,9 @@ namespace Map
 
         private void GenerateIslands(GameMapAccessor mapData)
         {
-            SimplexNoise.Noise.Seed = _rnd.Next(0, 10000);
-            float[,] values = SimplexNoise.Noise.Calc2D(rows, columns, waterFrequency);
+            var simplex = new Simplex.Noise();
+            simplex.Seed = _rnd.Next(0, 10000);
+            float[,] values = simplex.Calc2D(rows, columns, waterFrequency);
             foreach (var hexTile in mapData.HexTiles.SelectMany(hexTiles => hexTiles))
             {
                 if (values[hexTile.ColIdx, hexTile.RowIdx]/255 > 1 - landBias)
