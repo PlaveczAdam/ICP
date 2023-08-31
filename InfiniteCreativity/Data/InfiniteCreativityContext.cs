@@ -57,6 +57,11 @@ namespace InfiniteCreativity.Data
             modelBuilder.Entity<HexTileDataObject>()
                 .HasIndex(e => e.Id)
                 .IsUnique();
+
+            modelBuilder.Entity<GConnection>()
+                .HasOne(e => e.Player)
+                .WithMany(e => e.GConnections)
+                .HasForeignKey(e => e.PlayerId);
         }
     }
 }

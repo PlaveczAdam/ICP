@@ -22,8 +22,9 @@ namespace InfiniteCreativity.Services.GameNS
         private EnemyGenerator _enemyGenerator;
         private Random _rnd = new Random();
         private IGameEndService _gameEndService;
+        private INotificationService _notificationService;
 
-        public GameService(InfiniteCreativityContext context, ICharacterService characterService, IPlayerService playerService, IMapper mapper, EnemyGenerator enemyGenerator, IGameEndService gameEndService)
+        public GameService(InfiniteCreativityContext context, ICharacterService characterService, IPlayerService playerService, IMapper mapper, EnemyGenerator enemyGenerator, IGameEndService gameEndService, INotificationService notificationService)
         {
             _context = context;
             _characterService = characterService;
@@ -31,6 +32,7 @@ namespace InfiniteCreativity.Services.GameNS
             _mapper = mapper;
             _enemyGenerator = enemyGenerator;
             _gameEndService = gameEndService;
+            _notificationService = notificationService;
         }
 
         public async Task EndGame()
@@ -104,6 +106,7 @@ namespace InfiniteCreativity.Services.GameNS
                 NextInTurnCharacterId = characters[currInd].Id
             };
             await _context.SaveChangesAsync();
+            await _notificationService.SendGNotification(gconn.PlayerId);
             return gTurnDTO;
         }
 
@@ -135,6 +138,7 @@ namespace InfiniteCreativity.Services.GameNS
             _context.Map.Add(map);
             await GenerateAndPlaceEnemys();
             await _context.SaveChangesAsync();
+            await _notificationService.SendGNotification(currentPlayer.Id);
         }
 
         public async Task<ShowWalkResultDTO> WalkPlayerRoute(CreatePlayerRouteDTO playerRoute)
@@ -192,6 +196,7 @@ namespace InfiniteCreativity.Services.GameNS
             walkRes.EndColumn = ch.Col.Value;
             walkRes.EndRow = ch.Row.Value;
             await _context.SaveChangesAsync();
+            await _notificationService.SendGNotification(gconn.PlayerId);
 
             return walkRes;
         }

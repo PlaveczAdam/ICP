@@ -1,4 +1,5 @@
 ﻿using Entities;
+using InfiniteCreativity.Models.CoreNS;
 using InfiniteCreativity.Models.GameNS.Enemys;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,5 +13,7 @@ namespace InfiniteCreativity.Models.GameNS
         public ICollection<GameCharacter> Characters { get; set; }
         public MapDataObject Map { get; set; }
         public ICollection<Enemy> Enemies { get; set; }
+        public Player Player { get; set; }
+        public int PlayerId { get; set; }
     }
 }
