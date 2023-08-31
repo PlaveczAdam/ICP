@@ -8,7 +8,7 @@ namespace InfiniteCreativity.DTO.Game
 {
     public class ShowGameHexTileDataObjectDTO
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public int RowIdx { get; set; }
         public int ColIdx { get; set; }
         public TileContent TileContent { get; set; } = TileContent.Empty;
