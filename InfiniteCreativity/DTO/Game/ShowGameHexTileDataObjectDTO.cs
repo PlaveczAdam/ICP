@@ -1,6 +1,7 @@
 ﻿using DataObjects;
 using Entities;
 using InfiniteCreativity.Models.Enums.GameNS;
+using InfiniteCreativity.Models.GameNS.Enemys;
 using InfiniteCreativity.Services.GameNS;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -15,5 +16,6 @@ namespace InfiniteCreativity.DTO.Game
         public bool IsDiscovered { get; set; }
         public bool ReservedForPath { get; set; }
         public EntityBaseDataObject? DetailEntity { get; set; }
+        public ShowGameEnemyDTO? Enemy { get; set; }
     }
 }
