@@ -173,6 +173,7 @@ namespace InfiniteCreativity.Services.GameNS
                 { throw new InvalidOperationException(); }
                 var cost = tileData.IsWater() != currentTile.IsWater() ? ch.CurrentMovement : 1;
                 remainingMovementPoints -= cost;
+                currentTile = tileData;
                 if (tileData.Enemy is not null)
                 {
                     walkRes.InCombat = true;
