@@ -49,6 +49,7 @@ namespace InfiniteCreativity.Services.GameNS
             var currentPlayer = await _playerService.GetCurrentPlayer(withGConnections: true);
             var map = _context.Map
                 .Include(x=>x.HexTiles)
+                .ThenInclude(x=>x.Enemy)
                 .First(x => x.GConnection == currentPlayer.GConnections.First());
             var mapAccessor = new GameMapAccessor(map);
 
