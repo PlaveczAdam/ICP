@@ -147,7 +147,7 @@ namespace InfiniteCreativity.Services.GameNS
             { throw new InvalidOperationException(); }
             var walkRes = new ShowWalkResultDTO();
 
-            var gconn = await GetGameConnectionDetailed(withGameCharacters: true, withCharacterDetail: true);
+            var gconn = await GetGameConnectionDetailed(withGameCharacters: true, withCharacterDetail: true, withMap:true);
             var characters = gconn.Characters.OrderBy(x => x.Order).ToList();
             var currInd = (gconn.Turn - 1) % gconn.Characters.Count();
             var character = characters[currInd];
