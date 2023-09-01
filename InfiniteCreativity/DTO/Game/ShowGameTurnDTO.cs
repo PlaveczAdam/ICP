@@ -3,6 +3,6 @@
     public class ShowGameTurnDTO
     {
         public int Turn { get; set; }
-        public Guid NextInTurnCharacterId { get; set; }
+        public int NextInTurnCharacterId { get; set; }
     }
 }

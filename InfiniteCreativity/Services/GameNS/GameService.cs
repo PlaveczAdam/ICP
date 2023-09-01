@@ -57,12 +57,12 @@ namespace InfiniteCreativity.Services.GameNS
 
         public async Task<ShowGameTurnDTO> GetTurn()
         {
-            var gconn = await GetGameConnectionDetailed(withGameCharacters: true);
+            var gconn = await GetGameConnectionDetailed(withGameCharacters: true, withCharacterDetail:true);
             var characters = gconn.Characters.OrderBy(x=>x.Order).ToList();
             var currInd = (gconn.Turn - 1) % gconn.Characters.Count();
             var gTurnDTO = new ShowGameTurnDTO() { 
                 Turn = gconn.Turn,
-                NextInTurnCharacterId = characters[currInd].Id
+                NextInTurnCharacterId = characters[currInd].Character.Id
             };
             return gTurnDTO;
         }
@@ -103,7 +103,7 @@ namespace InfiniteCreativity.Services.GameNS
             var gTurnDTO = new ShowGameTurnDTO()
             {
                 Turn = gconn.Turn,
-                NextInTurnCharacterId = characters[currInd].Id
+                NextInTurnCharacterId = characters[currInd].Character.Id
             };
             await _context.SaveChangesAsync();
             await _notificationService.SendGNotification(gconn.PlayerId);
