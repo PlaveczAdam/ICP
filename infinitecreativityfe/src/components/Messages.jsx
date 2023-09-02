@@ -91,10 +91,15 @@ function Messages(props) {
   return (
     <ClickAwayListener
       onClickAway={() => {
-        if (props.isOpen !== isOpen) setIsOpen(props.isOpen);
-        else {
+        if (props.isOpen !== isOpen) {
+          setIsOpen(props.isOpen);
+          props.setChecked(props.isOpen);
+        }
+        else if(props.isOpen === true){
           props.setIsOpen(false);
+          props.setChecked(false);
           setIsOpen(false);
+          localStorage.setItem(`${userCTX.user.name}Close`, DateTime.utc().toISO());
         }
       }}
       //mouseEvent="onMouseDown"
@@ -118,7 +123,7 @@ function Messages(props) {
             else {
               props.setIsOpen(true);
               setIsOpen(true);
-              localStorage.setItem(`${userCTX.user.name}Date`, DateTime.utc().toISO());
+              localStorage.setItem(`${userCTX.user.name}Open`, DateTime.utc().toISO());
             }
             props.setMsgNumber(0);
             props.setChecked(true);

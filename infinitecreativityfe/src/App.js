@@ -20,7 +20,7 @@ import AllListings from "./components/AllListings";
 import Messages from "./components/Messages";
 import { ToastContainer } from "react-toastify";
 import Badge from "@mui/material/Badge";
-import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
+import QuestionAnswerIcon from "@mui/icons-material/QuestionAnswer";
 import useNotification, { notificationTypes } from "./hooks/useNotification";
 import {
   Chart as ChartJS,
@@ -30,7 +30,7 @@ import {
   Filler,
   Tooltip,
   Legend,
-} from 'chart.js';
+} from "chart.js";
 
 ChartJS.register(
   RadialLinearScale,
@@ -159,67 +159,67 @@ const globalTheme = createTheme(theme, {
       },
     },
     MuiMenu: {
-      styleOverrides:{
-        list:{
-          backgroundColor:"black",
-        }
-      }
+      styleOverrides: {
+        list: {
+          backgroundColor: "black",
+        },
+      },
     },
     MuiIconButton: {
-      styleOverrides:{
-        root:{
-          color:"white"
-        }
-      }
+      styleOverrides: {
+        root: {
+          color: "white",
+        },
+      },
     },
     MuiListItemIcon: {
-      styleOverrides:{
-        root:{
-          color:"white"
-        }
-      }
+      styleOverrides: {
+        root: {
+          color: "white",
+        },
+      },
     },
     MuiDataGrid: {
-      styleOverrides:{
-        menu:{
-          "& .MuiDataGrid-menuList":{
-            backgroundColor:"black",
-            border:"solid 1px white",
-            borderRadius:"4px"
-          }
+      styleOverrides: {
+        menu: {
+          "& .MuiDataGrid-menuList": {
+            backgroundColor: "black",
+            border: "solid 1px white",
+            borderRadius: "4px",
+          },
         },
-        root:{
-          borderColor:"transparent"
+        root: {
+          borderColor: "transparent",
         },
-        withBorderColor:{
+        withBorderColor: {
           borderColor: "rgb(85 32 91)",
-        }
-      }
+        },
+      },
     },
     MuiSelect: {
-      styleOverrides:{
-        select:{
-          color:"white"
+      styleOverrides: {
+        select: {
+          color: "white",
         },
-        icon:{
-          color:"white"
-        }
-      }
+        icon: {
+          color: "white",
+        },
+      },
     },
-    MuiTablePagination:{
-      styleOverrides:{
-        select:{
-          "&,&:focus":{
-          border: "solid 1px",
-          borderRadius:"4px",
-          borderColor: "white"
-          }
-        }
-      }
+    MuiTablePagination: {
+      styleOverrides: {
+        select: {
+          "&,&:focus": {
+            border: "solid 1px",
+            borderRadius: "4px",
+            borderColor: "white",
+          },
+        },
+      },
     },
     MuiMenuItem: {
-      styleOverrides:{
-        root:{
+      styleOverrides: {
+        root: {
           "&:hover": {
             color: theme.palette.secondary.contrastText,
             backgroundColor: theme.palette.secondary.light,
@@ -230,8 +230,8 @@ const globalTheme = createTheme(theme, {
             backgroundColor: theme.palette.secondary.light,
             borderColor: theme.palette.secondary.main,
           },
-        }
-      }
+        },
+      },
     },
     MuiButton: {
       defaultProps: {
@@ -277,90 +277,97 @@ const globalTheme = createTheme(theme, {
       ],
     },
   },
-  typography:{
-    body1:{
-      color:"white"
+  typography: {
+    body1: {
+      color: "white",
     },
-    body2:{
-      color:"white"
+    body2: {
+      color: "white",
     },
-    h1:{
-      color:"white"
+    h1: {
+      color: "white",
     },
-    h2:{
-      color:"white"
+    h2: {
+      color: "white",
     },
-    h3:{
-      color:"white"
+    h3: {
+      color: "white",
     },
-    h4:{
-      color:"white"
+    h4: {
+      color: "white",
     },
-    h5:{
-      color:"white"
+    h5: {
+      color: "white",
     },
-    h6:{
-      color:"white"
+    h6: {
+      color: "white",
     },
-    subtitle1:{
-      color:"white"
+    subtitle1: {
+      color: "white",
     },
-    subtitle2:{
-      color:"white"
+    subtitle2: {
+      color: "white",
     },
-    button:{
-      color:"white"
+    button: {
+      color: "white",
     },
-    caption:{
-      color:"white"
+    caption: {
+      color: "white",
     },
-    overline:{
-      color:"white"
+    overline: {
+      color: "white",
     },
-  }
+  },
 });
 
 function App() {
   const [activeButton, setActiveButton] = useState("home");
   const [childData, setChildData] = useState([]);
   const [msgNumber, setMsgNumber] = useState(0);
-  const [openDate, setOpenDate] = useState();
-  const [lastOpenDate, setlastOpenDate] = useState();
   const [isOpen, setIsOpen] = useState(false);
   const [checked, setChecked] = useState(false);
   const userCTX = useContext(UserContext);
   let newMessagesCounter;
-  
+
   async function handleLogOut() {
     await fetch("/api/player/logout");
     setActiveButton("home");
     userCTX.refresh();
     setChecked(false);
   }
-  
+
   function openMessages() {
-    setChecked(true);
-    if (isOpen) setIsOpen(false);
-    else {setIsOpen(true); localStorage.setItem(`${userCTX.user.name}Date`, DateTime.utc().toISO());}
+    let date = DateTime.utc().toISO();
+    if (isOpen) {
+      setIsOpen(false);
+      setChecked(false);
+      localStorage.setItem(`${userCTX.user.name}Close`, date);
+    } else {
+      setChecked(true);
+      setIsOpen(true);
+      localStorage.setItem(`${userCTX.user.name}Open`, date);
+    }
   }
 
   function handleChildData(data) {
-    const lastDate = localStorage.getItem(`${userCTX.user.name}Date`);
-    setOpenDate(DateTime.utc().toISO());
-    setlastOpenDate(lastDate);
     setChildData(data);
   }
 
   useEffect(() => {
+    if(userCTX.user){
+      const lastDate = localStorage.getItem(`${userCTX.user.name}Open`);
+      const closeDate = localStorage.getItem(`${userCTX.user.name}Close`);
     newMessagesCounter = childData.filter(
       (x) =>
         x.recipient.name === userCTX.user.name &&
-        x.sendDate >= lastOpenDate &&
-        x.sendDate <= openDate
+        x.sendDate >= lastDate &&
+        x.sendDate >= closeDate
     );
+    console.log(newMessagesCounter[0]);
     setTimeout(() => {
       if (!checked) setMsgNumber(newMessagesCounter.length);
     }, 200);
+  }
   }, [childData]);
 
   let notification = useNotification(notificationTypes.QuestUpdate);
@@ -368,7 +375,7 @@ function App() {
     userCTX.refresh();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [notification]);
-  
+
   return (
     <ThemeProvider theme={globalTheme}>
       <div className="App">
@@ -481,7 +488,7 @@ function App() {
                       }}
                     >
                       <Box sx={{ paddingRight: "20px" }}>
-                        <Badge badgeContent={msgNumber} color="error">
+                        <Badge badgeContent={msgNumber} color="error" max={9}>
                           <QuestionAnswerIcon
                             style={{
                               color: "",
@@ -489,7 +496,7 @@ function App() {
                               backgroundColor: "rgba(0, 105, 94, 0.4)",
                               padding: "10px",
                               border: "1px solid #202020",
-                              boxShadow: "0px 5px 8px #101010"
+                              boxShadow: "0px 5px 8px #101010",
                             }}
                             sx={{ "&:hover": { cursor: "pointer" } }}
                             onClick={() => {
@@ -596,9 +603,10 @@ function App() {
           <Messages
             onDataPassed={handleChildData}
             setChecked={setChecked}
+            checked={checked}
             setMsgNumber={setMsgNumber}
-            isOpen={isOpen}
             setIsOpen={setIsOpen}
+            isOpen={isOpen}
           ></Messages>
         </Box>
       </div>
