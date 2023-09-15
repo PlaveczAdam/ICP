@@ -1,5 +1,4 @@
 ﻿using InfiniteCreativity.Models.Enums.CoreNS;
-using InfiniteCreativity.Models.GameNS;
 
 namespace InfiniteCreativity.DTO.Game
 {

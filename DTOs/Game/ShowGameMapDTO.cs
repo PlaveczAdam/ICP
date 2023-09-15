@@ -1,6 +1,4 @@
-﻿using InfiniteCreativity.Models.GameNS;
-
-namespace InfiniteCreativity.DTO.Game
+﻿namespace InfiniteCreativity.DTO.Game
 {
     public class ShowGameMapDTO
     {
