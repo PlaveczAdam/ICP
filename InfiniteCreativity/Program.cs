@@ -20,6 +20,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers().AddNewtonsoftJson((o) => {
+    o.SerializerSettings.TypeNameHandling = Newtonsoft.Json.TypeNameHandling.Auto;
     o.SerializerSettings.Converters.Add(new StringEnumConverter
     {
         NamingStrategy = new CamelCaseNamingStrategy()
