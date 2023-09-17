@@ -28,10 +28,10 @@ namespace InfiniteCreativity.Controllers.CoreNS
             return await _listingService.GetListings(listingFilter);
         }
 
-        [HttpPut, Route("sold/{id}")]
-        public async Task PurchaseListing(int id)
+        [HttpPut, Route("sold/{id}/{amount}")]
+        public async Task PurchaseListing(int id, ulong amount)
         {
-            await _listingService.PurchaseListing(id);
+            await _listingService.PurchaseListing(id, amount);
         }
 
         [HttpPut, Route("cancelled/{id}")]

@@ -7,5 +7,7 @@ namespace InfiniteCreativity.DTO
         public Guid ItemId { get; set; }
         [Range(1, double.MaxValue)]
         public double Price { get; set; }
+        [Range(1, ulong.MaxValue)]
+        public ulong Amount { get; set; }
     }
 }
