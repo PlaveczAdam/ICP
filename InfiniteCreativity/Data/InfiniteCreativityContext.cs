@@ -3,6 +3,7 @@ using InfiniteCreativity.Models;
 using InfiniteCreativity.Models.Weapons;
 using InfiniteCreativity.Models.ArmorNs;
 using InfiniteCreativity.Models.Materials;
+using InfiniteCreativity.Models.Enemys;
 
 namespace InfiniteCreativity.Data
 {
@@ -29,6 +30,7 @@ namespace InfiniteCreativity.Data
         public DbSet<Stackable> Stackable { get; set; }
         public DbSet<FeConnection> FeConnection { get; set; }
         public DbSet<GConnection> GConnection { get; set; }
-
+        public DbSet<Enemy> Enemy { get; set; }
+        public DbSet<Boss> Boss { get; set; }
     }
 }

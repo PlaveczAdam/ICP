@@ -98,25 +98,27 @@ function Quests(props) {
 
   const columns = useMemo(() => {
     return [
-      { field: "name", headerName: "Name", flex:1 },
-      { field: "description", headerName: "Description", flex:1 },
+      { field: "name", headerName: "Name", flex: 1 },
+      { field: "description", headerName: "Description", flex: 1 },
       {
         field: "progression",
         headerName: "Progression",
         width: 200,
         renderCell: (params) => (
-          <Box display="flex" alignItems="center"minHeight={50}>
-            <Box width={100} >
+          <Box display="flex" alignItems="center" minHeight={50}>
+            <Box width={100}>
               <LinearProgress variant="determinate" value={params.value} />
             </Box>
-            <Box minWidth={60}><DoubleDisplay value={params.value}></DoubleDisplay>%</Box>
+            <Box minWidth={60}>
+              <DoubleDisplay value={params.value}></DoubleDisplay>%
+            </Box>
           </Box>
         ),
       },
       {
         field: "reward",
         headerName: "Reward",
-        flex:1,
+        flex: 1,
         valueGetter: (params) => {
           return {
             isDone: params.row.isDone,
@@ -189,7 +191,12 @@ function Quests(props) {
         </AppBar>
 
         {quests ? (
-          <DataGrid rows={orderedQuests} columns={columns} getRowHeight={() => 'auto'}/>
+          <DataGrid
+            rows={orderedQuests}
+            columns={columns}
+            getRowHeight={() => "auto"}
+            initialState={{ pagination: { paginationModel: { pageSize: 25 } } }}
+          />
         ) : (
           <LinearProgress />
         )}

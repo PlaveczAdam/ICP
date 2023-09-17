@@ -6,5 +6,6 @@ namespace InfiniteCreativity.Models
     public class GConnection
     {
         public string ConnectionID { get; set; }
+        public int Turn { get; set; } = 1;
     }
 }

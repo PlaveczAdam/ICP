@@ -15,6 +15,8 @@ namespace InfiniteCreativity.Models
         public Race Race { get; set; }
         public Profession Profession { get; set; }
 
+        public double CurrentHealth { get; set; }
+
         [NotMapped]
         public double BaseHealth => StatComputer.ComputeBaseHealth(Race, Profession, Level);
         [NotMapped]
@@ -27,6 +29,10 @@ namespace InfiniteCreativity.Models
         public double BaseAbilityResource => StatComputer.ComputeBaseAbilityResource(Race, Profession);
         [NotMapped]
         public double BaseAbilityResourceGain => StatComputer.ComputeBaseAbilityResourceGain(Race, Profession);
+        [NotMapped]
+        public double BaseCriticalChance => StatComputer.ComputeBaseCriticalChance(Profession);
+        [NotMapped]
+        public double BaseCriticalMultiplier => StatComputer.ComputeBaseCriticalMultiplier(Profession);
 
         [NotMapped]
         public double Health => EffectiveStatComputer.ComputeEffectiveHealth(BaseHealth, Armor);
@@ -42,6 +48,10 @@ namespace InfiniteCreativity.Models
         public double AbilityResourceGain => EffectiveStatComputer.ComputeEffectiveAbilityResourceGain(BaseAbilityResourceGain);
         [NotMapped]
         public double Defense => EffectiveStatComputer.ComputeEffectiveDefense(Armor);
+        [NotMapped]
+        public double CriticalChance => EffectiveStatComputer.ComputeEffectiveCriticalChance(BaseCriticalChance, Weapon);
+        [NotMapped]
+        public double CriticalMultiplier => EffectiveStatComputer.ComputeEffectiveCritMultiplier(BaseCriticalMultiplier, Weapon);
 
 #pragma warning disable CS8620 // Argument cannot be used for parameter due to differences in the nullability of reference types.
         [NotMapped]
