@@ -67,7 +67,7 @@ namespace InfiniteCreativity.Services.GameNS
             };
             return gTurnDTO;
         }
-        private async Task<GConnection> GetGameConnectionDetailed(bool withGameCharacters = false, bool withCharacterDetail = false, bool withMap = false, bool withEnemy=false)
+        private async Task<GConnection> GetGameConnectionDetailed(bool withGameCharacters = false, bool withCharacterDetail = false, bool withMap = false, bool withEnemy=false, bool withInventory=false)
         {
             var currentPlayer = await _playerService.GetCurrentPlayer(withGConnections: true);
             var gconn = _context.GConnection.AsQueryable();
@@ -90,12 +90,37 @@ namespace InfiniteCreativity.Services.GameNS
             {
                 gconn = gconn.Include(x => x.Enemies);
             }
+            if (withInventory)
+            {
+                gconn = gconn
+                    .Include(x => x.Characters)
+                        .ThenInclude(x => x.Character)
+                            .ThenInclude(x => x.Head)
+                    .Include(x => x.Characters)
+                        .ThenInclude(x => x.Character)
+                            .ThenInclude(x => x.Shoulder)
+                    .Include(x => x.Characters)
+                        .ThenInclude(x => x.Character)
+                            .ThenInclude(x => x.Chest)
+                    .Include(x => x.Characters)
+                        .ThenInclude(x => x.Character)
+                            .ThenInclude(x => x.Hand)
+                    .Include(x => x.Characters)
+                        .ThenInclude(x => x.Character)
+                            .ThenInclude(x => x.Leg)
+                    .Include(x => x.Characters)
+                        .ThenInclude(x => x.Character)
+                            .ThenInclude(x => x.Boot)
+                    .Include(x => x.Characters)
+                        .ThenInclude(x => x.Character)
+                            .ThenInclude(x => x.Weapon);
+            }
             return await gconn.SingleAsync(x => x.Id == currentPlayer.GConnections.First().Id);
         }
 
         public async Task<ShowGameTurnDTO> ProgressTurn()
         {
-            var gconn = await GetGameConnectionDetailed(withGameCharacters: true, withCharacterDetail: true);
+            var gconn = await GetGameConnectionDetailed(withGameCharacters: true, withCharacterDetail: true, withInventory: true);
             var characters = gconn.Characters.OrderBy(x => x.Order).ToList();
             gconn.Turn++;
             var currInd = (gconn.Turn - 1) % gconn.Characters.Count();
@@ -214,7 +239,7 @@ namespace InfiniteCreativity.Services.GameNS
                 .Where(hexTile => hexTile.TileContent.IsWalkable() && !characters.Any(y=>(y.Character.Col == hexTile.ColIdx && y.Character.Row == hexTile.RowIdx)))
                 .ToList().ShuffleInPlace(_rnd);
 
-            var enemyTiles = Enumerable.Range(0, (int)_rnd.NextDouble(emptyTiles.Count() * 0.1, emptyTiles.Count() * 0.5)).Select(x => emptyTiles[x]);
+            var enemyTiles = Enumerable.Range(0, (int)_rnd.NextDouble(emptyTiles.Count() * 0.1, emptyTiles.Count() * 0.2)).Select(x => emptyTiles[x]);
             enemyTiles.ForEach(x => { 
                 x.Enemy = _enemyGenerator.Generate(level);
                 x.Enemy.GConnection = gconn;
