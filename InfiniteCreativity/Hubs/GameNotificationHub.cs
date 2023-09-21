@@ -1,4 +1,4 @@
-﻿using InfiniteCreativity.Services;
+﻿using InfiniteCreativity.Services.CoreNS;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 

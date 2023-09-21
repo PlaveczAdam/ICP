@@ -22,7 +22,7 @@ namespace InfiniteCreativity.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("InfiniteCreativity.Models.Character", b =>
+            modelBuilder.Entity("DataObjects.EntityBaseDataObject", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -30,23 +30,76 @@ namespace InfiniteCreativity.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("BootId")
+                    b.Property<Guid>("HexTileDataObjectId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("HexTileDataObjectId")
+                        .IsUnique();
+
+                    b.ToTable("EntityBase", (string)null);
+                });
+
+            modelBuilder.Entity("Entities.MapDataObject", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    b.Property<int?>("ChestId")
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Columns")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("GConnectionId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Rows")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GConnectionId")
+                        .IsUnique();
+
+                    b.ToTable("Map", (string)null);
+                });
+
+            modelBuilder.Entity("InfiniteCreativity.Models.CoreNS.Character", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<Guid?>("BootId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("ChestId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int?>("Col")
                         .HasColumnType("integer");
 
                     b.Property<double>("CurrentHealth")
                         .HasColumnType("double precision");
 
-                    b.Property<int?>("HandId")
+                    b.Property<int>("CurrentMovement")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("HeadId")
-                        .HasColumnType("integer");
+                    b.Property<Guid?>("HandId")
+                        .HasColumnType("uuid");
 
-                    b.Property<int?>("LegId")
-                        .HasColumnType("integer");
+                    b.Property<Guid?>("HeadId")
+                        .HasColumnType("uuid");
+
+                    b.Property<bool>("IsInCombat")
+                        .HasColumnType("boolean");
+
+                    b.Property<Guid?>("LegId")
+                        .HasColumnType("uuid");
 
                     b.Property<double>("Level")
                         .HasColumnType("double precision");
@@ -63,11 +116,14 @@ namespace InfiniteCreativity.Migrations
                     b.Property<int>("Race")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("ShoulderId")
+                    b.Property<int?>("Row")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("WeaponId")
-                        .HasColumnType("integer");
+                    b.Property<Guid?>("ShoulderId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("WeaponId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
@@ -87,10 +143,34 @@ namespace InfiniteCreativity.Migrations
 
                     b.HasIndex("WeaponId");
 
-                    b.ToTable("Character");
+                    b.ToTable("Character", (string)null);
                 });
 
-            modelBuilder.Entity("InfiniteCreativity.Models.Enemys.Enemy", b =>
+            modelBuilder.Entity("InfiniteCreativity.Models.CoreNS.CharacterSkillSlot", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("CharacterId")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid?>("SkillHolderId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("SlotNumber")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CharacterId");
+
+                    b.HasIndex("SkillHolderId");
+
+                    b.ToTable("CharacterSkillSlot", (string)null);
+                });
+
+            modelBuilder.Entity("InfiniteCreativity.Models.CoreNS.FeConnection", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -98,40 +178,12 @@ namespace InfiniteCreativity.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("EnemyType")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("GConnectionConnectionID")
-                        .HasColumnType("text");
-
-                    b.Property<double>("Health")
-                        .HasColumnType("double precision");
-
-                    b.Property<double>("Level")
-                        .HasColumnType("double precision");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("GConnectionConnectionID");
-
-                    b.ToTable("Enemy");
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("Enemy");
-
-                    b.UseTphMappingStrategy();
-                });
-
-            modelBuilder.Entity("InfiniteCreativity.Models.FeConnection", b =>
-                {
-                    b.Property<string>("ConnectionID")
-                        .HasColumnType("text");
-
                     b.Property<bool>("Connected")
                         .HasColumnType("boolean");
+
+                    b.Property<string>("ConnectionID")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<int?>("PlayerId")
                         .HasColumnType("integer");
@@ -140,38 +192,18 @@ namespace InfiniteCreativity.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.HasKey("ConnectionID");
+                    b.HasKey("Id");
 
                     b.HasIndex("PlayerId");
 
-                    b.ToTable("FeConnection");
+                    b.ToTable("FeConnection", (string)null);
                 });
 
-            modelBuilder.Entity("InfiniteCreativity.Models.GConnection", b =>
+            modelBuilder.Entity("InfiniteCreativity.Models.CoreNS.Item", b =>
                 {
-                    b.Property<string>("ConnectionID")
-                        .HasColumnType("text");
-
-                    b.Property<int?>("PlayerId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("Turn")
-                        .HasColumnType("integer");
-
-                    b.HasKey("ConnectionID");
-
-                    b.HasIndex("PlayerId");
-
-                    b.ToTable("GConnection");
-                });
-
-            modelBuilder.Entity("InfiniteCreativity.Models.Item", b =>
-                {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -210,14 +242,14 @@ namespace InfiniteCreativity.Migrations
 
                     b.HasIndex("QuestId");
 
-                    b.ToTable("Item");
+                    b.ToTable("Item", (string)null);
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("Item");
 
                     b.UseTphMappingStrategy();
                 });
 
-            modelBuilder.Entity("InfiniteCreativity.Models.Listing", b =>
+            modelBuilder.Entity("InfiniteCreativity.Models.CoreNS.Listing", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -225,8 +257,8 @@ namespace InfiniteCreativity.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("ItemId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("ItemId")
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime>("ListingDate")
                         .HasColumnType("timestamp with time zone");
@@ -243,10 +275,10 @@ namespace InfiniteCreativity.Migrations
 
                     b.HasIndex("SellerId");
 
-                    b.ToTable("Listing");
+                    b.ToTable("Listing", (string)null);
                 });
 
-            modelBuilder.Entity("InfiniteCreativity.Models.Message", b =>
+            modelBuilder.Entity("InfiniteCreativity.Models.CoreNS.Message", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -273,10 +305,10 @@ namespace InfiniteCreativity.Migrations
 
                     b.HasIndex("SenderId");
 
-                    b.ToTable("Message");
+                    b.ToTable("Message", (string)null);
                 });
 
-            modelBuilder.Entity("InfiniteCreativity.Models.Player", b =>
+            modelBuilder.Entity("InfiniteCreativity.Models.CoreNS.Player", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -303,10 +335,10 @@ namespace InfiniteCreativity.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Player");
+                    b.ToTable("Player", (string)null);
                 });
 
-            modelBuilder.Entity("InfiniteCreativity.Models.Quest", b =>
+            modelBuilder.Entity("InfiniteCreativity.Models.CoreNS.Quest", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -344,19 +376,174 @@ namespace InfiniteCreativity.Migrations
 
                     b.HasIndex("CharacterId");
 
-                    b.ToTable("Quest");
+                    b.ToTable("Quest", (string)null);
                 });
 
-            modelBuilder.Entity("InfiniteCreativity.Models.Enemys.Boss", b =>
+            modelBuilder.Entity("InfiniteCreativity.Models.CoreNS.Skill", b =>
                 {
-                    b.HasBaseType("InfiniteCreativity.Models.Enemys.Enemy");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
 
-                    b.HasDiscriminator().HasValue("Boss");
+                    b.Property<int>("Cooldown")
+                        .HasColumnType("integer");
+
+                    b.Property<double>("Damage")
+                        .HasColumnType("double precision");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<double>("ResourceCost")
+                        .HasColumnType("double precision");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Skill", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("ea380bc9-ccf3-4f9f-ab09-f72cf0229465"),
+                            Cooldown = 0,
+                            Damage = 2.0,
+                            Description = "nincs",
+                            Name = "First",
+                            ResourceCost = 1.0
+                        });
                 });
 
-            modelBuilder.Entity("InfiniteCreativity.Models.Equippable", b =>
+            modelBuilder.Entity("InfiniteCreativity.Models.GameNS.Enemys.Enemy", b =>
                 {
-                    b.HasBaseType("InfiniteCreativity.Models.Item");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("EnemyType")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("GConnectionId")
+                        .HasColumnType("integer");
+
+                    b.Property<double>("Health")
+                        .HasColumnType("double precision");
+
+                    b.Property<double>("Level")
+                        .HasColumnType("double precision");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GConnectionId");
+
+                    b.ToTable("Enemy", (string)null);
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("Enemy");
+
+                    b.UseTphMappingStrategy();
+                });
+
+            modelBuilder.Entity("InfiniteCreativity.Models.GameNS.GConnection", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ConnectionID")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("PlayerId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Turn")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PlayerId");
+
+                    b.ToTable("GConnection", (string)null);
+                });
+
+            modelBuilder.Entity("InfiniteCreativity.Models.GameNS.GameCharacter", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("CharacterId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("ConnectionId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Order")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CharacterId");
+
+                    b.HasIndex("ConnectionId");
+
+                    b.ToTable("GameCharacter", (string)null);
+                });
+
+            modelBuilder.Entity("InfiniteCreativity.Models.GameNS.HexTileDataObject", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("ColIdx")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("EnemyId")
+                        .HasColumnType("integer");
+
+                    b.Property<bool>("IsDiscovered")
+                        .HasColumnType("boolean");
+
+                    b.Property<int>("MapDataObjectId")
+                        .HasColumnType("integer");
+
+                    b.Property<bool>("ReservedForPath")
+                        .HasColumnType("boolean");
+
+                    b.Property<int>("RowIdx")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("TileContent")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EnemyId");
+
+                    b.HasIndex("Id")
+                        .IsUnique();
+
+                    b.HasIndex("MapDataObjectId");
+
+                    b.ToTable("HexTiles", (string)null);
+                });
+
+            modelBuilder.Entity("InfiniteCreativity.Models.CoreNS.Equippable", b =>
+                {
+                    b.HasBaseType("InfiniteCreativity.Models.CoreNS.Item");
 
                     b.Property<int>("EquipCount")
                         .HasColumnType("integer");
@@ -364,12 +551,12 @@ namespace InfiniteCreativity.Migrations
                     b.HasDiscriminator().HasValue("Equippable");
                 });
 
-            modelBuilder.Entity("InfiniteCreativity.Models.Stackable", b =>
+            modelBuilder.Entity("InfiniteCreativity.Models.CoreNS.Stackable", b =>
                 {
-                    b.HasBaseType("InfiniteCreativity.Models.Item");
+                    b.HasBaseType("InfiniteCreativity.Models.CoreNS.Item");
 
-                    b.Property<int>("Amount")
-                        .HasColumnType("integer");
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("numeric(20,0)");
 
                     b.Property<int>("StackableType")
                         .HasColumnType("integer");
@@ -377,9 +564,16 @@ namespace InfiniteCreativity.Migrations
                     b.HasDiscriminator().HasValue("Stackable");
                 });
 
-            modelBuilder.Entity("InfiniteCreativity.Models.ArmorNs.Boot", b =>
+            modelBuilder.Entity("InfiniteCreativity.Models.GameNS.Enemys.Boss", b =>
                 {
-                    b.HasBaseType("InfiniteCreativity.Models.Equippable");
+                    b.HasBaseType("InfiniteCreativity.Models.GameNS.Enemys.Enemy");
+
+                    b.HasDiscriminator().HasValue("Boss");
+                });
+
+            modelBuilder.Entity("InfiniteCreativity.Models.CoreNS.ArmorNs.Boot", b =>
+                {
+                    b.HasBaseType("InfiniteCreativity.Models.CoreNS.Equippable");
 
                     b.Property<int>("ArmorType")
                         .ValueGeneratedOnUpdateSometimes()
@@ -399,9 +593,9 @@ namespace InfiniteCreativity.Migrations
                     b.HasDiscriminator().HasValue("Boot");
                 });
 
-            modelBuilder.Entity("InfiniteCreativity.Models.ArmorNs.Chest", b =>
+            modelBuilder.Entity("InfiniteCreativity.Models.CoreNS.ArmorNs.Chest", b =>
                 {
-                    b.HasBaseType("InfiniteCreativity.Models.Equippable");
+                    b.HasBaseType("InfiniteCreativity.Models.CoreNS.Equippable");
 
                     b.Property<int>("ArmorType")
                         .ValueGeneratedOnUpdateSometimes()
@@ -418,9 +612,9 @@ namespace InfiniteCreativity.Migrations
                     b.HasDiscriminator().HasValue("Chest");
                 });
 
-            modelBuilder.Entity("InfiniteCreativity.Models.ArmorNs.Hand", b =>
+            modelBuilder.Entity("InfiniteCreativity.Models.CoreNS.ArmorNs.Hand", b =>
                 {
-                    b.HasBaseType("InfiniteCreativity.Models.Equippable");
+                    b.HasBaseType("InfiniteCreativity.Models.CoreNS.Equippable");
 
                     b.Property<int>("ArmorType")
                         .ValueGeneratedOnUpdateSometimes()
@@ -437,9 +631,9 @@ namespace InfiniteCreativity.Migrations
                     b.HasDiscriminator().HasValue("Hand");
                 });
 
-            modelBuilder.Entity("InfiniteCreativity.Models.ArmorNs.Head", b =>
+            modelBuilder.Entity("InfiniteCreativity.Models.CoreNS.ArmorNs.Head", b =>
                 {
-                    b.HasBaseType("InfiniteCreativity.Models.Equippable");
+                    b.HasBaseType("InfiniteCreativity.Models.CoreNS.Equippable");
 
                     b.Property<int>("ArmorType")
                         .ValueGeneratedOnUpdateSometimes()
@@ -456,9 +650,9 @@ namespace InfiniteCreativity.Migrations
                     b.HasDiscriminator().HasValue("Head");
                 });
 
-            modelBuilder.Entity("InfiniteCreativity.Models.ArmorNs.Leg", b =>
+            modelBuilder.Entity("InfiniteCreativity.Models.CoreNS.ArmorNs.Leg", b =>
                 {
-                    b.HasBaseType("InfiniteCreativity.Models.Equippable");
+                    b.HasBaseType("InfiniteCreativity.Models.CoreNS.Equippable");
 
                     b.Property<int>("ArmorType")
                         .ValueGeneratedOnUpdateSometimes()
@@ -475,9 +669,9 @@ namespace InfiniteCreativity.Migrations
                     b.HasDiscriminator().HasValue("Leg");
                 });
 
-            modelBuilder.Entity("InfiniteCreativity.Models.ArmorNs.Shoulder", b =>
+            modelBuilder.Entity("InfiniteCreativity.Models.CoreNS.ArmorNs.Shoulder", b =>
                 {
-                    b.HasBaseType("InfiniteCreativity.Models.Equippable");
+                    b.HasBaseType("InfiniteCreativity.Models.CoreNS.Equippable");
 
                     b.Property<int>("ArmorType")
                         .ValueGeneratedOnUpdateSometimes()
@@ -494,9 +688,9 @@ namespace InfiniteCreativity.Migrations
                     b.HasDiscriminator().HasValue("Shoulder");
                 });
 
-            modelBuilder.Entity("InfiniteCreativity.Models.Weapons.Weapon", b =>
+            modelBuilder.Entity("InfiniteCreativity.Models.CoreNS.Weapons.Weapon", b =>
                 {
-                    b.HasBaseType("InfiniteCreativity.Models.Equippable");
+                    b.HasBaseType("InfiniteCreativity.Models.CoreNS.Equippable");
 
                     b.Property<double>("AttackSpeed")
                         .HasColumnType("double precision");
@@ -519,23 +713,35 @@ namespace InfiniteCreativity.Migrations
                     b.HasDiscriminator().HasValue("Weapon");
                 });
 
-            modelBuilder.Entity("InfiniteCreativity.Models.Materials.Material", b =>
+            modelBuilder.Entity("InfiniteCreativity.Models.CoreNS.Materials.Material", b =>
                 {
-                    b.HasBaseType("InfiniteCreativity.Models.Stackable");
+                    b.HasBaseType("InfiniteCreativity.Models.CoreNS.Stackable");
 
                     b.HasDiscriminator().HasValue("Material");
                 });
 
-            modelBuilder.Entity("InfiniteCreativity.Models.Weapons.Melee", b =>
+            modelBuilder.Entity("InfiniteCreativity.Models.CoreNS.SkillHolder", b =>
                 {
-                    b.HasBaseType("InfiniteCreativity.Models.Weapons.Weapon");
+                    b.HasBaseType("InfiniteCreativity.Models.CoreNS.Stackable");
+
+                    b.Property<Guid>("SkillId")
+                        .HasColumnType("uuid");
+
+                    b.HasIndex("SkillId");
+
+                    b.HasDiscriminator().HasValue("SkillHolder");
+                });
+
+            modelBuilder.Entity("InfiniteCreativity.Models.CoreNS.Weapons.Melee", b =>
+                {
+                    b.HasBaseType("InfiniteCreativity.Models.CoreNS.Weapons.Weapon");
 
                     b.HasDiscriminator().HasValue("Melee");
                 });
 
-            modelBuilder.Entity("InfiniteCreativity.Models.Weapons.Ranged", b =>
+            modelBuilder.Entity("InfiniteCreativity.Models.CoreNS.Weapons.Ranged", b =>
                 {
-                    b.HasBaseType("InfiniteCreativity.Models.Weapons.Weapon");
+                    b.HasBaseType("InfiniteCreativity.Models.CoreNS.Weapons.Weapon");
 
                     b.Property<double>("Reload")
                         .HasColumnType("double precision");
@@ -543,39 +749,61 @@ namespace InfiniteCreativity.Migrations
                     b.HasDiscriminator().HasValue("Ranged");
                 });
 
-            modelBuilder.Entity("InfiniteCreativity.Models.Character", b =>
+            modelBuilder.Entity("DataObjects.EntityBaseDataObject", b =>
                 {
-                    b.HasOne("InfiniteCreativity.Models.ArmorNs.Boot", "Boot")
+                    b.HasOne("InfiniteCreativity.Models.GameNS.HexTileDataObject", "HexTileDataObject")
+                        .WithOne("DetailEntity")
+                        .HasForeignKey("DataObjects.EntityBaseDataObject", "HexTileDataObjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("HexTileDataObject");
+                });
+
+            modelBuilder.Entity("Entities.MapDataObject", b =>
+                {
+                    b.HasOne("InfiniteCreativity.Models.GameNS.GConnection", "GConnection")
+                        .WithOne("Map")
+                        .HasForeignKey("Entities.MapDataObject", "GConnectionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("GConnection");
+                });
+
+            modelBuilder.Entity("InfiniteCreativity.Models.CoreNS.Character", b =>
+                {
+                    b.HasOne("InfiniteCreativity.Models.CoreNS.ArmorNs.Boot", "Boot")
                         .WithMany()
                         .HasForeignKey("BootId");
 
-                    b.HasOne("InfiniteCreativity.Models.ArmorNs.Chest", "Chest")
+                    b.HasOne("InfiniteCreativity.Models.CoreNS.ArmorNs.Chest", "Chest")
                         .WithMany()
                         .HasForeignKey("ChestId");
 
-                    b.HasOne("InfiniteCreativity.Models.ArmorNs.Hand", "Hand")
+                    b.HasOne("InfiniteCreativity.Models.CoreNS.ArmorNs.Hand", "Hand")
                         .WithMany()
                         .HasForeignKey("HandId");
 
-                    b.HasOne("InfiniteCreativity.Models.ArmorNs.Head", "Head")
+                    b.HasOne("InfiniteCreativity.Models.CoreNS.ArmorNs.Head", "Head")
                         .WithMany()
                         .HasForeignKey("HeadId");
 
-                    b.HasOne("InfiniteCreativity.Models.ArmorNs.Leg", "Leg")
+                    b.HasOne("InfiniteCreativity.Models.CoreNS.ArmorNs.Leg", "Leg")
                         .WithMany()
                         .HasForeignKey("LegId");
 
-                    b.HasOne("InfiniteCreativity.Models.Player", "Player")
+                    b.HasOne("InfiniteCreativity.Models.CoreNS.Player", "Player")
                         .WithMany("Characters")
                         .HasForeignKey("PlayerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("InfiniteCreativity.Models.ArmorNs.Shoulder", "Shoulder")
+                    b.HasOne("InfiniteCreativity.Models.CoreNS.ArmorNs.Shoulder", "Shoulder")
                         .WithMany()
                         .HasForeignKey("ShoulderId");
 
-                    b.HasOne("InfiniteCreativity.Models.Weapons.Weapon", "Weapon")
+                    b.HasOne("InfiniteCreativity.Models.CoreNS.Weapons.Weapon", "Weapon")
                         .WithMany()
                         .HasForeignKey("WeaponId");
 
@@ -596,51 +824,52 @@ namespace InfiniteCreativity.Migrations
                     b.Navigation("Weapon");
                 });
 
-            modelBuilder.Entity("InfiniteCreativity.Models.Enemys.Enemy", b =>
+            modelBuilder.Entity("InfiniteCreativity.Models.CoreNS.CharacterSkillSlot", b =>
                 {
-                    b.HasOne("InfiniteCreativity.Models.GConnection", "GConnection")
-                        .WithMany()
-                        .HasForeignKey("GConnectionConnectionID");
+                    b.HasOne("InfiniteCreativity.Models.CoreNS.Character", "Character")
+                        .WithMany("SkillSlots")
+                        .HasForeignKey("CharacterId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("GConnection");
+                    b.HasOne("InfiniteCreativity.Models.CoreNS.SkillHolder", "SkillHolder")
+                        .WithMany()
+                        .HasForeignKey("SkillHolderId");
+
+                    b.Navigation("Character");
+
+                    b.Navigation("SkillHolder");
                 });
 
-            modelBuilder.Entity("InfiniteCreativity.Models.FeConnection", b =>
+            modelBuilder.Entity("InfiniteCreativity.Models.CoreNS.FeConnection", b =>
                 {
-                    b.HasOne("InfiniteCreativity.Models.Player", null)
+                    b.HasOne("InfiniteCreativity.Models.CoreNS.Player", null)
                         .WithMany("FeConnections")
                         .HasForeignKey("PlayerId");
                 });
 
-            modelBuilder.Entity("InfiniteCreativity.Models.GConnection", b =>
+            modelBuilder.Entity("InfiniteCreativity.Models.CoreNS.Item", b =>
                 {
-                    b.HasOne("InfiniteCreativity.Models.Player", null)
-                        .WithMany("GConnections")
-                        .HasForeignKey("PlayerId");
-                });
-
-            modelBuilder.Entity("InfiniteCreativity.Models.Item", b =>
-                {
-                    b.HasOne("InfiniteCreativity.Models.Player", "Player")
+                    b.HasOne("InfiniteCreativity.Models.CoreNS.Player", "Player")
                         .WithMany("Inventory")
                         .HasForeignKey("PlayerId");
 
-                    b.HasOne("InfiniteCreativity.Models.Quest", null)
+                    b.HasOne("InfiniteCreativity.Models.CoreNS.Quest", null)
                         .WithMany("Rewards")
                         .HasForeignKey("QuestId");
 
                     b.Navigation("Player");
                 });
 
-            modelBuilder.Entity("InfiniteCreativity.Models.Listing", b =>
+            modelBuilder.Entity("InfiniteCreativity.Models.CoreNS.Listing", b =>
                 {
-                    b.HasOne("InfiniteCreativity.Models.Item", "Item")
+                    b.HasOne("InfiniteCreativity.Models.CoreNS.Item", "Item")
                         .WithMany()
                         .HasForeignKey("ItemId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("InfiniteCreativity.Models.Player", "Seller")
+                    b.HasOne("InfiniteCreativity.Models.CoreNS.Player", "Seller")
                         .WithMany("Listing")
                         .HasForeignKey("SellerId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -651,15 +880,15 @@ namespace InfiniteCreativity.Migrations
                     b.Navigation("Seller");
                 });
 
-            modelBuilder.Entity("InfiniteCreativity.Models.Message", b =>
+            modelBuilder.Entity("InfiniteCreativity.Models.CoreNS.Message", b =>
                 {
-                    b.HasOne("InfiniteCreativity.Models.Player", "Recipient")
+                    b.HasOne("InfiniteCreativity.Models.CoreNS.Player", "Recipient")
                         .WithMany("RecievedMessages")
                         .HasForeignKey("RecipientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("InfiniteCreativity.Models.Player", "Sender")
+                    b.HasOne("InfiniteCreativity.Models.CoreNS.Player", "Sender")
                         .WithMany("SentMessages")
                         .HasForeignKey("SenderId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -670,9 +899,9 @@ namespace InfiniteCreativity.Migrations
                     b.Navigation("Sender");
                 });
 
-            modelBuilder.Entity("InfiniteCreativity.Models.Quest", b =>
+            modelBuilder.Entity("InfiniteCreativity.Models.CoreNS.Quest", b =>
                 {
-                    b.HasOne("InfiniteCreativity.Models.Character", "Character")
+                    b.HasOne("InfiniteCreativity.Models.CoreNS.Character", "Character")
                         .WithMany("Quests")
                         .HasForeignKey("CharacterId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -681,12 +910,88 @@ namespace InfiniteCreativity.Migrations
                     b.Navigation("Character");
                 });
 
-            modelBuilder.Entity("InfiniteCreativity.Models.Character", b =>
+            modelBuilder.Entity("InfiniteCreativity.Models.GameNS.Enemys.Enemy", b =>
                 {
-                    b.Navigation("Quests");
+                    b.HasOne("InfiniteCreativity.Models.GameNS.GConnection", "GConnection")
+                        .WithMany("Enemies")
+                        .HasForeignKey("GConnectionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("GConnection");
                 });
 
-            modelBuilder.Entity("InfiniteCreativity.Models.Player", b =>
+            modelBuilder.Entity("InfiniteCreativity.Models.GameNS.GConnection", b =>
+                {
+                    b.HasOne("InfiniteCreativity.Models.CoreNS.Player", "Player")
+                        .WithMany("GConnections")
+                        .HasForeignKey("PlayerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Player");
+                });
+
+            modelBuilder.Entity("InfiniteCreativity.Models.GameNS.GameCharacter", b =>
+                {
+                    b.HasOne("InfiniteCreativity.Models.CoreNS.Character", "Character")
+                        .WithMany()
+                        .HasForeignKey("CharacterId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("InfiniteCreativity.Models.GameNS.GConnection", "Connection")
+                        .WithMany("Characters")
+                        .HasForeignKey("ConnectionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Character");
+
+                    b.Navigation("Connection");
+                });
+
+            modelBuilder.Entity("InfiniteCreativity.Models.GameNS.HexTileDataObject", b =>
+                {
+                    b.HasOne("InfiniteCreativity.Models.GameNS.Enemys.Enemy", "Enemy")
+                        .WithMany()
+                        .HasForeignKey("EnemyId");
+
+                    b.HasOne("Entities.MapDataObject", "MapDataObject")
+                        .WithMany("HexTiles")
+                        .HasForeignKey("MapDataObjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Enemy");
+
+                    b.Navigation("MapDataObject");
+                });
+
+            modelBuilder.Entity("InfiniteCreativity.Models.CoreNS.SkillHolder", b =>
+                {
+                    b.HasOne("InfiniteCreativity.Models.CoreNS.Skill", "Skill")
+                        .WithMany()
+                        .HasForeignKey("SkillId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Skill");
+                });
+
+            modelBuilder.Entity("Entities.MapDataObject", b =>
+                {
+                    b.Navigation("HexTiles");
+                });
+
+            modelBuilder.Entity("InfiniteCreativity.Models.CoreNS.Character", b =>
+                {
+                    b.Navigation("Quests");
+
+                    b.Navigation("SkillSlots");
+                });
+
+            modelBuilder.Entity("InfiniteCreativity.Models.CoreNS.Player", b =>
                 {
                     b.Navigation("Characters");
 
@@ -703,9 +1008,24 @@ namespace InfiniteCreativity.Migrations
                     b.Navigation("SentMessages");
                 });
 
-            modelBuilder.Entity("InfiniteCreativity.Models.Quest", b =>
+            modelBuilder.Entity("InfiniteCreativity.Models.CoreNS.Quest", b =>
                 {
                     b.Navigation("Rewards");
+                });
+
+            modelBuilder.Entity("InfiniteCreativity.Models.GameNS.GConnection", b =>
+                {
+                    b.Navigation("Characters");
+
+                    b.Navigation("Enemies");
+
+                    b.Navigation("Map")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("InfiniteCreativity.Models.GameNS.HexTileDataObject", b =>
+                {
+                    b.Navigation("DetailEntity");
                 });
 #pragma warning restore 612, 618
         }

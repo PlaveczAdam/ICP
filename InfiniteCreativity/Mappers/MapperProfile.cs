@@ -1,14 +1,16 @@
 ﻿using AutoMapper;
-using InfiniteCreativity.Models;
-using InfiniteCreativity.Models.ArmorNs;
-using InfiniteCreativity.Models.DTO;
-using InfiniteCreativity.Models.DTO.Armor;
-using InfiniteCreativity.Models.DTO.Game;
-using InfiniteCreativity.Models.DTO.Message;
-using InfiniteCreativity.Models.DTO.Weapon;
-using InfiniteCreativity.Models.Enemys;
-using InfiniteCreativity.Models.Materials;
-using InfiniteCreativity.Models.Weapons;
+using DTOs;
+using InfiniteCreativity.DTO;
+using InfiniteCreativity.DTO.Armor;
+using InfiniteCreativity.DTO.Game;
+using InfiniteCreativity.DTO.Message;
+using InfiniteCreativity.DTO.Weapon;
+using InfiniteCreativity.Models.CoreNS;
+using InfiniteCreativity.Models.CoreNS.ArmorNs;
+using InfiniteCreativity.Models.CoreNS.Materials;
+using InfiniteCreativity.Models.CoreNS.Weapons;
+using InfiniteCreativity.Models.GameNS;
+using InfiniteCreativity.Models.GameNS.Enemys;
 
 namespace InfiniteCreativity.Mappers
 {
@@ -45,8 +47,14 @@ namespace InfiniteCreativity.Mappers
             CreateMap<Character, ShowGameCharacterDTO>();
             CreateMap<Character, ShowCharacterWithStatDTO>();
 
+            CreateMap<GameMapAccessor, ShowGameMapDTO>();
+            CreateMap<HexTileDataObject, ShowGameHexTileDataObjectDTO>();
+
             CreateMap<Enemy, ShowGameEnemyDTO>();
             CreateMap<Boss, ShowGameBossDTO>();
+
+            CreateMap<Skill, ShowSkillDTO>();
+            CreateMap<SkillHolder, ShowSkillHolderDTO>();
 
             CreateMap<Quest, ShowQuestDTO>();
 

@@ -1,11 +1,6 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Collections.Concurrent;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
-using InfiniteCreativity.Services;
-using Microsoft.AspNetCore.Components;
+using InfiniteCreativity.Services.CoreNS;
 
 namespace InfiniteCreativity.Hubs
 {
