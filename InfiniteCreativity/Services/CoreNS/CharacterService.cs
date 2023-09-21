@@ -1,11 +1,14 @@
 ﻿using AutoMapper;
+using DTOs;
 using InfiniteCreativity.Data;
 using InfiniteCreativity.DTO;
 using InfiniteCreativity.Exceptions;
 using InfiniteCreativity.Models.CoreNS;
 using InfiniteCreativity.Models.CoreNS.ArmorNs;
 using InfiniteCreativity.Models.CoreNS.Weapons;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using MoreLinq;
 using System.Linq.Expressions;
 using System.Reflection;
 
@@ -90,7 +93,7 @@ namespace InfiniteCreativity.Services.CoreNS
             await _notificationService.SendGNotification(currentPlayer.Id);
         }
 
-        public async Task<Character> GetCharacterById(int characterId, Player currentPlayer, bool withEquipment = false, bool withQuest = false)
+        public async Task<Character> GetCharacterById(int characterId, Player currentPlayer, bool withEquipment = false, bool withQuest = false, bool withSkillsSlots = false)
         {
             var character =
                 currentPlayer.Characters.FirstOrDefault(x => x.Id == characterId)
@@ -111,6 +114,10 @@ namespace InfiniteCreativity.Services.CoreNS
             if (withQuest)
             {
                 characterEntity = characterEntity.Include((x) => x.Quests);
+            }
+            if (withSkillsSlots)
+            {
+                characterEntity = characterEntity.Include((x) => x.SkillSlots).ThenInclude(x=>x.SkillHolder);
             }
             return await characterEntity.SingleAsync((x) => x.Id == characterId);
         }
@@ -234,6 +241,63 @@ namespace InfiniteCreativity.Services.CoreNS
             {
                 throw new ArgumentException();
             }
+        }
+
+        public async Task EquipSkills(int characterId, UpdateCharacterSkillsDTO skills)
+        {
+            var currentPlayer = await _playerService.GetCurrentPlayer(withInventory:true);
+            var character = await GetCharacterById(characterId, currentPlayer, withSkillsSlots:true);
+
+            var skillsAtPlayer = skills.Skills.Select(x =>
+            {
+                if (x is null)
+                { return null; }
+
+                var item = currentPlayer.Inventory!.First(y => y.Id == x && y is SkillHolder);
+                return item;
+            }).ToList();
+            character.SkillSlots.Clear();
+
+            for (int i = 0; i < skillsAtPlayer.Count(); i++)
+            { 
+                character.SkillSlots.Add(new CharacterSkillSlot() { 
+                    Character=character,
+                    SkillHolder = (SkillHolder?)skillsAtPlayer[i],
+                    SlotNumber = i
+                });
+            }
+
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UnequipSkill(SkillHolder skillHolder)
+        {
+            var currentPlayer = await _playerService.GetCurrentPlayer(withInventory: true);
+
+            var skillslotsWhereEquipped = await _context.CharacterSkillSlot
+                .Include(x => x.SkillHolder)
+                .Where((x) =>
+                    x.SkillHolder != null && x.SkillHolder.Id == skillHolder.Id)
+                .ToListAsync();
+
+            skillslotsWhereEquipped.ForEach(x => x.SkillHolder = null);
+        }
+
+        public async Task<ShowCharacterSkillsDTO> GetCharacterSkills(int characterId)
+        {
+            var currentPlayer = await _playerService.GetCurrentPlayer();
+            var character = await GetCharacterById(characterId, currentPlayer, withSkillsSlots: true);
+            var skillHolders = character.SkillSlots.OrderBy(x=>x.SlotNumber).Select(x => x.SkillHolder).ToList();
+
+            if (skillHolders.Count() == 0)
+            {
+                return new ShowCharacterSkillsDTO() { SkillHolders = new() { null, null, null, null, null } };
+            }
+
+            return new ShowCharacterSkillsDTO()
+            {
+                SkillHolders = _mapper.Map<List<ShowSkillHolderDTO?>>(skillHolders),
+            };
         }
     }
 }

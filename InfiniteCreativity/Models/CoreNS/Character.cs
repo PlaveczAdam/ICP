@@ -71,7 +71,7 @@ namespace InfiniteCreativity.Models.CoreNS
         public Weapon? Weapon { get; set; }
 
         public Player Player { get; set; }
-
+        public ICollection<CharacterSkillSlot> SkillSlots { get; set; }
 
         public int? Row { get; set; }
         public int? Col { get; set; }

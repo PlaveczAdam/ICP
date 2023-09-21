@@ -29,6 +29,8 @@ function Equipment(props) {
   const [equipment, setEquipment] = useState();
   const [armor, setArmor] = useState("");
   const [weapon, setWeapon] = useState("");
+  const [skills, setSkills] = useState();
+  const [skillSlot, setSkillSlot] = useState(-1);
 
   const inventoryCTX = useContext(InventoryContext);
 
@@ -36,6 +38,25 @@ function Equipment(props) {
     const res = await fetch(`/api/character/equipment/${props.characterID}`);
     let equipment = await res.json();
     setEquipment(equipment);
+  }
+
+  async function getSkills() {
+    const res = await fetch(`/api/character/skills/${props.characterID}`);
+    let sks = await res.json();
+    setSkills(sks.skillHolders);
+  }
+  async function equipSkill(item) {
+    const newSkills = [...skills];
+    newSkills[skillSlot] = item;
+
+    const res = await fetch(
+      `/api/character/skills/${props.characterID}`,
+      { method: "PUT", body:JSON.stringify({skills:newSkills.map(x=>x?.id)}), headers:{"content-type":"application/json"}}
+    );
+    if (res.ok) {
+      setSkills(newSkills);
+      inventoryCTX.refresh();
+    }
   }
 
   async function equip(item) {
@@ -61,12 +82,29 @@ function Equipment(props) {
       inventoryCTX.refresh();
     }
   }
+
+  function filterItem(item)
+  {
+    if(armor)
+    {
+      return item.armorType === armor
+    }else if(weapon)
+    {
+      return item.itemType === "weapon" 
+    }else if(skillSlot !== -1)
+    {
+      return item.itemType === "skill"
+    }
+    return false;
+  }
+
   return (
     <Box>
       <Button
         type="btn"
         onClick={() => {
           getEquipment();
+          getSkills();
           setIsModalOpen(true);
         }}
       >
@@ -93,25 +131,63 @@ function Equipment(props) {
             </Typography>
           </Toolbar>
         </AppBar>
-        {equipment ? (
-          <Box display="flex" alignItems= "flex-start">
-            <Box display="flex" flexGrow={1} gap={2} flexWrap="wrap">
-              {armor || weapon
-                ? inventoryCTX.inventory
-                    .filter((x) =>
-                      armor
-                        ? x.itemType === "armor" && x.armorType === armor
-                        : x.itemType === "weapon"
-                    )
-                    .map((x) => (
-                      <Item
-                        item={x}
-                        onClick={() => equip(x)}
-                        key={x.id}
-                        interactive
-                      ></Item>
-                    ))
-                : null}
+        {(equipment && skills) ? (
+          <Box
+            display="flex"
+            alignItems="flex-start"
+            flexGrow={1}
+            overflow="auto"
+          >
+            <Box
+              display="flex"
+              flexGrow={1}
+              flexDirection="column"
+              alignSelf="stretch"
+            >
+              <Box flexGrow={1} minHeight={0} overflow="auto">
+                <Box
+                  display="flex"
+                  flexGrow={1}
+                  gap={2}
+                  flexWrap="wrap"
+                  alignItems="flex-start"
+                >
+                  { inventoryCTX.inventory
+                        .filter(filterItem)
+                        .map((x) => (
+                          <Item
+                            item={x}
+                            onClick={() => skillSlot===-1? equip(x):equipSkill(x)}
+                            key={x.id}
+                            interactive
+                          ></Item>
+                        ))
+                   }
+                </Box>
+              </Box>
+              <Box minHeight={125} display="flex">
+                {skills.map((x, ind) => (
+                  <Box display="flex" flexDirection="column" alignItems="center" key={ind}>
+                    <Item
+                      item={x}
+                      onClick={() => {
+                        setArmor("");
+                        setWeapon("");
+                        setSkillSlot(ind);
+                      }}
+                      interactive
+                    ></Item>
+                    <Collapse
+                      in={x && ind === skillSlot}
+                      orientation="vertical"
+                    >
+                      <Button onClick={() => equipSkill(null)}>
+                        Unequip
+                      </Button>
+                    </Collapse>
+                  </Box>
+                ))}
+              </Box>
             </Box>
             <Box display="flex" flexDirection="column" gap="3px" minWidth={220}>
               <Box display="flex" flexDirection="row" alignItems="center">
@@ -120,6 +196,7 @@ function Equipment(props) {
                   onClick={() => {
                     setArmor("head");
                     setWeapon("");
+                    setSkillSlot(-1);
                   }}
                   interactive
                 ></Item>
@@ -138,6 +215,7 @@ function Equipment(props) {
                   onClick={() => {
                     setArmor("shoulder");
                     setWeapon("");
+                    setSkillSlot(-1);
                   }}
                   interactive
                 ></Item>
@@ -156,6 +234,7 @@ function Equipment(props) {
                   onClick={() => {
                     setArmor("chest");
                     setWeapon("");
+                    setSkillSlot(-1);
                   }}
                   interactive
                 ></Item>
@@ -174,6 +253,7 @@ function Equipment(props) {
                   onClick={() => {
                     setArmor("hand");
                     setWeapon("");
+                    setSkillSlot(-1);
                   }}
                   interactive
                 ></Item>
@@ -192,6 +272,7 @@ function Equipment(props) {
                   onClick={() => {
                     setArmor("leg");
                     setWeapon("");
+                    setSkillSlot(-1);
                   }}
                   interactive
                 ></Item>
@@ -210,6 +291,7 @@ function Equipment(props) {
                   onClick={() => {
                     setArmor("boot");
                     setWeapon("");
+                    setSkillSlot(-1);
                   }}
                   interactive
                 ></Item>
@@ -228,6 +310,7 @@ function Equipment(props) {
                   onClick={() => {
                     setWeapon("weapon");
                     setArmor("");
+                    setSkillSlot(-1);
                   }}
                   interactive
                 ></Item>

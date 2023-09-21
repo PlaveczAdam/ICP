@@ -6,6 +6,7 @@
         Stone2,
         Stone3,
         Fish,
-        TheRock
+        TheRock,
+        FirstSkill
     }
 }

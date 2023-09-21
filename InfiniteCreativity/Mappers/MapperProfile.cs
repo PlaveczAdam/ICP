@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using DTOs;
 using InfiniteCreativity.DTO;
 using InfiniteCreativity.DTO.Armor;
 using InfiniteCreativity.DTO.Game;
@@ -51,6 +52,9 @@ namespace InfiniteCreativity.Mappers
 
             CreateMap<Enemy, ShowGameEnemyDTO>();
             CreateMap<Boss, ShowGameBossDTO>();
+
+            CreateMap<Skill, ShowSkillDTO>();
+            CreateMap<SkillHolder, ShowSkillHolderDTO>();
 
             CreateMap<Quest, ShowQuestDTO>();
 

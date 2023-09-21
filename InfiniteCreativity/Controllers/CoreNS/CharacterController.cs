@@ -1,4 +1,6 @@
-﻿using InfiniteCreativity.DTO;
+﻿using DTOs;
+using InfiniteCreativity.DTO;
+using InfiniteCreativity.Models.CoreNS;
 using InfiniteCreativity.Services.CoreNS;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -42,6 +44,18 @@ namespace InfiniteCreativity.Controllers.CoreNS
         public async Task UnequipEquipment(int characterId, Guid itemId)
         {
             await _characterService.UnequipEquipment(characterId, itemId);
+        }
+
+        [HttpPut, Route("skills/{characterId}")]
+        public async Task EquipSkills(int characterId, UpdateCharacterSkillsDTO skills)
+        {
+            await _characterService.EquipSkills(characterId, skills);
+        }
+
+        [HttpGet, Route("skills/{characterId}")]
+        public async Task<ShowCharacterSkillsDTO> GetCharacterSkills(int characterId)
+        {
+            return await _characterService.GetCharacterSkills(characterId);
         }
     }
 }

@@ -59,7 +59,7 @@ namespace InfiniteCreativity.Services.CoreNS
 
         public async Task OnFeDisconnected(HubCallerContext hubContext)
         {
-            var connection = _context.FeConnection.Find(hubContext.ConnectionId);
+            var connection = _context.FeConnection.FirstOrDefault(x => x.ConnectionID == hubContext.ConnectionId);
             if (connection is not null)
             {
                 _context.Remove(connection);

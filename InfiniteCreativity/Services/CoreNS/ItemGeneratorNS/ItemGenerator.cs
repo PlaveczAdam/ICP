@@ -42,9 +42,16 @@ namespace InfiniteCreativity.Services.CoreNS.ItemGeneratorNS
                     return GenerateArmor(armor);
                 case Material material:
                     return GenerateMaterial(material);
+                case SkillHolder skillHolder:
+                    return GenerateSkillHolder(skillHolder);
                 default:
                     throw new NotImplementedException();
             }
+        }
+
+        private Item GenerateSkillHolder(SkillHolder itemDesc)
+        {
+            return itemDesc;
         }
 
         private Weapon GenerateWeapon(Weapon itemDesc)

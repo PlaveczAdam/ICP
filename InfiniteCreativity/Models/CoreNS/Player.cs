@@ -13,10 +13,10 @@ namespace InfiniteCreativity.Models.CoreNS
         public int CharacterSlot { get; set; }
         public int QuestSlot { get; set; }
 
-        public IEnumerable<Item>? Inventory { get; set; }
+        public ICollection<Item>? Inventory { get; set; }
         public ICollection<Character> Characters { get; set; }
 
-        public IEnumerable<Listing> Listing { get; set; }
+        public ICollection<Listing> Listing { get; set; }
 
         public ICollection<FeConnection> FeConnections { get; set; }
         public ICollection<GConnection> GConnections { get; set; }

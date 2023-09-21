@@ -40,6 +40,9 @@ namespace InfiniteCreativity.Data
         public DbSet<HexTileDataObject> HexTiles { get; set; }
         public DbSet<EntityBaseDataObject> EntityBase { get; set; }
         public DbSet<GameCharacter> GameCharacter { get; set; }
+        public DbSet<Skill> Skill { get; set; }
+        public DbSet<SkillHolder> SkillHolder { get; set; }
+        public DbSet<CharacterSkillSlot> CharacterSkillSlot { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -62,6 +65,14 @@ namespace InfiniteCreativity.Data
                 .HasOne(e => e.Player)
                 .WithMany(e => e.GConnections)
                 .HasForeignKey(e => e.PlayerId);
+
+            modelBuilder.Entity<Skill>()
+                .HasData(InfiniteCreativity.Models.CoreNS.Skill.SkillSeed.Values);
+
+            modelBuilder.Entity<SkillHolder>()
+                .HasOne(e => e.Skill)
+                .WithMany()
+                .HasForeignKey(e => e.SkillId);
         }
     }
 }

@@ -95,6 +95,7 @@ namespace InfiniteCreativity.Services.CoreNS.ItemGeneratorNS
                 ArmorType = ArmorType.Hand,
                 ItemType = ItemType.Armor,
                 ArmorValue = 1,
+                Health = 1.1,
                 Value = 15,
                 Rarity = RarityType.Rare
             },

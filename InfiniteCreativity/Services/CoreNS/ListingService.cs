@@ -47,12 +47,23 @@ namespace InfiniteCreativity.Services.CoreNS
                 {
                     listedItem = stackable.Split(newListing.Amount);
                 }
+
+                if (stackable.Amount == newListing.Amount)
+                {
+                    if (stackable is SkillHolder skillHolder)
+                    {
+                        await _characterService.UnequipSkill(skillHolder);
+                    }
+                }
             }
 
             listedItem.Player = null;
             newL.Item = listedItem;
             newL.ListingDate = DateTime.UtcNow;
-            await _characterService.UnequipItemFromAllCharacter(newListing.ItemId);
+            if(item is Equippable equippable)
+            {
+                await _characterService.UnequipItemFromAllCharacter(newListing.ItemId);
+            }
             _context.Listing.Add(newL);
             await _context.SaveChangesAsync();
             await _notificationService.SendGNotification(player.Id);

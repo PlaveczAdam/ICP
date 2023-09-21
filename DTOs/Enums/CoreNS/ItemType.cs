@@ -4,6 +4,7 @@
     {
         Weapon,
         Armor,
-        Material
+        Material,
+        Skill
     }
 }

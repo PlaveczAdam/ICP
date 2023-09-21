@@ -10,7 +10,7 @@ namespace InfiniteCreativity.Services.CoreNS.ItemGeneratorNS
     {
         public static List<Item> ItemDescriptions = new List<Item>()
         {
-            new Melee
+            /*new Melee
             {
                 Name = "WEPÖN",
                 ImageName = ImageName.Sword,
@@ -130,7 +130,7 @@ namespace InfiniteCreativity.Services.CoreNS.ItemGeneratorNS
                 StackableType = StackableType.Stone1,
                 Value = 1,
                 Rarity = RarityType.Common
-            },
+            },*/
             new Material{
                 Name = "Fizsh",
                 ImageName = ImageName.Stone,
@@ -140,6 +140,7 @@ namespace InfiniteCreativity.Services.CoreNS.ItemGeneratorNS
                 Value = 1,
                 Rarity = RarityType.Common
             },
+            Skill.SkillHolder[StackableType.FirstSkill],
         };
     }
 }

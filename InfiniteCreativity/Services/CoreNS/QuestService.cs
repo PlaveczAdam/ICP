@@ -123,6 +123,7 @@ namespace InfiniteCreativity.Services.CoreNS
                         if (playerStack is null)
                         {
                             x.Player = currentPlayer;
+                            x.Player.Inventory.Add(x);
                         }
                         else
                         {
