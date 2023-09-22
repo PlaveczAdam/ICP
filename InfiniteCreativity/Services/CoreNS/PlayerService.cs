@@ -136,6 +136,7 @@ namespace InfiniteCreativity.Services.CoreNS
         public async Task<ShowPlayerDTO> GetCurrentPlayerDTO()
         {
             var player = await GetCurrentPlayer();
+            player.Characters = player.Characters.OrderBy(x => x.Name).ThenBy(x => x.Id).ToList();
             return _mapper.Map<ShowPlayerDTO>(player);
         }
 

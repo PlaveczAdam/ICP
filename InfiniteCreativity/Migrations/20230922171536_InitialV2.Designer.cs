@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace InfiniteCreativity.Migrations
 {
     [DbContext(typeof(InfiniteCreativityContext))]
-    [Migration("20230919180031_AddSkill")]
-    partial class AddSkill
+    [Migration("20230922171536_InitialV2")]
+    partial class InitialV2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,11 +27,9 @@ namespace InfiniteCreativity.Migrations
 
             modelBuilder.Entity("DataObjects.EntityBaseDataObject", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("uuid");
 
                     b.Property<Guid>("HexTileDataObjectId")
                         .HasColumnType("uuid");
@@ -46,17 +44,15 @@ namespace InfiniteCreativity.Migrations
 
             modelBuilder.Entity("Entities.MapDataObject", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("uuid");
 
                     b.Property<int>("Columns")
                         .HasColumnType("integer");
 
-                    b.Property<int>("GConnectionId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("GConnectionId")
+                        .HasColumnType("uuid");
 
                     b.Property<int>("Rows")
                         .HasColumnType("integer");
@@ -69,13 +65,40 @@ namespace InfiniteCreativity.Migrations
                     b.ToTable("Map");
                 });
 
-            modelBuilder.Entity("InfiniteCreativity.Models.CoreNS.Character", b =>
+            modelBuilder.Entity("InfiniteCreativity.Models.CoreNS.BattleParticipant", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("BattleId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("CharacterId")
+                        .HasColumnType("uuid");
+
+                    b.Property<double>("CurrentSpeed")
+                        .HasColumnType("double precision");
+
+                    b.Property<int?>("EnemyId")
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    b.HasKey("Id");
+
+                    b.HasIndex("BattleId");
+
+                    b.HasIndex("CharacterId");
+
+                    b.HasIndex("EnemyId");
+
+                    b.ToTable("BattleParticipants");
+                });
+
+            modelBuilder.Entity("InfiniteCreativity.Models.CoreNS.Character", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
 
                     b.Property<Guid?>("BootId")
                         .HasColumnType("uuid");
@@ -110,8 +133,8 @@ namespace InfiniteCreativity.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
-                    b.Property<int>("PlayerId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("PlayerId")
+                        .HasColumnType("uuid");
 
                     b.Property<int>("Profession")
                         .HasColumnType("integer");
@@ -149,13 +172,35 @@ namespace InfiniteCreativity.Migrations
                     b.ToTable("Character");
                 });
 
-            modelBuilder.Entity("InfiniteCreativity.Models.CoreNS.FeConnection", b =>
+            modelBuilder.Entity("InfiniteCreativity.Models.CoreNS.CharacterSkillSlot", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("CharacterId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("SkillHolderId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("SlotNumber")
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    b.HasKey("Id");
+
+                    b.HasIndex("CharacterId");
+
+                    b.HasIndex("SkillHolderId");
+
+                    b.ToTable("CharacterSkillSlot");
+                });
+
+            modelBuilder.Entity("InfiniteCreativity.Models.CoreNS.FeConnection", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
 
                     b.Property<bool>("Connected")
                         .HasColumnType("boolean");
@@ -164,8 +209,8 @@ namespace InfiniteCreativity.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int?>("PlayerId")
-                        .HasColumnType("integer");
+                    b.Property<Guid?>("PlayerId")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("UserAgent")
                         .IsRequired()
@@ -203,11 +248,11 @@ namespace InfiniteCreativity.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int?>("PlayerId")
-                        .HasColumnType("integer");
+                    b.Property<Guid?>("PlayerId")
+                        .HasColumnType("uuid");
 
-                    b.Property<int?>("QuestId")
-                        .HasColumnType("integer");
+                    b.Property<Guid?>("QuestId")
+                        .HasColumnType("uuid");
 
                     b.Property<int>("Rarity")
                         .HasColumnType("integer");
@@ -230,11 +275,9 @@ namespace InfiniteCreativity.Migrations
 
             modelBuilder.Entity("InfiniteCreativity.Models.CoreNS.Listing", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("uuid");
 
                     b.Property<Guid>("ItemId")
                         .HasColumnType("uuid");
@@ -245,8 +288,8 @@ namespace InfiniteCreativity.Migrations
                     b.Property<double>("Price")
                         .HasColumnType("double precision");
 
-                    b.Property<int>("SellerId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("SellerId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
@@ -259,24 +302,22 @@ namespace InfiniteCreativity.Migrations
 
             modelBuilder.Entity("InfiniteCreativity.Models.CoreNS.Message", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("uuid");
 
                     b.Property<string>("MessageBody")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("RecipientId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("RecipientId")
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime>("SendDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("SenderId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("SenderId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
@@ -289,11 +330,9 @@ namespace InfiniteCreativity.Migrations
 
             modelBuilder.Entity("InfiniteCreativity.Models.CoreNS.Player", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("uuid");
 
                     b.Property<int>("CharacterSlot")
                         .HasColumnType("integer");
@@ -319,17 +358,15 @@ namespace InfiniteCreativity.Migrations
 
             modelBuilder.Entity("InfiniteCreativity.Models.CoreNS.Quest", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("uuid");
 
                     b.Property<double>("CashReward")
                         .HasColumnType("double precision");
 
-                    b.Property<int>("CharacterId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("CharacterId")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -397,6 +434,17 @@ namespace InfiniteCreativity.Migrations
                         });
                 });
 
+            modelBuilder.Entity("InfiniteCreativity.Models.GameNS.Battle", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Battle");
+                });
+
             modelBuilder.Entity("InfiniteCreativity.Models.GameNS.Enemys.Enemy", b =>
                 {
                     b.Property<int>("Id")
@@ -412,8 +460,8 @@ namespace InfiniteCreativity.Migrations
                     b.Property<int>("EnemyType")
                         .HasColumnType("integer");
 
-                    b.Property<int>("GConnectionId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("GConnectionId")
+                        .HasColumnType("uuid");
 
                     b.Property<double>("Health")
                         .HasColumnType("double precision");
@@ -434,18 +482,16 @@ namespace InfiniteCreativity.Migrations
 
             modelBuilder.Entity("InfiniteCreativity.Models.GameNS.GConnection", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("uuid");
 
                     b.Property<string>("ConnectionID")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("PlayerId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("PlayerId")
+                        .HasColumnType("uuid");
 
                     b.Property<int>("Turn")
                         .HasColumnType("integer");
@@ -463,11 +509,11 @@ namespace InfiniteCreativity.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<int>("CharacterId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("CharacterId")
+                        .HasColumnType("uuid");
 
-                    b.Property<int>("ConnectionId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("ConnectionId")
+                        .HasColumnType("uuid");
 
                     b.Property<int>("Order")
                         .HasColumnType("integer");
@@ -496,8 +542,8 @@ namespace InfiniteCreativity.Migrations
                     b.Property<bool>("IsDiscovered")
                         .HasColumnType("boolean");
 
-                    b.Property<int>("MapDataObjectId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("MapDataObjectId")
+                        .HasColumnType("uuid");
 
                     b.Property<bool>("ReservedForPath")
                         .HasColumnType("boolean");
@@ -671,9 +717,6 @@ namespace InfiniteCreativity.Migrations
                 {
                     b.HasBaseType("InfiniteCreativity.Models.CoreNS.Equippable");
 
-                    b.Property<double>("AttackSpeed")
-                        .HasColumnType("double precision");
-
                     b.Property<double>("CritChance")
                         .HasColumnType("double precision");
 
@@ -681,9 +724,6 @@ namespace InfiniteCreativity.Migrations
                         .HasColumnType("double precision");
 
                     b.Property<double>("Damage")
-                        .HasColumnType("double precision");
-
-                    b.Property<double>("Range")
                         .HasColumnType("double precision");
 
                     b.Property<int>("WeaponType")
@@ -697,6 +737,18 @@ namespace InfiniteCreativity.Migrations
                     b.HasBaseType("InfiniteCreativity.Models.CoreNS.Stackable");
 
                     b.HasDiscriminator().HasValue("Material");
+                });
+
+            modelBuilder.Entity("InfiniteCreativity.Models.CoreNS.SkillHolder", b =>
+                {
+                    b.HasBaseType("InfiniteCreativity.Models.CoreNS.Stackable");
+
+                    b.Property<Guid>("SkillId")
+                        .HasColumnType("uuid");
+
+                    b.HasIndex("SkillId");
+
+                    b.HasDiscriminator().HasValue("SkillHolder");
                 });
 
             modelBuilder.Entity("InfiniteCreativity.Models.CoreNS.Weapons.Melee", b =>
@@ -736,6 +788,25 @@ namespace InfiniteCreativity.Migrations
                         .IsRequired();
 
                     b.Navigation("GConnection");
+                });
+
+            modelBuilder.Entity("InfiniteCreativity.Models.CoreNS.BattleParticipant", b =>
+                {
+                    b.HasOne("InfiniteCreativity.Models.GameNS.Battle", null)
+                        .WithMany("Participants")
+                        .HasForeignKey("BattleId");
+
+                    b.HasOne("InfiniteCreativity.Models.CoreNS.Character", "Character")
+                        .WithMany()
+                        .HasForeignKey("CharacterId");
+
+                    b.HasOne("InfiniteCreativity.Models.GameNS.Enemys.Enemy", "Enemy")
+                        .WithMany()
+                        .HasForeignKey("EnemyId");
+
+                    b.Navigation("Character");
+
+                    b.Navigation("Enemy");
                 });
 
             modelBuilder.Entity("InfiniteCreativity.Models.CoreNS.Character", b =>
@@ -789,6 +860,23 @@ namespace InfiniteCreativity.Migrations
                     b.Navigation("Shoulder");
 
                     b.Navigation("Weapon");
+                });
+
+            modelBuilder.Entity("InfiniteCreativity.Models.CoreNS.CharacterSkillSlot", b =>
+                {
+                    b.HasOne("InfiniteCreativity.Models.CoreNS.Character", "Character")
+                        .WithMany("SkillSlots")
+                        .HasForeignKey("CharacterId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("InfiniteCreativity.Models.CoreNS.SkillHolder", "SkillHolder")
+                        .WithMany()
+                        .HasForeignKey("SkillHolderId");
+
+                    b.Navigation("Character");
+
+                    b.Navigation("SkillHolder");
                 });
 
             modelBuilder.Entity("InfiniteCreativity.Models.CoreNS.FeConnection", b =>
@@ -918,6 +1006,17 @@ namespace InfiniteCreativity.Migrations
                     b.Navigation("MapDataObject");
                 });
 
+            modelBuilder.Entity("InfiniteCreativity.Models.CoreNS.SkillHolder", b =>
+                {
+                    b.HasOne("InfiniteCreativity.Models.CoreNS.Skill", "Skill")
+                        .WithMany()
+                        .HasForeignKey("SkillId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Skill");
+                });
+
             modelBuilder.Entity("Entities.MapDataObject", b =>
                 {
                     b.Navigation("HexTiles");
@@ -926,6 +1025,8 @@ namespace InfiniteCreativity.Migrations
             modelBuilder.Entity("InfiniteCreativity.Models.CoreNS.Character", b =>
                 {
                     b.Navigation("Quests");
+
+                    b.Navigation("SkillSlots");
                 });
 
             modelBuilder.Entity("InfiniteCreativity.Models.CoreNS.Player", b =>
@@ -948,6 +1049,11 @@ namespace InfiniteCreativity.Migrations
             modelBuilder.Entity("InfiniteCreativity.Models.CoreNS.Quest", b =>
                 {
                     b.Navigation("Rewards");
+                });
+
+            modelBuilder.Entity("InfiniteCreativity.Models.GameNS.Battle", b =>
+                {
+                    b.Navigation("Participants");
                 });
 
             modelBuilder.Entity("InfiniteCreativity.Models.GameNS.GConnection", b =>
