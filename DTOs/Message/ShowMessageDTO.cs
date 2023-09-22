@@ -2,7 +2,7 @@
 {
     public class ShowMessageDTO
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public ShowPlayerDTO Sender { get; set; }
         public ShowPlayerDTO Recipient { get; set; }
         public string MessageBody { get; set; }

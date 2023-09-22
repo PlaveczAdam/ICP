@@ -17,19 +17,19 @@ namespace InfiniteCreativity.Controllers.CoreNS
         }
 
         [HttpGet, Route("{characterId}")]
-        public Task<IEnumerable<ShowQuestDTO>> GetQuests(int characterId)
+        public Task<IEnumerable<ShowQuestDTO>> GetQuests(Guid characterId)
         {
             return _questService.GetQuestByCharacterId(characterId);
         }
 
         [HttpPost, Route("{characterId}")]
-        public Task<ShowQuestDTO> CreateQuest(int characterId)
+        public Task<ShowQuestDTO> CreateQuest(Guid characterId)
         {
             return _questService.CreateQuest(characterId);
         }
 
         [HttpPut, Route("{questId}/{amount}")]
-        public async Task<ShowQuestDTO> StatusUpdate(int questId, int amount)
+        public async Task<ShowQuestDTO> StatusUpdate(Guid questId, int amount)
         {
             return await _questService.MakeQuestProgress(questId, amount);
         }

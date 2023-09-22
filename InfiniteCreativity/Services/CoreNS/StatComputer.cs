@@ -93,6 +93,13 @@ namespace InfiniteCreativity.Services.CoreNS
             { Profession.Support, 1.25 },
         };
 
+        private static Dictionary<Profession, double> _professionSpeed = new() {
+            { Profession.Warrior, 0.9 },
+            { Profession.Ranger, 1.2 },
+            { Profession.Mage, 1 },
+            { Profession.Support, 1 },
+        };
+
         public static double ComputeBaseHealth(Race race, Profession profession, double level)
         {
             return _baseHealth * level * _raceHealth[race] * _professionHealth[profession];
@@ -126,6 +133,11 @@ namespace InfiniteCreativity.Services.CoreNS
         internal static double ComputeBaseCriticalMultiplier(Profession profession)
         {
             return _professionCriticalMultiplier[profession];
+        }
+
+        internal static double ComputeBaseSpeed(Profession profession)
+        {
+            return _professionSpeed[profession];
         }
     }
 }

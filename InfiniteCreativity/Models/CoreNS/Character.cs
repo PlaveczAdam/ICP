@@ -9,14 +9,14 @@ namespace InfiniteCreativity.Models.CoreNS
 {
     public class Character
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public string? Name { get; set; }
         public double Level { get; set; }
         public Race Race { get; set; }
         public Profession Profession { get; set; }
         public int CurrentMovement { get; set; }
-
         public double CurrentHealth { get; set; }
+
 
         [NotMapped]
         public double BaseHealth => StatComputer.ComputeBaseHealth(Race, Profession, Level);
@@ -34,6 +34,8 @@ namespace InfiniteCreativity.Models.CoreNS
         public double BaseCriticalChance => StatComputer.ComputeBaseCriticalChance(Profession);
         [NotMapped]
         public double BaseCriticalMultiplier => StatComputer.ComputeBaseCriticalMultiplier(Profession);
+        [NotMapped]
+        public double BaseSpeed => StatComputer.ComputeBaseSpeed(Profession);
 
         [NotMapped]
         public double Health => EffectiveStatComputer.ComputeEffectiveHealth(BaseHealth, Armor);
@@ -53,6 +55,8 @@ namespace InfiniteCreativity.Models.CoreNS
         public double CriticalChance => EffectiveStatComputer.ComputeEffectiveCriticalChance(BaseCriticalChance, Weapon);
         [NotMapped]
         public double CriticalMultiplier => EffectiveStatComputer.ComputeEffectiveCritMultiplier(BaseCriticalMultiplier, Weapon);
+        [NotMapped]
+        public double Speed => EffectiveStatComputer.ComputeEffectiveSpeed(BaseSpeed);
 
 #pragma warning disable CS8620 // Argument cannot be used for parameter due to differences in the nullability of reference types.
         [NotMapped]

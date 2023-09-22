@@ -54,7 +54,7 @@ namespace InfiniteCreativity.Services.CoreNS
             throw new UserAlreadyExistException();
         }
 
-        public async Task<int> GetPlayerIdIfValid(LoginPlayerDTO player)
+        public async Task<Guid> GetPlayerIdIfValid(LoginPlayerDTO player)
         {
             var p = await _context.Player
                 .Include(x => x.Characters)
@@ -74,7 +74,7 @@ namespace InfiniteCreativity.Services.CoreNS
 
         public async Task<Player> GetCurrentPlayer(bool withInventory = false, bool withMessages = false, bool withFeConnections = false, bool withGConnections = false)
         {
-            var userId = int.Parse(
+            var userId = Guid.Parse(
                 _contextAccessor.HttpContext!.User.Claims
                     .FirstOrDefault(x => x.Type == ClaimTypes.Sid)!
                     .Value
@@ -110,7 +110,7 @@ namespace InfiniteCreativity.Services.CoreNS
 
         public async Task<ShowGamePlayerDTO> GetCurrentPlayerAll()
         {
-            var userId = int.Parse(
+            var userId = Guid.Parse(
                 _contextAccessor.HttpContext!.User.Claims
                     .FirstOrDefault(x => x.Type == ClaimTypes.Sid)!
                     .Value
@@ -149,7 +149,7 @@ namespace InfiniteCreativity.Services.CoreNS
         {
             return await _context.Player.Include(x => x.FeConnections).FirstOrDefaultAsync(x => x.Name == name);
         }
-        public async Task<Player> GetPlayerById(int id)
+        public async Task<Player> GetPlayerById(Guid id)
         {
             return await _context.Player
                 .Include(x => x.FeConnections)

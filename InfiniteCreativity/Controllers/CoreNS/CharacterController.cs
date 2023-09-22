@@ -25,35 +25,35 @@ namespace InfiniteCreativity.Controllers.CoreNS
         }
 
         [HttpGet, Route("equipment/{characterId}")]
-        public async Task<ShowEquipmentDTO> GetEquipment(int characterId)
+        public async Task<ShowEquipmentDTO> GetEquipment(Guid characterId)
         {
             return await _characterService.GetEquipment(characterId);
         }
         [HttpGet, Route("{characterId}")]
-        public async Task<ShowCharacterWithStatDTO> GetCharacterDTOById(int characterId)
+        public async Task<ShowCharacterWithStatDTO> GetCharacterDTOById(Guid characterId)
         {
             return await _characterService.GetCharacterDTOById(characterId);
         }
         [HttpPut, Route("equipment/{characterId}/{itemId}")]
-        public async Task EquipEquipment(int characterId, Guid itemId)
+        public async Task EquipEquipment(Guid characterId, Guid itemId)
         {
             await _characterService.EquipEquipment(characterId, itemId);
         }
 
         [HttpPut, Route("unequip/{characterId}/{itemId}")]
-        public async Task UnequipEquipment(int characterId, Guid itemId)
+        public async Task UnequipEquipment(Guid characterId, Guid itemId)
         {
             await _characterService.UnequipEquipment(characterId, itemId);
         }
 
         [HttpPut, Route("skills/{characterId}")]
-        public async Task EquipSkills(int characterId, UpdateCharacterSkillsDTO skills)
+        public async Task EquipSkills(Guid characterId, UpdateCharacterSkillsDTO skills)
         {
             await _characterService.EquipSkills(characterId, skills);
         }
 
         [HttpGet, Route("skills/{characterId}")]
-        public async Task<ShowCharacterSkillsDTO> GetCharacterSkills(int characterId)
+        public async Task<ShowCharacterSkillsDTO> GetCharacterSkills(Guid characterId)
         {
             return await _characterService.GetCharacterSkills(characterId);
         }

@@ -28,7 +28,7 @@ namespace InfiniteCreativity.Controllers.CoreNS
         [HttpPost, Route("login")]
         public async Task<IActionResult> Login([FromBody] LoginPlayerDTO player)
         {
-            int id;
+            Guid id;
             try
             {
                 id = await _playerService.GetPlayerIdIfValid(player);

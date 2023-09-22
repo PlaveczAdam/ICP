@@ -27,7 +27,7 @@ namespace InfiniteCreativity.Services.CoreNS
             _gameEndService = gameEndService;
         }
 
-        public async Task SendFeNotification(int playerId, NotificationType notificationType)
+        public async Task SendFeNotification(Guid playerId, NotificationType notificationType)
         {
             var whom = await _playerService.GetPlayerById(playerId);
             var connections = whom.FeConnections.Where((x) => x.Connected).ToList();
@@ -85,7 +85,7 @@ namespace InfiniteCreativity.Services.CoreNS
             await _context.SaveChangesAsync();
         }
 
-        public async Task SendGNotification(int playerId)
+        public async Task SendGNotification(Guid playerId)
         {
             var whom = await _playerService.GetPlayerById(playerId);
             var connections = whom.GConnections;

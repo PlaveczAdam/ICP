@@ -4,7 +4,7 @@ namespace InfiniteCreativity.DTO
 {
     public class ShowCharacterWithStatDTO
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public string? Name { get; set; }
         public Race Race { get; set; }
         public Profession Profession { get; set; }

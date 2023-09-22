@@ -8,11 +8,11 @@ namespace Entities
 {
     public class MapDataObject
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public GConnection GConnection { get; set; }
         public ICollection<HexTileDataObject> HexTiles { get; set; }
         public int Rows { get; set; }
         public int Columns { get; set; }
-        public int GConnectionId { get; set; }
+        public Guid GConnectionId { get; set; }
     }
 }

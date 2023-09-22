@@ -29,13 +29,13 @@ namespace InfiniteCreativity.Controllers.CoreNS
         }
 
         [HttpPut, Route("sold/{id}/{amount}")]
-        public async Task PurchaseListing(int id, ulong amount)
+        public async Task PurchaseListing(Guid id, ulong amount)
         {
             await _listingService.PurchaseListing(id, amount);
         }
 
         [HttpPut, Route("cancelled/{id}")]
-        public async Task CancelListing(int id)
+        public async Task CancelListing(Guid id)
         {
             await _listingService.CancelListing(id);
         }

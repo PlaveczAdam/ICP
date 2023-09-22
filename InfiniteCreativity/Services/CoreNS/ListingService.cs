@@ -88,7 +88,7 @@ namespace InfiniteCreativity.Services.CoreNS
             return _mapper.Map<List<ShowListingDTO>>(listingResult);
         }
 
-        public async Task PurchaseListing(int id, ulong amount)
+        public async Task PurchaseListing(Guid id, ulong amount)
         {
             var lting = await _context.Listing
                     .Include(x => x.Seller)
@@ -156,7 +156,7 @@ namespace InfiniteCreativity.Services.CoreNS
             await _notificationService.SendGNotification(player.Id);
             await _notificationService.SendGNotification(lting.Seller.Id);
         }
-        public async Task CancelListing(int id)
+        public async Task CancelListing(Guid id)
         {
             var lting = await _context.Listing
                     .Include(x => x.Seller)

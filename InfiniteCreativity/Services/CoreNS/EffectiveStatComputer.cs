@@ -65,5 +65,10 @@ namespace InfiniteCreativity.Services.CoreNS
             }
             return baseMovement + boot.Movement;
         }
+
+        internal static double ComputeEffectiveSpeed(double baseSpeed)
+        {
+            return baseSpeed;
+        }
     }
 }

@@ -4,7 +4,7 @@ namespace InfiniteCreativity.DTO.Game
 {
     public class ShowGameEnemyDTO
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public double Level { get; set; }
         public EnemyType EnemyType { get; set; }
 

@@ -4,7 +4,7 @@ namespace InfiniteCreativity.Models.CoreNS
 {
     public class Message
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public Player Sender { get; set; }
         public Player Recipient { get; set; }
         public string MessageBody { get; set; }

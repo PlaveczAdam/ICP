@@ -6,7 +6,7 @@ namespace InfiniteCreativity.Services.CoreNS
     {
         public Task<ShowListingDTO> CreateListing(CreateListingDTO newListing);
         public Task<IEnumerable<ShowListingDTO>> GetListings(ListingFilterDTO listingFilter);
-        public Task PurchaseListing(int id, ulong amount);
-        public Task CancelListing(int id);
+        public Task PurchaseListing(Guid id, ulong amount);
+        public Task CancelListing(Guid id);
     }
 }

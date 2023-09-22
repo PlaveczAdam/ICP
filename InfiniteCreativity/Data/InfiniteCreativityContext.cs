@@ -43,6 +43,8 @@ namespace InfiniteCreativity.Data
         public DbSet<Skill> Skill { get; set; }
         public DbSet<SkillHolder> SkillHolder { get; set; }
         public DbSet<CharacterSkillSlot> CharacterSkillSlot { get; set; }
+        public DbSet<BattleParticipant> BattleParticipants { get; set; }
+        public DbSet<Battle> Battle { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

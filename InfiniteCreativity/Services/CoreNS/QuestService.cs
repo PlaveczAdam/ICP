@@ -34,7 +34,7 @@ namespace InfiniteCreativity.Services.CoreNS
             _notificationService = notificationService;
         }
 
-        public async Task<IEnumerable<ShowQuestDTO>> GetQuestByCharacterId(int characterId)
+        public async Task<IEnumerable<ShowQuestDTO>> GetQuestByCharacterId(Guid characterId)
         {
             var currentPlayer = await _playerService.GetCurrentPlayer();
             var character = await _characterService.GetCharacterById(characterId, currentPlayer);
@@ -44,7 +44,7 @@ namespace InfiniteCreativity.Services.CoreNS
             return _mapper.Map<IEnumerable<ShowQuestDTO>>(quests);
         }
 
-        public async Task<ShowQuestDTO> MakeQuestProgress(int questId, int amount)
+        public async Task<ShowQuestDTO> MakeQuestProgress(Guid questId, int amount)
         {
             var currentPlayer = await _playerService.GetCurrentPlayer(withInventory: true);
             var q =
@@ -67,7 +67,7 @@ namespace InfiniteCreativity.Services.CoreNS
             return _mapper.Map<ShowQuestDTO>(q);
         }
 
-        public async Task<ShowQuestDTO> CreateQuest(int characterId)
+        public async Task<ShowQuestDTO> CreateQuest(Guid characterId)
         {
             var currentPlayer = await _playerService.GetCurrentPlayer();
             var character = await _characterService.GetCharacterById(characterId, currentPlayer, withQuest: true);

@@ -52,14 +52,14 @@ namespace InfiniteCreativity.Services.CoreNS
             return _mapper.Map<ShowCharacterDTO>(newCharacter);
         }
 
-        public async Task<ShowEquipmentDTO> GetEquipment(int characterId)
+        public async Task<ShowEquipmentDTO> GetEquipment(Guid characterId)
         {
             var currentPlayer = await _playerService.GetCurrentPlayer();
             var character = await GetCharacterById(characterId, currentPlayer, true);
             return _mapper.Map<ShowEquipmentDTO>(character);
         }
 
-        public async Task EquipEquipment(int characterId, Guid itemId)
+        public async Task EquipEquipment(Guid characterId, Guid itemId)
         {
             var currentPlayer = await _playerService.GetCurrentPlayer();
             var item = await _context.Item.SingleAsync((x) => x.Id == itemId && x.Player != null && x.Player.Id == currentPlayer.Id);
@@ -93,7 +93,7 @@ namespace InfiniteCreativity.Services.CoreNS
             await _notificationService.SendGNotification(currentPlayer.Id);
         }
 
-        public async Task<Character> GetCharacterById(int characterId, Player currentPlayer, bool withEquipment = false, bool withQuest = false, bool withSkillsSlots = false)
+        public async Task<Character> GetCharacterById(Guid characterId, Player currentPlayer, bool withEquipment = false, bool withQuest = false, bool withSkillsSlots = false)
         {
             var character =
                 currentPlayer.Characters.FirstOrDefault(x => x.Id == characterId)
@@ -122,7 +122,7 @@ namespace InfiniteCreativity.Services.CoreNS
             return await characterEntity.SingleAsync((x) => x.Id == characterId);
         }
 
-        public async Task<ShowCharacterWithStatDTO> GetCharacterDTOById(int characterId)
+        public async Task<ShowCharacterWithStatDTO> GetCharacterDTOById(Guid characterId)
         {
             var currentPlayer = await _playerService.GetCurrentPlayer();
             return _mapper.Map<ShowCharacterWithStatDTO>(await GetCharacterById(characterId, currentPlayer, withEquipment: true));
@@ -184,7 +184,7 @@ namespace InfiniteCreativity.Services.CoreNS
             await _notificationService.SendGNotification(currentPlayer.Id);
         }
 
-        public async Task UnequipEquipment(int characterId, Guid itemId)
+        public async Task UnequipEquipment(Guid characterId, Guid itemId)
         {
             var currentPlayer = await _playerService.GetCurrentPlayer();
             var item = await _context.Item.FindAsync(itemId);
@@ -243,7 +243,7 @@ namespace InfiniteCreativity.Services.CoreNS
             }
         }
 
-        public async Task EquipSkills(int characterId, UpdateCharacterSkillsDTO skills)
+        public async Task EquipSkills(Guid characterId, UpdateCharacterSkillsDTO skills)
         {
             var currentPlayer = await _playerService.GetCurrentPlayer(withInventory:true);
             var character = await GetCharacterById(characterId, currentPlayer, withSkillsSlots:true);
@@ -283,7 +283,7 @@ namespace InfiniteCreativity.Services.CoreNS
             skillslotsWhereEquipped.ForEach(x => x.SkillHolder = null);
         }
 
-        public async Task<ShowCharacterSkillsDTO> GetCharacterSkills(int characterId)
+        public async Task<ShowCharacterSkillsDTO> GetCharacterSkills(Guid characterId)
         {
             var currentPlayer = await _playerService.GetCurrentPlayer();
             var character = await GetCharacterById(characterId, currentPlayer, withSkillsSlots: true);
