@@ -317,6 +317,7 @@ namespace InfiniteCreativity.Services.GameNS
             });
             _context.BattleParticipants
                 .OrderBy(x => x.CurrentSpeed)
+                .AsEnumerable()
                 .Select((x,ind) => new { Ind = ind, Participant = x })
                 .ForEach(x => x.Participant.Order = x.Ind);
             _context.Add(battle);
