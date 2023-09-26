@@ -12,6 +12,7 @@ namespace InfiniteCreativity.Services.CoreNS
         private static double _baseAbilityResourceGain = 1;
         private static double _baseCriticalChance = 0.01;
         private static double _baseCriticalMultiplier = 1.5;
+        private static double _baseSpeed = 20;
 
         private static Dictionary<Race, double> _raceHealth = new() {
             { Race.Human, 1 },
@@ -137,7 +138,7 @@ namespace InfiniteCreativity.Services.CoreNS
 
         internal static double ComputeBaseSpeed(Profession profession)
         {
-            return _professionSpeed[profession];
+            return _baseSpeed * _professionSpeed[profession];
         }
     }
 }
