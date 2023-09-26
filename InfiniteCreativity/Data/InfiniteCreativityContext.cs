@@ -75,6 +75,11 @@ namespace InfiniteCreativity.Data
                 .HasOne(e => e.Skill)
                 .WithMany()
                 .HasForeignKey(e => e.SkillId);
+
+            modelBuilder.Entity<HexTileDataObject>()
+                .HasOne(e => e.Enemy)
+                .WithOne(e => e.Tile)
+                .HasForeignKey<HexTileDataObject>(e => e.EnemyId);
         }
     }
 }

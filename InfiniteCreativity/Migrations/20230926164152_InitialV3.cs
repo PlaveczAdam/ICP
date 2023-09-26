@@ -1,28 +1,16 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
 namespace InfiniteCreativity.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialV2 : Migration
+    public partial class InitialV3 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "Battle",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Battle", x => x.Id);
-                });
-
             migrationBuilder.CreateTable(
                 name: "Player",
                 columns: table => new
@@ -48,6 +36,7 @@ namespace InfiniteCreativity.Migrations
                     Description = table.Column<string>(type: "text", nullable: false),
                     Damage = table.Column<double>(type: "double precision", nullable: false),
                     ResourceCost = table.Column<double>(type: "double precision", nullable: false),
+                    AbilityGaugeCost = table.Column<int>(type: "integer", nullable: false),
                     Cooldown = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
@@ -73,26 +62,6 @@ namespace InfiniteCreativity.Migrations
                         column: x => x.PlayerId,
                         principalTable: "Player",
                         principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "GConnection",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    ConnectionID = table.Column<string>(type: "text", nullable: false),
-                    Turn = table.Column<int>(type: "integer", nullable: false),
-                    PlayerId = table.Column<Guid>(type: "uuid", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_GConnection", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_GConnection_Player_PlayerId",
-                        column: x => x.PlayerId,
-                        principalTable: "Player",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -123,11 +92,49 @@ namespace InfiniteCreativity.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Battle",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    HasStarted = table.Column<bool>(type: "boolean", nullable: false),
+                    NextInTurnId = table.Column<Guid>(type: "uuid", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Battle", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "GConnection",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    ConnectionID = table.Column<string>(type: "text", nullable: false),
+                    Turn = table.Column<int>(type: "integer", nullable: false),
+                    PlayerId = table.Column<Guid>(type: "uuid", nullable: false),
+                    BattleId = table.Column<Guid>(type: "uuid", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_GConnection", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_GConnection_Battle_BattleId",
+                        column: x => x.BattleId,
+                        principalTable: "Battle",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_GConnection_Player_PlayerId",
+                        column: x => x.PlayerId,
+                        principalTable: "Player",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Enemy",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Level = table.Column<double>(type: "double precision", nullable: false),
                     EnemyType = table.Column<int>(type: "integer", nullable: false),
                     Health = table.Column<double>(type: "double precision", nullable: false),
@@ -176,7 +183,7 @@ namespace InfiniteCreativity.Migrations
                     TileContent = table.Column<int>(type: "integer", nullable: false),
                     IsDiscovered = table.Column<bool>(type: "boolean", nullable: false),
                     ReservedForPath = table.Column<bool>(type: "boolean", nullable: false),
-                    EnemyId = table.Column<int>(type: "integer", nullable: true)
+                    EnemyId = table.Column<Guid>(type: "uuid", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -218,8 +225,10 @@ namespace InfiniteCreativity.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     CharacterId = table.Column<Guid>(type: "uuid", nullable: true),
-                    EnemyId = table.Column<int>(type: "integer", nullable: true),
+                    EnemyId = table.Column<Guid>(type: "uuid", nullable: true),
                     CurrentSpeed = table.Column<double>(type: "double precision", nullable: false),
+                    Order = table.Column<int>(type: "integer", nullable: false),
+                    CurrentActionGauge = table.Column<int>(type: "integer", nullable: false),
                     BattleId = table.Column<Guid>(type: "uuid", nullable: true)
                 },
                 constraints: table =>
@@ -248,6 +257,7 @@ namespace InfiniteCreativity.Migrations
                     Profession = table.Column<int>(type: "integer", nullable: false),
                     CurrentMovement = table.Column<int>(type: "integer", nullable: false),
                     CurrentHealth = table.Column<double>(type: "double precision", nullable: false),
+                    CurrentAbilityResource = table.Column<double>(type: "double precision", nullable: false),
                     IsInCombat = table.Column<bool>(type: "boolean", nullable: false),
                     HeadId = table.Column<Guid>(type: "uuid", nullable: true),
                     ShoulderId = table.Column<Guid>(type: "uuid", nullable: true),
@@ -425,8 +435,13 @@ namespace InfiniteCreativity.Migrations
 
             migrationBuilder.InsertData(
                 table: "Skill",
-                columns: new[] { "Id", "Cooldown", "Damage", "Description", "Name", "ResourceCost" },
-                values: new object[] { new Guid("ea380bc9-ccf3-4f9f-ab09-f72cf0229465"), 0, 2.0, "nincs", "First", 1.0 });
+                columns: new[] { "Id", "AbilityGaugeCost", "Cooldown", "Damage", "Description", "Name", "ResourceCost" },
+                values: new object[] { new Guid("ea380bc9-ccf3-4f9f-ab09-f72cf0229465"), 2, 0, 2.0, "nincs", "First", 1.0 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Battle_NextInTurnId",
+                table: "Battle",
+                column: "NextInTurnId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_BattleParticipants_BattleId",
@@ -520,6 +535,11 @@ namespace InfiniteCreativity.Migrations
                 column: "ConnectionId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_GConnection_BattleId",
+                table: "GConnection",
+                column: "BattleId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_GConnection_PlayerId",
                 table: "GConnection",
                 column: "PlayerId");
@@ -527,7 +547,8 @@ namespace InfiniteCreativity.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_HexTiles_EnemyId",
                 table: "HexTiles",
-                column: "EnemyId");
+                column: "EnemyId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_HexTiles_Id",
@@ -585,6 +606,13 @@ namespace InfiniteCreativity.Migrations
                 name: "IX_Quest_CharacterId",
                 table: "Quest",
                 column: "CharacterId");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Battle_BattleParticipants_NextInTurnId",
+                table: "Battle",
+                column: "NextInTurnId",
+                principalTable: "BattleParticipants",
+                principalColumn: "Id");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_BattleParticipants_Character_CharacterId",
@@ -647,11 +675,12 @@ namespace InfiniteCreativity.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
+                name: "FK_Battle_BattleParticipants_NextInTurnId",
+                table: "Battle");
+
+            migrationBuilder.DropForeignKey(
                 name: "FK_Quest_Character_CharacterId",
                 table: "Quest");
-
-            migrationBuilder.DropTable(
-                name: "BattleParticipants");
 
             migrationBuilder.DropTable(
                 name: "CharacterSkillSlot");
@@ -672,19 +701,22 @@ namespace InfiniteCreativity.Migrations
                 name: "Message");
 
             migrationBuilder.DropTable(
-                name: "Battle");
-
-            migrationBuilder.DropTable(
                 name: "HexTiles");
-
-            migrationBuilder.DropTable(
-                name: "Enemy");
 
             migrationBuilder.DropTable(
                 name: "Map");
 
             migrationBuilder.DropTable(
+                name: "BattleParticipants");
+
+            migrationBuilder.DropTable(
+                name: "Enemy");
+
+            migrationBuilder.DropTable(
                 name: "GConnection");
+
+            migrationBuilder.DropTable(
+                name: "Battle");
 
             migrationBuilder.DropTable(
                 name: "Character");

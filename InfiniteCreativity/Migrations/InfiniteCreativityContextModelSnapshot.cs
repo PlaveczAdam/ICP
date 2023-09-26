@@ -74,10 +74,16 @@ namespace InfiniteCreativity.Migrations
                     b.Property<Guid?>("CharacterId")
                         .HasColumnType("uuid");
 
+                    b.Property<int>("CurrentActionGauge")
+                        .HasColumnType("integer");
+
                     b.Property<double>("CurrentSpeed")
                         .HasColumnType("double precision");
 
-                    b.Property<int?>("EnemyId")
+                    b.Property<Guid?>("EnemyId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("Order")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
@@ -105,6 +111,9 @@ namespace InfiniteCreativity.Migrations
 
                     b.Property<int?>("Col")
                         .HasColumnType("integer");
+
+                    b.Property<double>("CurrentAbilityResource")
+                        .HasColumnType("double precision");
 
                     b.Property<double>("CurrentHealth")
                         .HasColumnType("double precision");
@@ -398,6 +407,9 @@ namespace InfiniteCreativity.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<int>("AbilityGaugeCost")
+                        .HasColumnType("integer");
+
                     b.Property<int>("Cooldown")
                         .HasColumnType("integer");
 
@@ -423,6 +435,7 @@ namespace InfiniteCreativity.Migrations
                         new
                         {
                             Id = new Guid("ea380bc9-ccf3-4f9f-ab09-f72cf0229465"),
+                            AbilityGaugeCost = 2,
                             Cooldown = 0,
                             Damage = 2.0,
                             Description = "nincs",
@@ -437,18 +450,24 @@ namespace InfiniteCreativity.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<bool>("HasStarted")
+                        .HasColumnType("boolean");
+
+                    b.Property<Guid?>("NextInTurnId")
+                        .HasColumnType("uuid");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("NextInTurnId");
 
                     b.ToTable("Battle");
                 });
 
             modelBuilder.Entity("InfiniteCreativity.Models.GameNS.Enemys.Enemy", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Discriminator")
                         .IsRequired()
@@ -483,6 +502,9 @@ namespace InfiniteCreativity.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<Guid?>("BattleId")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("ConnectionID")
                         .IsRequired()
                         .HasColumnType("text");
@@ -494,6 +516,8 @@ namespace InfiniteCreativity.Migrations
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("BattleId");
 
                     b.HasIndex("PlayerId");
 
@@ -533,8 +557,8 @@ namespace InfiniteCreativity.Migrations
                     b.Property<int>("ColIdx")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("EnemyId")
-                        .HasColumnType("integer");
+                    b.Property<Guid?>("EnemyId")
+                        .HasColumnType("uuid");
 
                     b.Property<bool>("IsDiscovered")
                         .HasColumnType("boolean");
@@ -553,7 +577,8 @@ namespace InfiniteCreativity.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EnemyId");
+                    b.HasIndex("EnemyId")
+                        .IsUnique();
 
                     b.HasIndex("Id")
                         .IsUnique();
@@ -945,6 +970,15 @@ namespace InfiniteCreativity.Migrations
                     b.Navigation("Character");
                 });
 
+            modelBuilder.Entity("InfiniteCreativity.Models.GameNS.Battle", b =>
+                {
+                    b.HasOne("InfiniteCreativity.Models.CoreNS.BattleParticipant", "NextInTurn")
+                        .WithMany()
+                        .HasForeignKey("NextInTurnId");
+
+                    b.Navigation("NextInTurn");
+                });
+
             modelBuilder.Entity("InfiniteCreativity.Models.GameNS.Enemys.Enemy", b =>
                 {
                     b.HasOne("InfiniteCreativity.Models.GameNS.GConnection", "GConnection")
@@ -958,11 +992,17 @@ namespace InfiniteCreativity.Migrations
 
             modelBuilder.Entity("InfiniteCreativity.Models.GameNS.GConnection", b =>
                 {
+                    b.HasOne("InfiniteCreativity.Models.GameNS.Battle", "Battle")
+                        .WithMany()
+                        .HasForeignKey("BattleId");
+
                     b.HasOne("InfiniteCreativity.Models.CoreNS.Player", "Player")
                         .WithMany("GConnections")
                         .HasForeignKey("PlayerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Battle");
 
                     b.Navigation("Player");
                 });
@@ -989,8 +1029,8 @@ namespace InfiniteCreativity.Migrations
             modelBuilder.Entity("InfiniteCreativity.Models.GameNS.HexTileDataObject", b =>
                 {
                     b.HasOne("InfiniteCreativity.Models.GameNS.Enemys.Enemy", "Enemy")
-                        .WithMany()
-                        .HasForeignKey("EnemyId");
+                        .WithOne("Tile")
+                        .HasForeignKey("InfiniteCreativity.Models.GameNS.HexTileDataObject", "EnemyId");
 
                     b.HasOne("Entities.MapDataObject", "MapDataObject")
                         .WithMany("HexTiles")
@@ -1051,6 +1091,11 @@ namespace InfiniteCreativity.Migrations
             modelBuilder.Entity("InfiniteCreativity.Models.GameNS.Battle", b =>
                 {
                     b.Navigation("Participants");
+                });
+
+            modelBuilder.Entity("InfiniteCreativity.Models.GameNS.Enemys.Enemy", b =>
+                {
+                    b.Navigation("Tile");
                 });
 
             modelBuilder.Entity("InfiniteCreativity.Models.GameNS.GConnection", b =>
