@@ -305,6 +305,7 @@ namespace InfiniteCreativity.Services.GameNS
                 var battleParticEnemy = new BattleParticipant();
                 battleParticEnemy.Enemy = x;
                 battleParticEnemy.CurrentSpeed = x.Speed;
+                x.GConnection = enemy.GConnection;
                 battle.Participants.Add(battleParticEnemy);
             });
 
