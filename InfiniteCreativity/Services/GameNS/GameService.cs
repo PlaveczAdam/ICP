@@ -250,7 +250,7 @@ namespace InfiniteCreativity.Services.GameNS
                     walkRes.EndColumn = ch.Col.Value;
                     walkRes.EndRow = ch.Row.Value;
                     ch.IsInCombat = true;
-                    CreateBattle(ch, tileData.Enemy, characters, gma, currentTile);
+                    CreateBattle(ch, tileData.Enemy, characters, gma, currentTile, gconn);
                     await _context.SaveChangesAsync();
 
                     return walkRes;
@@ -269,7 +269,7 @@ namespace InfiniteCreativity.Services.GameNS
             return walkRes;
         }
 
-        private void CreateBattle(Character ch, Enemy enemy, List<GameCharacter> characters, GameMapAccessor gma, HexTileDataObject enemyTile)
+        private void CreateBattle(Character ch, Enemy enemy, List<GameCharacter> characters, GameMapAccessor gma, HexTileDataObject enemyTile, GConnection gconn)
         {
             var chars = new List<Character>() { ch };
             var mappedChars = characters.Select(x => x.Character);
@@ -288,11 +288,12 @@ namespace InfiniteCreativity.Services.GameNS
                 });
 
             var battle = new Battle() { Participants = new List<BattleParticipant>()};
-
+            gconn.Battle = battle;
             var battleParticEnemy = new BattleParticipant();
             battleParticEnemy.Enemy = enemy;
             battleParticEnemy.CurrentSpeed = enemy.Speed;
             battle.Participants.Add(battleParticEnemy);
+            
 
             var followUpEnemyNumber = _rnd.Next(0, chars.Count() + 1);
             var enemyList = new List<Enemy>();
