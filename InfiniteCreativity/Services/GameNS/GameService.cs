@@ -195,6 +195,7 @@ namespace InfiniteCreativity.Services.GameNS
             })) ;
             characters.ForEach(x => x.CurrentHealth = x.Health);
             characters.ForEach(x => x.CurrentMovement = x.Movement);
+            characters.ForEach(x => x.IsInCombat = false);
             _context.Map.Add(map);
             await GenerateAndPlaceEnemys();
             await _context.SaveChangesAsync();
