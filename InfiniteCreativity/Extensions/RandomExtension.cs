@@ -17,5 +17,13 @@
             var duration = random.Next(min,max);
             return TimeSpan.FromMinutes(duration);
         }
+
+        public static int NextCrit(this Random random, double critChance)
+        {
+            var guaranteed = (int)critChance;
+            var weight = critChance - guaranteed;
+            var roll = random.NextDouble();
+            return roll < weight ? guaranteed + 1 : guaranteed;
+        }
     }
 }

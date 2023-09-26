@@ -62,5 +62,10 @@ namespace InfiniteCreativity.Models.GameNS
         {
             return TileContent == TileContent.Water;
         }
+
+        public bool IsWalkable()
+        {
+            return TileContent == TileContent.Empty || TileContent == TileContent.City || TileContent == TileContent.Water;
+        }
     }
 }

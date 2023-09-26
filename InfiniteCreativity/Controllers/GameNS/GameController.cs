@@ -1,4 +1,5 @@
-﻿using InfiniteCreativity.DTO.Game;
+﻿using DTOs.Game;
+using InfiniteCreativity.DTO.Game;
 using InfiniteCreativity.Services.GameNS;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -48,5 +49,23 @@ namespace InfiniteCreativity.Controllers.GameNS
         {
             return _gameService.WalkPlayerRoute(playerRoute);
         }
+        [HttpPost, Route("battle")]
+        public Task<ShowBattleStateDTO> StartBattle()
+        {
+            return _gameService.StartBattle();
+        }
+        [HttpGet, Route("battle")]
+        public Task<ShowBattleStateDTO> GetCurrentBattleState()
+        {
+            return _gameService.GetCurrentBattleState();
+        }
+
+        [HttpPost, Route("battle/turn")]
+        public Task<ShowBattleStateDTO> MakePlayerTurn([FromBody] CreatePlayerActionDTO playerAction)
+        {
+            return _gameService.MakePlayerTurn(playerAction);
+        }
+
+
     }
 }

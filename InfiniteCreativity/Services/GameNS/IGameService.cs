@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using DTOs.Game;
 using InfiniteCreativity.DTO.Game;
 
 
@@ -11,6 +12,9 @@ namespace InfiniteCreativity.Services.GameNS
         public Task<ShowGameTurnDTO> GetTurn();
         public Task<ShowGameTurnDTO> ProgressTurn();
         public Task StartGame(CreateGameDTO createGameDTO);
-        Task<ShowWalkResultDTO> WalkPlayerRoute(CreatePlayerRouteDTO playerRoute);
+        public Task<ShowWalkResultDTO> WalkPlayerRoute(CreatePlayerRouteDTO playerRoute);
+        public Task<ShowBattleStateDTO> StartBattle();
+        public Task<ShowBattleStateDTO> GetCurrentBattleState();
+        public Task<ShowBattleStateDTO> MakePlayerTurn(CreatePlayerActionDTO playerAction);
     }
 }

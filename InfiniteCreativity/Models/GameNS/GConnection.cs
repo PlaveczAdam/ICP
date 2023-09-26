@@ -15,5 +15,6 @@ namespace InfiniteCreativity.Models.GameNS
         public ICollection<Enemy> Enemies { get; set; }
         public Player Player { get; set; }
         public Guid PlayerId { get; set; }
+        public Battle? Battle { get; set; }
     }
 }

@@ -1,14 +1,18 @@
 ﻿using AutoMapper.Configuration.Conventions;
+using DTOs.Game;
+using InfiniteCreativity.Extensions;
 using InfiniteCreativity.Models.CoreNS.ArmorNs;
 using InfiniteCreativity.Models.CoreNS.Weapons;
 using InfiniteCreativity.Models.Enums.CoreNS;
 using InfiniteCreativity.Services.CoreNS;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics;
 
 namespace InfiniteCreativity.Models.CoreNS
 {
     public class Character
     {
+        private Random _rnd = new Random();
         public Guid Id { get; set; }
         public string? Name { get; set; }
         public double Level { get; set; }
@@ -16,6 +20,7 @@ namespace InfiniteCreativity.Models.CoreNS
         public Profession Profession { get; set; }
         public int CurrentMovement { get; set; }
         public double CurrentHealth { get; set; }
+        public double CurrentAbilityResource { get; set; }
 
 
         [NotMapped]
@@ -79,5 +84,28 @@ namespace InfiniteCreativity.Models.CoreNS
 
         public int? Row { get; set; }
         public int? Col { get; set; }
+
+        public void TakeDamage(double damage)
+        {
+            CurrentHealth -= Math.Max(damage - Defense, 0);
+        }
+
+        public IEnumerable<ShowBattleEventDTO> AutoAttack(BattleParticipant enemy, BattleParticipant attacker)
+        {
+            var crit = _rnd.NextCrit(CriticalChance);
+            var damage = Damage * Math.Pow(CriticalMultiplier, crit);
+
+            enemy.Enemy!.TakeDamage(damage);
+            attacker.CurrentActionGauge -= 1;
+
+            return new List<ShowBattleEventDTO>(){
+                new ShowBattleEventAutoAttackDTO(){
+                    SourceParticipantId = attacker.Id,
+                    TargetParticipantId = enemy.Id,
+                    NewTargetHp = enemy.Enemy.Health,
+                    NewAbilityGauge = attacker.CurrentActionGauge,
+                }
+            };
+        }
     }
 }

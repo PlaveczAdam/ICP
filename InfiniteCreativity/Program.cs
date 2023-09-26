@@ -9,6 +9,7 @@ using InfiniteCreativity.Services.CoreNS.ItemGeneratorNS;
 using InfiniteCreativity.Services.CoreNS.QuestGeneratorNS;
 using InfiniteCreativity.Services.GameNS;
 using InfiniteCreativity.Services.GameNS.EnemyGeneratorNS;
+using InfiniteCreativity.Services.MapPatherNS;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
@@ -69,6 +70,8 @@ builder.Services.AddScoped<EnemyGenerator>();
 builder.Services.AddScoped<QuestGenerator>();
 builder.Services.AddScoped<ItemGenerator>();
 builder.Services.AddHostedService<QuestScheduler>();
+builder.Services.AddScoped<MapPather>();
+builder.Services.AddScoped<TurnSimulator>();
 
 builder.Services
     .AddAuthentication(options => options.DefaultScheme = "Cookies")

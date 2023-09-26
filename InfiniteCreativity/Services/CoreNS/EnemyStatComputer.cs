@@ -29,6 +29,11 @@ namespace InfiniteCreativity.Services.CoreNS
             { EnemyType.Trunk, 1.75},
         };
 
+        private static Dictionary<EnemyType, double> _enemyTypeSpeed = new() {
+            { EnemyType.Bean, 20 },
+            { EnemyType.Trunk, 50},
+        };
+
         internal static double CalculateCriticalChance(double level, EnemyType enemyType)
         {
             return _enemyTypeCriticalChance[enemyType] * Math.Sqrt(level);
@@ -52,6 +57,11 @@ namespace InfiniteCreativity.Services.CoreNS
         internal static double CalculateMaxHealth(double level, EnemyType enemyType)
         {
             return _enemyTypeHealth[enemyType] * level;
+        }
+
+        internal static double CalculateSpeed(EnemyType enemyType)
+        {
+            return _enemyTypeSpeed[enemyType];
         }
     }
 }
