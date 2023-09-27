@@ -12,6 +12,7 @@ namespace DTOs.Game
         public Guid Id { get; set; }
         public ShowGameCharacterDTO? Character { get; set; }
         public ShowGameEnemyDTO? Enemy { get; set; }
+        public int Order { get; set; }
         public double CurrentSpeed { get; set; }
 
     }
