@@ -318,9 +318,8 @@ namespace InfiniteCreativity.Services.GameNS
                 x.CurrentHealth = x.Health;
                 battle.Participants.Add(battleParticipantChar);
             });
-            _context.BattleParticipants
+            battle.Participants
                 .OrderBy(x => x.CurrentSpeed)
-                .AsEnumerable()
                 .Select((x,ind) => new { Ind = ind, Participant = x })
                 .ForEach(x => x.Participant.Order = x.Ind);
             _context.Add(battle);
