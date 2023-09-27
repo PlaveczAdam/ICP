@@ -19,6 +19,7 @@ namespace InfiniteCreativity.Services.GameNS
                .Include(x => x.Characters)
                .Include(x => x.Battle)
                .ThenInclude(x => x.Participants)
+               .ThenInclude(x => x.Enemy)
                .Include(x => x.Map)
                .ThenInclude(x => x.HexTiles)
                .ThenInclude(x => x.Enemy)
