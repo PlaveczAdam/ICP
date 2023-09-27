@@ -17,6 +17,8 @@ namespace InfiniteCreativity.Services.GameNS
         {
             var gconn = _context.GConnection
                .Include(x => x.Characters)
+               .Include(x => x.Battle)
+               .ThenInclude(x => x.Participants)
                .Include(x => x.Map)
                .ThenInclude(x => x.HexTiles)
                .ThenInclude(x => x.Enemy)
