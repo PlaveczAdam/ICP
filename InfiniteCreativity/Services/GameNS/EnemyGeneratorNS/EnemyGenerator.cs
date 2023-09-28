@@ -30,6 +30,7 @@ namespace InfiniteCreativity.Services.GameNS.EnemyGeneratorNS
             }
             enemy.Level = _rnd.NextDouble(Math.Max(level - 5, 1), level + 5);
             enemy.EnemyType = _rnd.Next(Enum.GetValues(typeof(EnemyType)).Cast<EnemyType>().ToList());
+            enemy.Health = enemy.MaxHealth;
 
             switch (enemy)
             {
