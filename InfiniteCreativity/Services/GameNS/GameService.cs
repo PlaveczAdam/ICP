@@ -319,7 +319,7 @@ namespace InfiniteCreativity.Services.GameNS
                 battle.Participants.Add(battleParticipantChar);
             });
             battle.Participants
-                .OrderBy(x => x.CurrentSpeed)
+                .OrderByDescending(x => x.CurrentSpeed)
                 .Select((x,ind) => new { Ind = ind, Participant = x })
                 .ForEach(x => x.Participant.Order = x.Ind);
             _context.Add(battle);
