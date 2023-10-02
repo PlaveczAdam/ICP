@@ -377,6 +377,11 @@ namespace InfiniteCreativity.Services.GameNS
             var characterParticipants = battle.Participants.Where(x => x.Character is not null).ToList();
             while (nextInTurn.Enemy != null)
             {
+                actions.Add(new ShowBattleEventNextInTurnDTO()
+                {
+                    SourceParticipantId = nextInTurn.Id,
+                    TargetParticipantId = nextInTurn.Id
+                });
                 actions.AddRange(nextInTurn.Enemy.Turn(characterParticipants, nextInTurn));
                 nextInTurn = _turnSimulator.GetNext(battle);
             }
