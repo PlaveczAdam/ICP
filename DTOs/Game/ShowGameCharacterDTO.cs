@@ -15,6 +15,7 @@ namespace InfiniteCreativity.DTO.Game
         public double Defense { get; set; }
         public int Movement { get; set; }
         public int CurrentMovement { get; set; }
+        public double CurrentAbilityResource { get; set; }
         public double Damage { get; set; }
         public double AbilityDamage { get; set; }
         public double AbilityResource { get; set; }
