@@ -10,12 +10,8 @@ namespace InfiniteCreativity.Services.MapPatherNS
         public List<Guid> Predict(Battle battle, int turnsInAdvance)
         { 
             var baseList = battle.Participants.OrderBy(x => x.Order).ToList();
-            var beforeCurrent = baseList.SkipUntil(x => x == battle.NextInTurn || battle.NextInTurn is null);
+            var beforeCurrent = baseList.SkipWhile(x => x != battle.NextInTurn && battle.NextInTurn is not null);
             var result = new List<Guid>();
-            if (battle.NextInTurn is not null)
-            {
-                result.Add(battle.NextInTurn.Id);
-            }
             result.AddRange(beforeCurrent.Select(x => x.Id));
             while (result.Count < turnsInAdvance) 
             {
