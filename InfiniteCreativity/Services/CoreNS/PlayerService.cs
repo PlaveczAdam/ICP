@@ -116,7 +116,13 @@ namespace InfiniteCreativity.Services.CoreNS
                     .Value
             );
             IQueryable<Player> userBase = _context.Player;
-            var res = await userBase.Include((x) => x.Inventory).Include(x => x.Characters)
+            var res = await userBase
+                    .Include(x => x.Characters)
+                    .ThenInclude((x) => x.SkillSlots)
+                    .ThenInclude((x) => x.SkillHolder)
+                    .ThenInclude((x) => x.Skill)
+                    .Include((x) => x.Inventory)
+                    .Include(x => x.Characters)
                     .ThenInclude((x) => x.Head)
                     .Include(x => x.Characters)
                     .ThenInclude((x) => x.Shoulder)

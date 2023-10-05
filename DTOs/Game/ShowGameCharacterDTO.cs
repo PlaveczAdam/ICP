@@ -1,4 +1,5 @@
-﻿using InfiniteCreativity.DTO.Armor;
+﻿using DTOs.Game;
+using InfiniteCreativity.DTO.Armor;
 using InfiniteCreativity.DTO.Weapon;
 using InfiniteCreativity.Models.Enums.CoreNS;
 
@@ -33,5 +34,6 @@ namespace InfiniteCreativity.DTO.Game
         public bool IsInCombat { get; set; }
         public int? Row { get; set; }
         public int? Col { get; set; }
+        public List<ShowCharacterSkillSlotDTO> SkillSlots { get; set; }
     }
 }

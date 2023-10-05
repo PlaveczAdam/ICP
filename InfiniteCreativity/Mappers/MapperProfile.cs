@@ -66,6 +66,8 @@ namespace InfiniteCreativity.Mappers
 
             CreateMap<Message, ShowMessageDTO>();
 
+            CreateMap<CharacterSkillSlot, ShowCharacterSkillSlotDTO>();
+
             /*CreateMap<Item, ShowMeleeDTO>().ConstructUsing((source, context) => context.Mapper.Map<ShowMeleeDTO>(source as Melee));*/
         }
     }
