@@ -13,6 +13,7 @@ namespace DTOs
         public string Description { get; set; }
         public double Damage { get; set; }
         public double ResourceCost { get; set; }
+        public int AbilityGaugeCost { get; set; }
         public int Cooldown { get; set; }
     }
 }
