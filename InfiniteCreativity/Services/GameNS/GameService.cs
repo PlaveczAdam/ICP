@@ -89,7 +89,7 @@ namespace InfiniteCreativity.Services.GameNS
             bool withCharacterDetail = false,
             bool withMap = false,
             bool withEnemy=false,
-            bool withInventory=false,
+            bool withInventory=true,
             bool withBattle=false
             )
         {
@@ -137,7 +137,12 @@ namespace InfiniteCreativity.Services.GameNS
                             .ThenInclude(x => x.Boot)
                     .Include(x => x.Characters)
                         .ThenInclude(x => x.Character)
-                            .ThenInclude(x => x.Weapon);
+                            .ThenInclude(x => x.Weapon)
+                    .Include(x => x.Characters)
+                        .ThenInclude(x => x.Character)
+                            .ThenInclude(x => x.SkillSlots)
+                                .ThenInclude(x => x.SkillHolder)
+                                    .ThenInclude(x => x.Skill);
             }
             if (withBattle)
             {
