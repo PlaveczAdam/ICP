@@ -420,7 +420,7 @@ namespace InfiniteCreativity.Services.GameNS
 
         public async  Task<ShowBattleStateDTO> MakePlayerTurn(CreatePlayerActionDTO playerAction)
         {
-            var gconn = await GetGameConnectionDetailed(withGameCharacters: true, withCharacterDetail: true, withBattle: true);
+            var gconn = await GetGameConnectionDetailed(withGameCharacters: true, withCharacterDetail: true, withBattle: true, withMap:true);
             var battle = gconn.Battle;
             if (battle is null || !battle.HasStarted)
             {
