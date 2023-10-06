@@ -45,7 +45,7 @@ namespace InfiniteCreativity.Mappers
             CreateMap<Character, CreateCharacterDTO>().ReverseMap();
             CreateMap<Character, ShowCharacterDTO>();
             CreateMap<Character, ShowEquipmentDTO>();
-            CreateMap<Character, ShowGameCharacterDTO>();
+            CreateMap<Character, ShowGameCharacterDTO>().ForMember(dest => dest.SkillSlots, opt => opt.MapFrom(src => src.SkillSlots.OrderBy(x => x.SlotNumber)));
             CreateMap<Character, ShowCharacterWithStatDTO>();
 
             CreateMap<GameMapAccessor, ShowGameMapDTO>();
