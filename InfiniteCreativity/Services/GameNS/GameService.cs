@@ -108,11 +108,11 @@ namespace InfiniteCreativity.Services.GameNS
             }
             if (withMap)
             {
-                gconn = gconn.Include(x => x.Map).ThenInclude(x=>x.HexTiles).ThenInclude(x=>x.Enemy);
+                gconn = gconn.Include(x => x.Map).ThenInclude(x => x.HexTiles).ThenInclude(x => x.Enemy).AsSplitQuery();
             }
             if (withEnemy)
             {
-                gconn = gconn.Include(x => x.Enemies);
+                gconn = gconn.Include(x => x.Enemies).AsSplitQuery();
             }
             if (withInventory)
             {
@@ -142,7 +142,8 @@ namespace InfiniteCreativity.Services.GameNS
                         .ThenInclude(x => x.Character)
                             .ThenInclude(x => x.SkillSlots)
                                 .ThenInclude(x => x.SkillHolder)
-                                    .ThenInclude(x => x.Skill);
+                                    .ThenInclude(x => x.Skill)
+                                        .AsSplitQuery();
             }
             if (withBattle)
             {
@@ -152,7 +153,8 @@ namespace InfiniteCreativity.Services.GameNS
                             .ThenInclude(x => x.Character)
                     .Include(x => x.Battle)
                         .ThenInclude(x => x.Participants)
-                            .ThenInclude(x => x.Enemy);
+                            .ThenInclude(x => x.Enemy)
+                                .AsSplitQuery();
             }
             return await gconn.Where(x => x.Id == currentPlayer.GConnections.First().Id).SingleAsync();
         }
