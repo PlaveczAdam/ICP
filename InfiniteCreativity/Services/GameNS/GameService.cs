@@ -154,7 +154,7 @@ namespace InfiniteCreativity.Services.GameNS
                         .ThenInclude(x => x.Participants)
                             .ThenInclude(x => x.Enemy);
             }
-            return await gconn.SingleAsync(x => x.Id == currentPlayer.GConnections.First().Id);
+            return await gconn.Where(x => x.Id == currentPlayer.GConnections.First().Id).SingleAsync();
         }
 
         public async Task<ShowGameTurnDTO> ProgressTurn()
