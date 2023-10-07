@@ -70,9 +70,15 @@ namespace InfiniteCreativity.Services.CoreNS
 
         public async Task OnGConnected(HubCallerContext hubContext)
         {
-            var currentPlyer = await _playerService.GetCurrentPlayer(withGConnections: true);
+            var currentPlayer = await _playerService.GetCurrentPlayer(withGConnections: true);
 
-            currentPlyer.GConnections.Add(new GConnection
+            foreach (var gconn in currentPlayer.GConnections)
+            {
+                await _gameEndService.Endgame(gconn.ConnectionID);
+            }
+            await _context.SaveChangesAsync();
+
+            currentPlayer.GConnections.Add(new GConnection
             {
                 ConnectionID = hubContext.ConnectionId
             });
