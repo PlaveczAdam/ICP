@@ -471,7 +471,7 @@ namespace InfiniteCreativity.Services.GameNS
             List<ShowBattleEventDTO> result = new();
             result.AddRange(battle.NextInTurn.Character.AutoAttack(enemy, battle.NextInTurn));
 
-            if (battle.NextInTurn.ActionGauge == 0)
+            if (battle.NextInTurn.CurrentActionGauge == 0)
             {
                 result.AddRange(HandleEnemyTurn(battle));
             }
@@ -527,7 +527,7 @@ namespace InfiniteCreativity.Services.GameNS
 
             List<ShowBattleEventDTO> result = new();
             result.AddRange(skill.SkillHolder.Skill.Activate(enemy, battle.NextInTurn, _mapper));
-            if (battle.NextInTurn.ActionGauge == 0)
+            if (battle.NextInTurn.CurrentActionGauge == 0)
             {
                 result.AddRange(HandleEnemyTurn(battle));
             }
