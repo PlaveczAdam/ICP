@@ -79,7 +79,8 @@ namespace InfiniteCreativity.Data
             modelBuilder.Entity<HexTileDataObject>()
                 .HasOne(e => e.Enemy)
                 .WithOne(e => e.Tile)
-                .HasForeignKey<HexTileDataObject>(e => e.EnemyId);
+                .HasForeignKey<HexTileDataObject>(e => e.EnemyId)
+                .OnDelete(DeleteBehavior.SetNull);
         }
     }
 }
