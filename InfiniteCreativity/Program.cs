@@ -53,6 +53,7 @@ builder.Services.AddDbContext<InfiniteCreativityContext>(
         options.UseNpgsql(connectionString);
         options.ConfigureWarnings(warnings =>
             warnings.Ignore(CoreEventId.NavigationBaseIncludeIgnored));
+        options.EnableSensitiveDataLogging(true);
     }
 );
 
