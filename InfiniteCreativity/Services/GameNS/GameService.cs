@@ -184,6 +184,11 @@ namespace InfiniteCreativity.Services.GameNS
                 throw new ArgumentException();
             }
             var currentPlayer = await _playerService.GetCurrentPlayer(withGConnections:true);
+            foreach (var gconn in currentPlayer.GConnections)
+            {
+                await _gameEndService.Endgame(gconn.ConnectionID);
+            }
+
             var oldMap = _context.Map.FirstOrDefault(x=>x.GConnection==currentPlayer.GConnections.First());
             if (oldMap is not null)
             { 
