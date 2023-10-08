@@ -491,7 +491,7 @@ namespace InfiniteCreativity.Services.GameNS
                     throw new ArgumentException("Invalid player action.");
             }
 
-            if (battle.Participants.Where(x => (x.Enemy?.Health ?? 0) > 0).Count() > 0)
+            if (battle.Participants.Where(x => (x.Enemy?.Health ?? 0) > 0).Count() == 0)
             {
                 res.Add(HandleVictory(battle, mapAccessor));
             }
