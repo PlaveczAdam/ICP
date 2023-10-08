@@ -490,8 +490,8 @@ namespace InfiniteCreativity.Services.GameNS
                 default:
                     throw new ArgumentException("Invalid player action.");
             }
-
-            if ( !res.Any(x => x is ShowBattleEventCombatEndDefeatDTO) && battle.Participants.Where(x => (x.Enemy?.Health ?? 0) > 0).Count() == 0)
+            bool isDefeated = res.Any(x => x is ShowBattleEventCombatEndDefeatDTO);
+            if ( !isDefeated && battle.Participants.Where(x => (x.Enemy?.Health ?? 0) > 0).Count() == 0)
             {
                 res.Add(HandleVictory(battle, mapAccessor));
             }
@@ -499,7 +499,7 @@ namespace InfiniteCreativity.Services.GameNS
             await _context.SaveChangesAsync();
             var newBattleState = _mapper.Map<ShowBattleStateDTO>(battle);
             newBattleState.BattleEvents = res;
-            newBattleState.TurnPredictions = _turnSimulator.Predict(battle, 10);
+            newBattleState.TurnPredictions = isDefeated ? new () : _turnSimulator.Predict(battle, 10);
             return newBattleState;
         }
 
