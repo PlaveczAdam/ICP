@@ -13,6 +13,7 @@ using InfiniteCreativity.Services.GameNS.EnemyGeneratorNS;
 using InfiniteCreativity.Services.MapPatherNS;
 using Map;
 using Microsoft.EntityFrameworkCore;
+using MoreLinq;
 using static MoreLinq.Extensions.ForEachExtension;
 
 namespace InfiniteCreativity.Services.GameNS
@@ -491,7 +492,7 @@ namespace InfiniteCreativity.Services.GameNS
                     throw new ArgumentException("Invalid player action.");
             }
 
-            if ( _context.Entry(battle).State != EntityState.Deleted && battle.Participants.Where(x => (x.Enemy?.Health ?? 0) > 0).Count() == 0)
+            if ( !res.Any(x => x is ShowBattleEventCombatEndDefeatDTO) && battle.Participants.Where(x => (x.Enemy?.Health ?? 0) > 0).Count() == 0)
             {
                 res.Add(HandleVictory(battle, mapAccessor));
             }
