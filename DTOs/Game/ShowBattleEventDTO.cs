@@ -51,4 +51,19 @@ namespace DTOs.Game
         public double NewTargetHp { get; set; }
         public int NewAbilityGauge { get; set; }
     }
+
+    public class ShowBattleEventParticipantDiesDTO : ShowBattleEventDTO
+    {
+
+    }
+
+    public class ShowBattleEventCombatEndDefeatDTO : ShowBattleEventDTO
+    {
+
+    }
+
+    public class ShowBattleEventCombatEndVictoryDTO : ShowBattleEventDTO
+    { 
+
+    }
 }

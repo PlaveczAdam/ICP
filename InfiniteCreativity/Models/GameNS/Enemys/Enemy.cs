@@ -39,7 +39,15 @@ namespace InfiniteCreativity.Models.GameNS.Enemys
             var result = new List<ShowBattleEventDTO>();
             while (selfParticipant.CurrentActionGauge > 0)
             {
-                var target = characterParticipants.MaxBy(x => x.Character!.Defense);
+                var validTargets = characterParticipants
+                    .Where(x => x.Character.CurrentHealth > 0);
+                if (validTargets.Count() == 0)
+                {
+                    return result;
+                }
+                var target = validTargets
+                    .MaxBy(x => x.Character!.Defense);
+
                 target!.Character!.TakeDamage(CalculateDamage());
 
                 result.Add(new ShowBattleEventEnemyAttackDTO()
@@ -48,6 +56,14 @@ namespace InfiniteCreativity.Models.GameNS.Enemys
                     TargetParticipantId = target.Id,
                     NewTargetHp = target.Character.CurrentHealth
                 });
+                if (target.Character.CurrentHealth <= 0)
+                {
+                    result.Add(new ShowBattleEventParticipantDiesDTO()
+                    {
+                        SourceParticipantId = selfParticipant.Id,
+                        TargetParticipantId = target.Id,
+                    });
+                }
 
                 selfParticipant.CurrentActionGauge--;
             }

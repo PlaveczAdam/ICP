@@ -98,7 +98,7 @@ namespace InfiniteCreativity.Models.CoreNS
             enemy.Enemy!.TakeDamage(damage);
             attacker.CurrentActionGauge -= 1;
 
-            return new List<ShowBattleEventDTO>(){
+            var res = new List<ShowBattleEventDTO>(){
                 new ShowBattleEventAutoAttackDTO(){
                     SourceParticipantId = attacker.Id,
                     TargetParticipantId = enemy.Id,
@@ -106,6 +106,17 @@ namespace InfiniteCreativity.Models.CoreNS
                     NewAbilityGauge = attacker.CurrentActionGauge,
                 }
             };
+
+            if (enemy.Enemy.Health <= 0)
+            {
+                res.Add(new ShowBattleEventParticipantDiesDTO()
+                {
+                    SourceParticipantId = attacker.Id,
+                    TargetParticipantId = enemy.Id,
+                });
+            }
+
+            return res;
         }
     }
 }
