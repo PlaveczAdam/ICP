@@ -34,7 +34,7 @@ namespace InfiniteCreativity.Models.CoreNS
             {
                 StackableType.HealSkill,
                 new Skill {
-                    Id = Guid.Parse("{be29078b-1e09-4b15-8802-77a8e3c8fd09}"),
+                    Id = Guid.Parse("be29078b-1e09-4b15-8802-77a8e3c8fd09"),
                     Name = "GenericHealing",
                     Description = "good for health",
                     Cooldown = 2,
@@ -59,7 +59,7 @@ namespace InfiniteCreativity.Models.CoreNS
                 }
             },
             {
-                StackableType.FirstSkill,
+                StackableType.HealSkill,
                 new SkillHolder {
                     Name = "GenericHealing",
                     Description = "good for health",
