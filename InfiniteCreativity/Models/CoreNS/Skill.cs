@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using DTOs;
+using DTOs.Enums.GameNS;
 using DTOs.Game;
 using InfiniteCreativity.Extensions;
 using InfiniteCreativity.Models.Enums.CoreNS;
@@ -17,6 +18,7 @@ namespace InfiniteCreativity.Models.CoreNS
         public double ResourceCost { get; set; }
         public int AbilityGaugeCost { get; set; }
         public int Cooldown { get; set; }
+        public TargetType TargetType { get; set; }
 
         public static Dictionary<StackableType, Skill> SkillSeed = new Dictionary<StackableType, Skill>() { 
             { 
@@ -29,6 +31,7 @@ namespace InfiniteCreativity.Models.CoreNS
                     ResourceCost = 1,
                     AbilityGaugeCost = 2,
                     Damage = 2,
+                    TargetType = TargetType.Enemy
                 } 
             },
             {
@@ -41,6 +44,7 @@ namespace InfiniteCreativity.Models.CoreNS
                     ResourceCost = 2,
                     AbilityGaugeCost = 1,
                     Damage = 2,
+                    TargetType = TargetType.Ally
                 }
             },
         };
