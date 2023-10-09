@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DTOs.Enums.GameNS;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,5 +16,6 @@ namespace DTOs
         public double ResourceCost { get; set; }
         public int AbilityGaugeCost { get; set; }
         public int Cooldown { get; set; }
+        public TargetType TargetType { get; set; }
     }
 }
