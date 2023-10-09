@@ -141,6 +141,7 @@ namespace InfiniteCreativity.Services.CoreNS.ItemGeneratorNS
                 Rarity = RarityType.Common
             },
             Skill.SkillHolder[StackableType.FirstSkill],
+            Skill.SkillHolder[StackableType.HealSkill],
         };
     }
 }
