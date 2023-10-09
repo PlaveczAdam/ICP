@@ -7,6 +7,7 @@
         Stone3,
         Fish,
         TheRock,
-        FirstSkill
+        FirstSkill,
+        HealSkill
     }
 }

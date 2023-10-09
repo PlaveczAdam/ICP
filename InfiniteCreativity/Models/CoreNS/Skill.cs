@@ -31,6 +31,18 @@ namespace InfiniteCreativity.Models.CoreNS
                     Damage = 2,
                 } 
             },
+            {
+                StackableType.HealSkill,
+                new Skill {
+                    Id = Guid.Parse("{be29078b-1e09-4b15-8802-77a8e3c8fd09}"),
+                    Name = "GenericHealing",
+                    Description = "good for health",
+                    Cooldown = 2,
+                    ResourceCost = 2,
+                    AbilityGaugeCost = 1,
+                    Damage = 2,
+                }
+            },
         };
         public static Dictionary<StackableType, SkillHolder> SkillHolder = new Dictionary<StackableType, SkillHolder>() {
             {
@@ -44,6 +56,19 @@ namespace InfiniteCreativity.Models.CoreNS
                     Value = 1,
                     Rarity = RarityType.Common,
                     SkillId = SkillSeed[StackableType.FirstSkill].Id,
+                }
+            },
+            {
+                StackableType.FirstSkill,
+                new SkillHolder {
+                    Name = "GenericHealing",
+                    Description = "good for health",
+                    ImageName = ImageName.TheRock,
+                    ItemType = ItemType.Skill,
+                    StackableType = StackableType.HealSkill,
+                    Value = 1,
+                    Rarity = RarityType.Common,
+                    SkillId = SkillSeed[StackableType.HealSkill].Id,
                 }
             },
         };
@@ -65,6 +90,30 @@ namespace InfiniteCreativity.Models.CoreNS
                     SourceParticipantId = caster.Id,
                     TargetParticipantId = enemy.Id,
                     NewTargetHp = enemy.Enemy.Health,
+                    NewAbilityGauge = caster.CurrentActionGauge,
+                    NewResource = caster.Character.CurrentAbilityResource,
+                    Skill = mapper.Map<ShowSkillDTO>(this),
+                }
+            };
+        }
+
+        public IEnumerable<ShowBattleEventDTO> ActivateHeal(BattleParticipant character, BattleParticipant caster, IMapper mapper)
+        {
+            var heal = Damage * caster.Character!.AbilityDamage;
+            var crit = _rnd.NextCrit(caster.Character.CriticalChance);
+            heal *= Math.Pow(caster.Character.CriticalMultiplier, crit);
+
+            character.Character!.TakeHealing(heal);
+            caster.Character.CurrentAbilityResource -= ResourceCost;
+            caster.CurrentActionGauge -= AbilityGaugeCost;
+
+            return new List<ShowBattleEventDTO>()
+            {
+                new ShowBattleEventCharacterHealDTO()
+                {
+                    SourceParticipantId = caster.Id,
+                    TargetParticipantId = character.Id,
+                    NewTargetHp = character.Character.CurrentHealth,
                     NewAbilityGauge = caster.CurrentActionGauge,
                     NewResource = caster.Character.CurrentAbilityResource,
                     Skill = mapper.Map<ShowSkillDTO>(this),

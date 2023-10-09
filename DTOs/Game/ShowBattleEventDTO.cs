@@ -26,6 +26,14 @@ namespace DTOs.Game
         public double NewResource { get; set; }
     }
 
+    public class ShowBattleEventCharacterHealDTO : ShowBattleEventDTO
+    {
+        public double NewTargetHp { get; set; }
+        public ShowSkillDTO Skill { get; set; }
+        public int NewAbilityGauge { get; set; }
+        public double NewResource { get; set; }
+    }
+
     public class ShowBattleEventResourceGainDTO : ShowBattleEventDTO
     { 
         public double NewResource { get; set;}

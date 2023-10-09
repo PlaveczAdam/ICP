@@ -17,6 +17,12 @@ namespace DTOs.Game
         public Guid? SkillSlotId { get; set; }
     }
 
+    public class CreatePlayerActionUseSkillOnAlly : CreatePlayerActionDTO
+    {
+        public Guid TargetId { get; set; }
+        public Guid? SkillSlotId { get; set; }
+    }
+
     public class CreatePlayerActionFlee :CreatePlayerActionDTO
     { 
 

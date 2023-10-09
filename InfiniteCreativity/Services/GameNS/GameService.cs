@@ -13,6 +13,7 @@ using InfiniteCreativity.Services.GameNS.EnemyGeneratorNS;
 using InfiniteCreativity.Services.MapPatherNS;
 using Map;
 using Microsoft.EntityFrameworkCore;
+using System;
 using static MoreLinq.Extensions.ForEachExtension;
 
 namespace InfiniteCreativity.Services.GameNS
@@ -487,6 +488,9 @@ namespace InfiniteCreativity.Services.GameNS
                         res.AddRange(PlayerUsesAutoAttack(skillAction, battle, mapAccessor));
                     }
                     break;
+                case CreatePlayerActionUseSkillOnAlly skillAction:
+                    res.AddRange(PlayerUsesHealingSkill(skillAction, battle, mapAccessor));
+                    break;
                 default:
                     throw new ArgumentException("Invalid player action.");
             }
@@ -578,6 +582,36 @@ namespace InfiniteCreativity.Services.GameNS
             });
             _context.Remove(battle);
             return new List<ShowBattleEventDTO>() { new ShowBattleEventCombatEndFleeDTO() };
+        }
+
+        private IEnumerable<ShowBattleEventDTO> PlayerUsesHealingSkill(CreatePlayerActionUseSkillOnAlly skillAction, Battle battle, GameMapAccessor mapAccessor)
+        {
+            var skill = battle.NextInTurn.Character.SkillSlots.First(x => x.Id == skillAction.SkillSlotId);
+            var target = battle.Participants.First(x => x.Id == skillAction.TargetId && x.Character is not null);
+
+            if (target.Character.CurrentHealth <= 0)
+            {
+                throw new InvalidOperationException("Already dead.");
+            }
+
+            if (battle.NextInTurn.Character.AbilityResource < skill.SkillHolder.Skill.ResourceCost)
+            {
+                throw new InvalidOperationException("Not enough resource.");
+            }
+
+            if (battle.NextInTurn.CurrentActionGauge < skill.SkillHolder.Skill.AbilityGaugeCost)
+            {
+                throw new InvalidOperationException("Not enough gauge.");
+            }
+
+            List<ShowBattleEventDTO> result = new();
+            result.AddRange(skill.SkillHolder.Skill.ActivateHeal(target, battle.NextInTurn, _mapper));
+            if (battle.NextInTurn.CurrentActionGauge == 0)
+            {
+                result.AddRange(HandleEnemyTurn(battle, mapAccessor));
+            }
+
+            return result;
         }
 
         private IEnumerable<ShowBattleEventDTO> PlayerUsesSkill(CreatePlayerActionUseSkillOnEnemy skillAction, Battle battle, GameMapAccessor mapAccessor)

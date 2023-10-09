@@ -7,6 +7,7 @@ using InfiniteCreativity.Models.Enums.CoreNS;
 using InfiniteCreativity.Services.CoreNS;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace InfiniteCreativity.Models.CoreNS
 {
@@ -89,6 +90,17 @@ namespace InfiniteCreativity.Models.CoreNS
         {
             CurrentHealth -= Math.Max(damage - Defense, 0);
         }
+        public void TakeHealing(double heal)
+        {
+            if (CurrentHealth < Health)
+            { 
+                CurrentHealth += heal;
+                if (CurrentHealth > Health)
+                {
+                    CurrentHealth = Health;
+                }
+            }
+        }
 
         public IEnumerable<ShowBattleEventDTO> AutoAttack(BattleParticipant enemy, BattleParticipant attacker)
         {
@@ -118,5 +130,7 @@ namespace InfiniteCreativity.Models.CoreNS
 
             return res;
         }
+
+        
     }
 }
