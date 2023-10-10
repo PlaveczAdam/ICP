@@ -589,6 +589,11 @@ namespace InfiniteCreativity.Services.GameNS
             var skill = battle.NextInTurn.Character.SkillSlots.First(x => x.Id == skillAction.SkillSlotId);
             var target = battle.Participants.First(x => x.Id == skillAction.TargetId && x.Character is not null);
 
+            if (target.Character.CurrentHealth >= target.Character.Health)
+            {
+                throw new InvalidOperationException("Full health reached.");
+            }
+
             if (target.Character.CurrentHealth <= 0)
             {
                 throw new InvalidOperationException("Already dead.");
