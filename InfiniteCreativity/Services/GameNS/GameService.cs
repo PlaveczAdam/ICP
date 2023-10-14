@@ -147,7 +147,8 @@ namespace InfiniteCreativity.Services.GameNS
                             .ThenInclude(x => x.SkillSlots)
                                 .ThenInclude(x => x.SkillHolder)
                                     .ThenInclude(x => x.Skill)
-                                        .AsSplitQuery();
+                                        .ThenInclude(x => x.Buffs)
+                                            .AsSplitQuery();
             }
             if (withBattle)
             {
