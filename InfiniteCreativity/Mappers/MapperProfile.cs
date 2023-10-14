@@ -56,6 +56,7 @@ namespace InfiniteCreativity.Mappers
 
             CreateMap<Skill, ShowSkillDTO>();
             CreateMap<SkillHolder, ShowSkillHolderDTO>();
+            CreateMap<Buff, ShowBuffDTO>();
 
             CreateMap<Battle, ShowBattleStateDTO>();
             CreateMap<BattleParticipant, ShowBattleParticipantDTO>();
