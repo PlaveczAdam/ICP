@@ -126,6 +126,7 @@ namespace InfiniteCreativity.Models.CoreNS
                     SourceParticipantId = attacker.Id,
                     TargetParticipantId = enemy.Id,
                 });
+                enemy.Buffs.Clear();
             }
 
             return res;

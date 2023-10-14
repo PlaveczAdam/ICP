@@ -3,6 +3,7 @@ using InfiniteCreativity.Extensions;
 using InfiniteCreativity.Models.CoreNS;
 using InfiniteCreativity.Models.Enums.CoreNS;
 using InfiniteCreativity.Services.CoreNS;
+using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace InfiniteCreativity.Models.GameNS.Enemys
@@ -63,6 +64,7 @@ namespace InfiniteCreativity.Models.GameNS.Enemys
                         SourceParticipantId = selfParticipant.Id,
                         TargetParticipantId = target.Id,
                     });
+                    target.Buffs.Clear();
                 }
 
                 selfParticipant.CurrentActionGauge--;

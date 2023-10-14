@@ -1,4 +1,5 @@
-﻿using DTOs.Enums.CoreNS;
+﻿using AutoMapper;
+using DTOs.Enums.CoreNS;
 using DTOs.Game;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -17,7 +18,7 @@ namespace InfiniteCreativity.Models.CoreNS
 
         public abstract bool StacksDuration { get; }
 
-        public abstract ShowBattleEventDTO Tick();
+        public abstract ShowBattleEventDTO Tick(IMapper mapper);
         public BattleParticipant BattleParticipant { get; set; }
     }
 
@@ -31,7 +32,7 @@ namespace InfiniteCreativity.Models.CoreNS
 
         public override bool StacksDuration => true;
 
-        public override ShowBattleEventDTO Tick()
+        public override ShowBattleEventDTO Tick(IMapper mapper)
         {
             Duration--;
             BattleParticipant.Character.CurrentAbilityResource += BattleParticipant.Character.AbilityResource * 0.05;
@@ -45,6 +46,7 @@ namespace InfiniteCreativity.Models.CoreNS
                 NewAbilityResource = BattleParticipant.Character.CurrentAbilityResource,
                 SourceParticipantId = BattleParticipant.Id,
                 TargetParticipantId = BattleParticipant.Id,
+                Buff = mapper.Map<ShowBuffDTO>(this),
             };
         }
     }
