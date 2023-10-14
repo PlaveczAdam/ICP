@@ -16,6 +16,7 @@ namespace DTOs.Game
         public int CurrentActionGauge { get; set; }
         public int ActionGauge { get; set; }
         public double CurrentSpeed { get; set; }
+        public List<ShowBuffDTO> Buffs { get; set;}
 
     }
 }
