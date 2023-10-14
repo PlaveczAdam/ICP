@@ -1,10 +1,13 @@
 ﻿using AutoMapper;
+using DTOs.Enums.CoreNS;
+using DTOs.Enums.GameNS;
 using DTOs.Game;
 using Extensions;
 using InfiniteCreativity.Data;
 using InfiniteCreativity.DTO.Game;
 using InfiniteCreativity.Extensions;
 using InfiniteCreativity.Models.CoreNS;
+using InfiniteCreativity.Models.Enums.CoreNS;
 using InfiniteCreativity.Models.Enums.GameNS;
 using InfiniteCreativity.Models.GameNS;
 using InfiniteCreativity.Models.GameNS.Enemys;
@@ -155,11 +158,14 @@ namespace InfiniteCreativity.Services.GameNS
                     .Include(x => x.Battle)
                         .ThenInclude(x => x.Participants)
                             .ThenInclude(x => x.Enemy)
-                                .AsSplitQuery();
+                                .AsSplitQuery()
+                    .Include(x => x.Battle)
+                        .ThenInclude(x => x.Participants)
+                            .ThenInclude(x => x.Buffs);
             }
             return await gconn.Where(x => x.Id == currentPlayer.GConnections.First().Id).SingleAsync();
         }
-
+        
         public async Task<ShowGameTurnDTO> ProgressTurn()
         {
             var gconn = await GetGameConnectionDetailed(withGameCharacters: true, withCharacterDetail: true, withInventory: true);
@@ -387,6 +393,7 @@ namespace InfiniteCreativity.Services.GameNS
             var characterParticipants = battle.Participants.Where(x => x.Character is not null).ToList();
             while (nextInTurn.Enemy != null)
             {
+                actions.AddRange(TickBuffs(battle));
                 actions.Add(new ShowBattleEventNextInTurnDTO()
                 {
                     SourceParticipantId = nextInTurn.Id,
@@ -402,6 +409,7 @@ namespace InfiniteCreativity.Services.GameNS
 
                 nextInTurn = _turnSimulator.GetNext(battle);
             }
+            actions.AddRange(TickBuffs(battle));
             actions.Add(new ShowBattleEventNextInTurnDTO()
             {
                 SourceParticipantId = nextInTurn.Id,
@@ -409,6 +417,24 @@ namespace InfiniteCreativity.Services.GameNS
             });
 
             return actions;
+        }
+
+        private IEnumerable<ShowBattleEventDTO> TickBuffs(Battle battle)
+        {
+            var result = new List<ShowBattleEventDTO>();
+            battle.Participants.ForEach(x =>
+            {
+                x.Buffs.ForEach(y => result.Add(y.Tick()));
+                var expiredBuffs = x.Buffs.Where(y => y.Duration <= 0);
+                expiredBuffs.ForEach(y => result.Add(new ShowBattleEventBuffExpiredDTO()
+                {
+                    SourceParticipantId = x.Id,
+                    TargetParticipantId = x.Id,
+                    Buff = _mapper.Map<ShowBuffDTO>(y),
+                }));
+                x.Buffs.RemoveAll(y => y.Duration <= 0);
+            });
+            return result;
         }
 
         private ShowBattleEventDTO HandleDefeat(Battle battle, GameMapAccessor mapAccessor)
@@ -489,7 +515,7 @@ namespace InfiniteCreativity.Services.GameNS
                     }
                     break;
                 case CreatePlayerActionUseSkillOnAlly skillAction:
-                    res.AddRange(PlayerUsesHealingSkill(skillAction, battle, mapAccessor));
+                    res.AddRange(PlayerUsesSkillOnAlly(skillAction, battle, mapAccessor));
                     break;
                 default:
                     throw new ArgumentException("Invalid player action.");
@@ -506,6 +532,7 @@ namespace InfiniteCreativity.Services.GameNS
             newBattleState.TurnPredictions = isDefeated ? new () : _turnSimulator.Predict(battle, 10);
             return newBattleState;
         }
+
 
         private ShowBattleEventDTO HandleVictory(Battle battle, GameMapAccessor mapAccessor)
         {
@@ -584,15 +611,10 @@ namespace InfiniteCreativity.Services.GameNS
             return new List<ShowBattleEventDTO>() { new ShowBattleEventCombatEndFleeDTO() };
         }
 
-        private IEnumerable<ShowBattleEventDTO> PlayerUsesHealingSkill(CreatePlayerActionUseSkillOnAlly skillAction, Battle battle, GameMapAccessor mapAccessor)
+        private IEnumerable<ShowBattleEventDTO> PlayerUsesSkillOnAlly(CreatePlayerActionUseSkillOnAlly skillAction, Battle battle, GameMapAccessor mapAccessor)
         {
             var skill = battle.NextInTurn.Character.SkillSlots.First(x => x.Id == skillAction.SkillSlotId);
             var target = battle.Participants.First(x => x.Id == skillAction.TargetId && x.Character is not null);
-
-            if (target.Character.CurrentHealth >= target.Character.Health)
-            {
-                throw new InvalidOperationException("Full health reached.");
-            }
 
             if (target.Character.CurrentHealth <= 0)
             {
@@ -609,14 +631,72 @@ namespace InfiniteCreativity.Services.GameNS
                 throw new InvalidOperationException("Not enough gauge.");
             }
 
+            if (skill.SkillHolder.Skill.TargetType != TargetType.Ally)
+            {
+                throw new InvalidOperationException("Invalid target for skill.");
+            }
+
             List<ShowBattleEventDTO> result = new();
-            result.AddRange(skill.SkillHolder.Skill.ActivateHeal(target, battle.NextInTurn, _mapper));
+
+            if (skill.SkillHolder.StackableType == StackableType.HealSkill)
+            {
+                result.AddRange(skill.SkillHolder.Skill.ActivateHeal(target, battle.NextInTurn, _mapper));
+            }
+
+            var buffs = skill.SkillHolder.Skill.Buffs;
+            result.AddRange(ApplyBuffs(buffs, target, battle.NextInTurn));
+
             if (battle.NextInTurn.CurrentActionGauge == 0)
             {
                 result.AddRange(HandleEnemyTurn(battle, mapAccessor));
             }
 
             return result;
+        }
+
+        private IEnumerable<ShowBattleEventDTO> ApplyBuffs(ICollection<BuffBlueprint> buffBps, BattleParticipant target, BattleParticipant source)
+        {
+            var buffs = buffBps.Select(x =>
+            {
+                switch (x.BuffType)
+                {
+                    case BuffType.Rejuvenation:
+                        return new Rejuvenation()
+                        {
+                            Duration = x.Duration,
+                        };
+                    default: throw new InvalidOperationException();
+                }
+            });
+
+            buffs.ForEach(x =>
+            {
+                if (x.StacksDuration)
+                {
+                    var oldBuff = target.Buffs.FirstOrDefault(y => y.BuffType == x.BuffType);
+                    if (oldBuff is not null)
+                    { 
+                        oldBuff.Duration += x.Duration;
+                        x.Duration = oldBuff.Duration;
+                        x.ID = oldBuff.ID;
+                    }
+                    else
+                    {
+                        target.Buffs.Add(x);
+                    }
+                }
+                else
+                {
+                    target.Buffs.Add(x);
+                }
+            });
+
+            return buffs.Select(x => new ShowBattleEventApplyBuffDTO
+            {
+                Buff = _mapper.Map<ShowBuffDTO>(x),
+                SourceParticipantId = source.Id,
+                TargetParticipantId = target.Id
+            });
         }
 
         private IEnumerable<ShowBattleEventDTO> PlayerUsesSkill(CreatePlayerActionUseSkillOnEnemy skillAction, Battle battle, GameMapAccessor mapAccessor)

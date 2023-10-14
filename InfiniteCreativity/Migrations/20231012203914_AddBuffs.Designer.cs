@@ -3,6 +3,7 @@ using System;
 using InfiniteCreativity.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace InfiniteCreativity.Migrations
 {
     [DbContext(typeof(InfiniteCreativityContext))]
-    partial class InfiniteCreativityContextModelSnapshot : ModelSnapshot
+    [Migration("20231012203914_AddBuffs")]
+    partial class AddBuffs
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,6 +24,21 @@ namespace InfiniteCreativity.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("BattleParticipantBuff", b =>
+                {
+                    b.Property<Guid>("BattleParticipantsId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("BuffsID")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("BattleParticipantsId", "BuffsID");
+
+                    b.HasIndex("BuffsID");
+
+                    b.ToTable("BattleParticipantBuff");
+                });
 
             modelBuilder.Entity("DataObjects.EntityBaseDataObject", b =>
                 {
@@ -103,9 +121,6 @@ namespace InfiniteCreativity.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("BattleParticipantId")
-                        .HasColumnType("uuid");
-
                     b.Property<string>("Discriminator")
                         .IsRequired()
                         .HasColumnType("text");
@@ -114,8 +129,6 @@ namespace InfiniteCreativity.Migrations
                         .HasColumnType("integer");
 
                     b.HasKey("ID");
-
-                    b.HasIndex("BattleParticipantId");
 
                     b.ToTable("Buff");
 
@@ -870,6 +883,21 @@ namespace InfiniteCreativity.Migrations
                     b.HasDiscriminator().HasValue("Ranged");
                 });
 
+            modelBuilder.Entity("BattleParticipantBuff", b =>
+                {
+                    b.HasOne("InfiniteCreativity.Models.CoreNS.BattleParticipant", null)
+                        .WithMany()
+                        .HasForeignKey("BattleParticipantsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("InfiniteCreativity.Models.CoreNS.Buff", null)
+                        .WithMany()
+                        .HasForeignKey("BuffsID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("DataObjects.EntityBaseDataObject", b =>
                 {
                     b.HasOne("InfiniteCreativity.Models.GameNS.HexTileDataObject", "HexTileDataObject")
@@ -910,17 +938,6 @@ namespace InfiniteCreativity.Migrations
                     b.Navigation("Character");
 
                     b.Navigation("Enemy");
-                });
-
-            modelBuilder.Entity("InfiniteCreativity.Models.CoreNS.Buff", b =>
-                {
-                    b.HasOne("InfiniteCreativity.Models.CoreNS.BattleParticipant", "BattleParticipant")
-                        .WithMany("Buffs")
-                        .HasForeignKey("BattleParticipantId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("BattleParticipant");
                 });
 
             modelBuilder.Entity("InfiniteCreativity.Models.CoreNS.BuffBlueprint", b =>
@@ -1159,11 +1176,6 @@ namespace InfiniteCreativity.Migrations
             modelBuilder.Entity("Entities.MapDataObject", b =>
                 {
                     b.Navigation("HexTiles");
-                });
-
-            modelBuilder.Entity("InfiniteCreativity.Models.CoreNS.BattleParticipant", b =>
-                {
-                    b.Navigation("Buffs");
                 });
 
             modelBuilder.Entity("InfiniteCreativity.Models.CoreNS.Character", b =>

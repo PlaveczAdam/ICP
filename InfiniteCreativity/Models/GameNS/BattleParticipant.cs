@@ -13,5 +13,6 @@ namespace InfiniteCreativity.Models.CoreNS
         public int CurrentActionGauge { get; set; }
         [NotMapped]
         public int ActionGauge => (int)CurrentSpeed / 10;
+        public List<Buff> Buffs { get; set; } = new List<Buff>();
     }
 }

@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
 using DTOs;
+using DTOs.Enums.CoreNS;
 using DTOs.Enums.GameNS;
 using DTOs.Game;
 using InfiniteCreativity.Extensions;
 using InfiniteCreativity.Models.Enums.CoreNS;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace InfiniteCreativity.Models.CoreNS
 {
@@ -19,11 +21,12 @@ namespace InfiniteCreativity.Models.CoreNS
         public int AbilityGaugeCost { get; set; }
         public int Cooldown { get; set; }
         public TargetType TargetType { get; set; }
+        public ICollection<BuffBlueprint> Buffs { get; set; } = new List<BuffBlueprint>();
 
-        public static Dictionary<StackableType, Skill> SkillSeed = new Dictionary<StackableType, Skill>() { 
-            { 
-                StackableType.FirstSkill, 
-                new Skill { 
+        public static Dictionary<StackableType, Skill> SkillSeed = new Dictionary<StackableType, Skill>() {
+            {
+                StackableType.FirstSkill,
+                new Skill {
                     Id = Guid.Parse("ea380bc9-ccf3-4f9f-ab09-f72cf0229465"),
                     Name = "First",
                     Description = "nincs",
@@ -32,7 +35,7 @@ namespace InfiniteCreativity.Models.CoreNS
                     AbilityGaugeCost = 2,
                     Damage = 2,
                     TargetType = TargetType.Enemy
-                } 
+                }
             },
             {
                 StackableType.HealSkill,
@@ -44,7 +47,7 @@ namespace InfiniteCreativity.Models.CoreNS
                     ResourceCost = 2,
                     AbilityGaugeCost = 1,
                     Damage = 2,
-                    TargetType = TargetType.Ally
+                    TargetType = TargetType.Ally,
                 }
             },
         };
@@ -77,6 +80,20 @@ namespace InfiniteCreativity.Models.CoreNS
             },
         };
 
+        public static Dictionary<StackableType, List<BuffBlueprint>> BuffBlueprintSeed = new Dictionary<StackableType, List<BuffBlueprint>>() {
+         {
+                StackableType.HealSkill,
+                new List<BuffBlueprint> () {
+                    new BuffBlueprint
+                    {
+                        ID = Guid.Parse("96660F57-F437-4E15-A469-7F596C6CCCCC"),
+                        BuffType = BuffType.Rejuvenation,
+                        Duration = 10,
+                        SkillId = SkillSeed[StackableType.HealSkill].Id
+                    },
+                }
+            },
+        };
         public IEnumerable<ShowBattleEventDTO> Activate(BattleParticipant enemy, BattleParticipant caster, IMapper mapper)
         {
             var damage = Damage * caster.Character!.AbilityDamage;

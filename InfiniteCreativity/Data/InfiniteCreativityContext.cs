@@ -86,6 +86,11 @@ namespace InfiniteCreativity.Data
                 .HasOne(e => e.Enemy)
                 .WithMany()
                 .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Buff>();
+            modelBuilder.Entity<Rejuvenation>();
+            modelBuilder.Entity<BuffBlueprint>()
+                .HasData(InfiniteCreativity.Models.CoreNS.Skill.BuffBlueprintSeed.SelectMany(x => x.Value));
         }
     }
 }

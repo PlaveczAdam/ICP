@@ -74,4 +74,19 @@ namespace DTOs.Game
     { 
 
     }
+
+    public class ShowBattleEventApplyBuffDTO : ShowBattleEventDTO
+    {
+        public ShowBuffDTO Buff { get; set; }
+    }
+
+    public class ShowBattleEventRejuvenationTickDTO : ShowBattleEventDTO
+    {
+        public double NewAbilityResource { get; set; }
+    }
+
+    public class ShowBattleEventBuffExpiredDTO : ShowBattleEventDTO
+    {
+        public ShowBuffDTO Buff { get; set; }
+    }
 }
