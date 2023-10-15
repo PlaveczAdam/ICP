@@ -33,7 +33,7 @@ namespace InfiniteCreativity.Models.CoreNS
 
         public override ConditionType ConditionType => ConditionType.Bleed;
 
-        public override bool StacksDuration => true;
+        public override bool StacksDuration => false;
 
         public override List<ShowBattleEventDTO> Tick(IMapper mapper)
         {
