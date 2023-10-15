@@ -7,6 +7,7 @@ namespace InfiniteCreativity.Models.CoreNS
 {
     public abstract class Buff
     {
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public Guid ID { get; set; }
         [NotMapped]
         public abstract string Name { get; }
