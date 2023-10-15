@@ -670,7 +670,7 @@ namespace InfiniteCreativity.Services.GameNS
                         };
                     default: throw new InvalidOperationException();
                 }
-            });
+            }).ToList();
 
             buffs.ForEach(x =>
             {
