@@ -407,19 +407,20 @@ namespace InfiniteCreativity.Services.GameNS
             {
                 actions.AddRange(TickBuffs(battle));
                 actions.AddRange(TickConditions(battle));
+                if (characterParticipants.All(x => x.Character.CurrentHealth <= 0))
+                {
+                    actions.Add(HandleDefeat(battle, mapAccessor));
+                    return actions;
+                }
+
+                if (enemyParticipants.All(x => x.GetCurrentHealth() <= 0))
+                {
+                    actions.Add(HandleVictory(battle, mapAccessor));
+                    return actions;
+                }
+
                 if (nextInTurn.GetCurrentHealth() <= 0)
                 {
-                    if (characterParticipants.All(x => x.Character.CurrentHealth <= 0))
-                    {
-                        actions.Add(HandleDefeat(battle, mapAccessor));
-                        return actions;
-                    }
-
-                    if (enemyParticipants.All(x=>x.GetCurrentHealth() <= 0))
-                    {
-                        actions.Add(HandleVictory(battle, mapAccessor));
-                        return actions;
-                    }
                     nextInTurn = _turnSimulator.GetNext(battle);
                     continue;
                 }
@@ -437,19 +438,20 @@ namespace InfiniteCreativity.Services.GameNS
             actions.AddRange(TickBuffs(battle));
             actions.AddRange(TickConditions(battle));
 
-            if (nextInTurn.GetCurrentHealth() <= 0)
+            if (characterParticipants.All(x => x.Character.CurrentHealth <= 0))
             {
-                if (characterParticipants.All(x => x.Character.CurrentHealth <= 0))
-                {
-                    actions.Add(HandleDefeat(battle, mapAccessor));
-                    return actions;
-                }
+                actions.Add(HandleDefeat(battle, mapAccessor));
+                return actions;
+            }
 
-                if (enemyParticipants.All(x => x.GetCurrentHealth() <= 0))
-                {
-                    actions.Add(HandleVictory(battle, mapAccessor));
-                    return actions;
-                }
+            if (enemyParticipants.All(x => x.GetCurrentHealth() <= 0))
+            {
+                actions.Add(HandleVictory(battle, mapAccessor));
+                return actions;
+            }
+
+            if (nextInTurn.GetCurrentHealth() <= 0)
+            {    
                 actions.AddRange(HandleEnemyTurn(battle, mapAccessor));
             }
 
