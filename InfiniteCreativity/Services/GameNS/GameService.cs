@@ -469,7 +469,7 @@ namespace InfiniteCreativity.Services.GameNS
             var result = new List<ShowBattleEventDTO>();
             battle.Participants.ForEach(x =>
             {
-                x.Buffs.ForEach(y => result.Add(y.Tick(_mapper)));
+                x.Buffs.OrderBy(y => y.BuffType).ForEach(y => result.Add(y.Tick(_mapper)));
                 var expiredBuffs = x.Buffs.Where(y => y.Duration <= 0);
                 expiredBuffs.ForEach(y => result.Add(new ShowBattleEventBuffExpiredDTO()
                 {
