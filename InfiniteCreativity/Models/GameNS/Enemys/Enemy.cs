@@ -5,6 +5,7 @@ using InfiniteCreativity.Models.Enums.CoreNS;
 using InfiniteCreativity.Services.CoreNS;
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace InfiniteCreativity.Models.GameNS.Enemys
 {
@@ -65,6 +66,7 @@ namespace InfiniteCreativity.Models.GameNS.Enemys
                         TargetParticipantId = target.Id,
                     });
                     target.Buffs.Clear();
+                    target.Conditions.Clear();
                 }
 
                 selfParticipant.CurrentActionGauge--;
@@ -83,6 +85,16 @@ namespace InfiniteCreativity.Models.GameNS.Enemys
         public void TakeDamage(double damage)
         {
             Health -= Math.Max(damage - Defense, 0);
+        }
+
+        public void TakeConditionDamage(double cDamage)
+        {
+            Health -= Math.Max(cDamage, 0);
+
+            if (Health <= 0)
+            {
+                Health = 0;
+            }
         }
     }
 }

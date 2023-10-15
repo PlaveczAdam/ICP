@@ -91,6 +91,12 @@ namespace InfiniteCreativity.Data
             modelBuilder.Entity<Rejuvenation>();
             modelBuilder.Entity<BuffBlueprint>()
                 .HasData(InfiniteCreativity.Models.CoreNS.Skill.BuffBlueprintSeed.SelectMany(x => x.Value));
+
+            modelBuilder.Entity<Condition>();
+            modelBuilder.Entity<Bleed>();
+            modelBuilder.Entity<ConditionBlueprint>()
+                .HasData(InfiniteCreativity.Models.CoreNS.Skill.ConditionBlueprintSeed.SelectMany(x => x.Value));
+
         }
     }
 }

@@ -22,6 +22,7 @@ namespace InfiniteCreativity.Models.CoreNS
         public int Cooldown { get; set; }
         public TargetType TargetType { get; set; }
         public ICollection<BuffBlueprint> Buffs { get; set; } = new List<BuffBlueprint>();
+        public ICollection<ConditionBlueprint> Conditions { get; set; } = new List<ConditionBlueprint>();
 
         public static Dictionary<StackableType, Skill> SkillSeed = new Dictionary<StackableType, Skill>() {
             {
@@ -51,6 +52,7 @@ namespace InfiniteCreativity.Models.CoreNS
                 }
             },
         };
+
         public static Dictionary<StackableType, SkillHolder> SkillHolder = new Dictionary<StackableType, SkillHolder>() {
             {
                 StackableType.FirstSkill,
@@ -80,8 +82,23 @@ namespace InfiniteCreativity.Models.CoreNS
             },
         };
 
+        public static Dictionary<StackableType, List<ConditionBlueprint>> ConditionBlueprintSeed = new Dictionary<StackableType, List<ConditionBlueprint>>() {
+        {
+                StackableType.FirstSkill,
+                new List<ConditionBlueprint> () {
+                    new ConditionBlueprint
+                    {
+                        ID = Guid.Parse("C0AEFCAB-0958-469F-A331-EA1B0967B557"),
+                        ConditionType = ConditionType.Bleed,
+                        Duration = 10,
+                        SkillId = SkillSeed[StackableType.FirstSkill].Id
+                    },
+                }
+            },
+        };
+
         public static Dictionary<StackableType, List<BuffBlueprint>> BuffBlueprintSeed = new Dictionary<StackableType, List<BuffBlueprint>>() {
-         {
+        {
                 StackableType.HealSkill,
                 new List<BuffBlueprint> () {
                     new BuffBlueprint
@@ -94,6 +111,7 @@ namespace InfiniteCreativity.Models.CoreNS
                 }
             },
         };
+
         public IEnumerable<ShowBattleEventDTO> Activate(BattleParticipant enemy, BattleParticipant caster, IMapper mapper)
         {
             var damage = Damage * caster.Character!.AbilityDamage;

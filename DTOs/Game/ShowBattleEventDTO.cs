@@ -90,4 +90,18 @@ namespace DTOs.Game
     {
         public ShowBuffDTO Buff { get; set; }
     }
+
+    public class ShowBattleEventBleedTickDTO : ShowBattleEventDTO
+    {
+        public ShowConditionDTO Condition { get; set; }
+        public double NewTargetHealth { get; set; }
+    }
+    public class ShowBattleEventApplyConditionDTO : ShowBattleEventDTO
+    {
+        public ShowConditionDTO Condition { get; set; }
+    }
+    public class ShowBattleEventConditionExpiredDTO : ShowBattleEventDTO
+    {
+        public ShowConditionDTO Condition { get; set; }
+    }
 }

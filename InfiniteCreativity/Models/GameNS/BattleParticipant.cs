@@ -14,5 +14,17 @@ namespace InfiniteCreativity.Models.CoreNS
         [NotMapped]
         public int ActionGauge => (int)CurrentSpeed / 10;
         public List<Buff> Buffs { get; set; } = new List<Buff>();
+        public List<Condition> Conditions { get; set; } = new List<Condition>();
+
+        public double GetCurrentHealth() {
+            if (Enemy is not null)
+            {
+                return Enemy.Health;
+            }
+            else
+            {
+                return Character.CurrentHealth;
+            }
+        }
     }
 }

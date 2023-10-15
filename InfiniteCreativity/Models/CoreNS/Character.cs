@@ -86,10 +86,7 @@ namespace InfiniteCreativity.Models.CoreNS
         public int? Row { get; set; }
         public int? Col { get; set; }
 
-        public void TakeDamage(double damage)
-        {
-            CurrentHealth -= Math.Max(damage - Defense, 0);
-        }
+        
         public void TakeHealing(double heal)
         {
             if (CurrentHealth < Health)
@@ -99,6 +96,20 @@ namespace InfiniteCreativity.Models.CoreNS
                 {
                     CurrentHealth = Health;
                 }
+            }
+        }
+        public void TakeDamage(double damage)
+        {
+            CurrentHealth -= Math.Max(damage - Defense, 0);
+        }
+
+        public void TakeConditionDamage(double cDamage)
+        {
+            CurrentHealth -= Math.Max(cDamage, 0);
+
+            if (CurrentHealth <= 0)
+            {
+                CurrentHealth = 0;
             }
         }
 

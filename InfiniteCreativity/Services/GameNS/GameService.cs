@@ -148,6 +148,12 @@ namespace InfiniteCreativity.Services.GameNS
                                 .ThenInclude(x => x.SkillHolder)
                                     .ThenInclude(x => x.Skill)
                                         .ThenInclude(x => x.Buffs)
+                    .Include(x => x.Characters)
+                        .ThenInclude(x => x.Character)
+                            .ThenInclude(x => x.SkillSlots)
+                                .ThenInclude(x => x.SkillHolder)
+                                    .ThenInclude(x => x.Skill)
+                                        .ThenInclude(x => x.Conditions)
                                             .AsSplitQuery();
             }
             if (withBattle)
@@ -162,7 +168,10 @@ namespace InfiniteCreativity.Services.GameNS
                                 .AsSplitQuery()
                     .Include(x => x.Battle)
                         .ThenInclude(x => x.Participants)
-                            .ThenInclude(x => x.Buffs);
+                            .ThenInclude(x => x.Buffs)
+                    .Include(x => x.Battle)
+                        .ThenInclude(x => x.Participants)
+                            .ThenInclude(x => x.Conditions);
             }
             return await gconn.Where(x => x.Id == currentPlayer.GConnections.First().Id).SingleAsync();
         }
@@ -392,9 +401,29 @@ namespace InfiniteCreativity.Services.GameNS
             var actions = new List<ShowBattleEventDTO>();
             var nextInTurn = _turnSimulator.GetNext(battle);
             var characterParticipants = battle.Participants.Where(x => x.Character is not null).ToList();
+            var enemyParticipants = battle.Participants.Where(x => x.Enemy is not null).ToList();
+
             while (nextInTurn.Enemy != null)
             {
                 actions.AddRange(TickBuffs(battle));
+                actions.AddRange(TickConditions(battle));
+                if (nextInTurn.GetCurrentHealth() <= 0)
+                {
+                    if (characterParticipants.All(x => x.Character.CurrentHealth <= 0))
+                    {
+                        actions.Add(HandleDefeat(battle, mapAccessor));
+                        return actions;
+                    }
+
+                    if (enemyParticipants.All(x=>x.GetCurrentHealth() <= 0))
+                    {
+                        actions.Add(HandleVictory(battle, mapAccessor));
+                        return actions;
+                    }
+                    nextInTurn = _turnSimulator.GetNext(battle);
+                    continue;
+                }
+  
                 actions.Add(new ShowBattleEventNextInTurnDTO()
                 {
                     SourceParticipantId = nextInTurn.Id,
@@ -402,15 +431,28 @@ namespace InfiniteCreativity.Services.GameNS
                 });
                 actions.AddRange(nextInTurn.Enemy.Turn(characterParticipants, nextInTurn));
 
+                nextInTurn = _turnSimulator.GetNext(battle);
+            }
+
+            actions.AddRange(TickBuffs(battle));
+            actions.AddRange(TickConditions(battle));
+
+            if (nextInTurn.GetCurrentHealth() <= 0)
+            {
                 if (characterParticipants.All(x => x.Character.CurrentHealth <= 0))
                 {
                     actions.Add(HandleDefeat(battle, mapAccessor));
                     return actions;
                 }
 
-                nextInTurn = _turnSimulator.GetNext(battle);
+                if (enemyParticipants.All(x => x.GetCurrentHealth() <= 0))
+                {
+                    actions.Add(HandleVictory(battle, mapAccessor));
+                    return actions;
+                }
+                actions.AddRange(HandleEnemyTurn(battle, mapAccessor));
             }
-            actions.AddRange(TickBuffs(battle));
+
             actions.Add(new ShowBattleEventNextInTurnDTO()
             {
                 SourceParticipantId = nextInTurn.Id,
@@ -434,6 +476,24 @@ namespace InfiniteCreativity.Services.GameNS
                     Buff = _mapper.Map<ShowBuffDTO>(y),
                 }));
                 x.Buffs.RemoveAll(y => y.Duration <= 0);
+            });
+            return result;
+        }
+
+        private IEnumerable<ShowBattleEventDTO> TickConditions(Battle battle)
+        {
+            var result = new List<ShowBattleEventDTO>();
+            battle.Participants.ForEach(x =>
+            {
+                x.Conditions.ForEach(y => result.AddRange(y.Tick(_mapper)));
+                var expiredConditions = x.Conditions.Where(y => y.Duration <= 0);
+                expiredConditions.ForEach(y => result.Add(new ShowBattleEventConditionExpiredDTO()
+                {
+                    SourceParticipantId = x.Id,
+                    TargetParticipantId = x.Id,
+                    Condition = _mapper.Map<ShowConditionDTO>(y),
+                }));
+                x.Conditions.RemoveAll(y => y.Duration <= 0);
             });
             return result;
         }
@@ -655,6 +715,55 @@ namespace InfiniteCreativity.Services.GameNS
             return result;
         }
 
+        private IEnumerable<ShowBattleEventDTO> ApplyConditions(ICollection<ConditionBlueprint> conditionBps, BattleParticipant target, BattleParticipant source)
+        {
+            var conditions = conditionBps.Select(x =>
+            {
+                switch (x.ConditionType)
+                {
+                    case ConditionType.Bleed:
+                        return new Bleed()
+                        {
+                            ID = Guid.NewGuid(),
+                            Duration = x.Duration,
+                            BattleParticipant = target,
+                            ConditionDamageMultiplier = source.Character.AbilityDamage * 0.5
+                        };
+                    default: throw new InvalidOperationException();
+                }
+            }).ToList();
+
+            conditions.ForEach(x =>
+            {
+                if (x.StacksDuration)
+                {
+                    var oldCondition = target.Conditions.FirstOrDefault(y => y.ConditionType == x.ConditionType);
+                    if (oldCondition is not null)
+                    {
+                        oldCondition.Duration += x.Duration;
+                        x.Duration = oldCondition.Duration;
+                        x.ID = oldCondition.ID;
+                        x.ConditionDamageMultiplier = oldCondition.ConditionDamageMultiplier;
+                    }
+                    else
+                    {
+                        target.Conditions.Add(x);
+                    }
+                }
+                else
+                {
+                    target.Conditions.Add(x);
+                }
+            });
+
+            return conditions.Select(x => new ShowBattleEventApplyConditionDTO
+            {
+                Condition = _mapper.Map<ShowConditionDTO>(x),
+                SourceParticipantId = source.Id,
+                TargetParticipantId = target.Id
+            });
+        }
+
         private IEnumerable<ShowBattleEventDTO> ApplyBuffs(ICollection<BuffBlueprint> buffBps, BattleParticipant target, BattleParticipant source)
         {
             var buffs = buffBps.Select(x =>
@@ -678,7 +787,7 @@ namespace InfiniteCreativity.Services.GameNS
                 {
                     var oldBuff = target.Buffs.FirstOrDefault(y => y.BuffType == x.BuffType);
                     if (oldBuff is not null)
-                    { 
+                    {
                         oldBuff.Duration += x.Duration;
                         x.Duration = oldBuff.Duration;
                         x.ID = oldBuff.ID;
@@ -724,6 +833,9 @@ namespace InfiniteCreativity.Services.GameNS
 
             List<ShowBattleEventDTO> result = new();
             result.AddRange(skill.SkillHolder.Skill.Activate(enemy, battle.NextInTurn, _mapper));
+
+            result.AddRange(ApplyConditions(skill.SkillHolder.Skill.Conditions, enemy ,battle.NextInTurn));
+
             if (battle.NextInTurn.CurrentActionGauge == 0)
             {
                 result.AddRange(HandleEnemyTurn(battle, mapAccessor));
