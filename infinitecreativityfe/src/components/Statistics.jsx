@@ -44,7 +44,7 @@ function Statistics(props) {
           stats?.defense ?? 0,
           stats?.damage ?? 0,
           stats?.abilityDamage ?? 0,
-          stats?.criticalChance ?? 0,
+          stats?.criticalChance*100 ?? 0,
           stats?.criticalMultiplier ?? 0,
         ],
         backgroundColor: "rgba(255, 99, 132, 0.2)",

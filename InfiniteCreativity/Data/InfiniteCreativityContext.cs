@@ -1,9 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using InfiniteCreativity.Models;
-using InfiniteCreativity.Models.Weapons;
-using InfiniteCreativity.Models.ArmorNs;
-using InfiniteCreativity.Models.Materials;
-using InfiniteCreativity.Models.Enemys;
+using InfiniteCreativity.Models.CoreNS.ArmorNs;
+using InfiniteCreativity.Models.CoreNS.Weapons;
+using InfiniteCreativity.Models.CoreNS.Materials;
+using InfiniteCreativity.Models.GameNS.Enemys;
+using InfiniteCreativity.Models.CoreNS;
+using InfiniteCreativity.Models.GameNS;
+using Entities;
+using DataObjects;
+using System.Reflection.Metadata;
 
 namespace InfiniteCreativity.Data
 {
@@ -32,5 +36,61 @@ namespace InfiniteCreativity.Data
         public DbSet<GConnection> GConnection { get; set; }
         public DbSet<Enemy> Enemy { get; set; }
         public DbSet<Boss> Boss { get; set; }
+        public DbSet<MapDataObject> Map { get; set; }
+        public DbSet<HexTileDataObject> HexTiles { get; set; }
+        public DbSet<EntityBaseDataObject> EntityBase { get; set; }
+        public DbSet<GameCharacter> GameCharacter { get; set; }
+        public DbSet<Skill> Skill { get; set; }
+        public DbSet<SkillHolder> SkillHolder { get; set; }
+        public DbSet<CharacterSkillSlot> CharacterSkillSlot { get; set; }
+        public DbSet<BattleParticipant> BattleParticipants { get; set; }
+        public DbSet<Battle> Battle { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<MapDataObject>()
+                .HasOne(e => e.GConnection)
+                .WithOne(e => e.Map)
+                .HasForeignKey<MapDataObject>(e => e.GConnectionId)
+                .IsRequired();
+
+            modelBuilder.Entity<EntityBaseDataObject>()
+                .HasOne(e => e.HexTileDataObject)
+                .WithOne(e => e.DetailEntity)
+                .HasForeignKey<EntityBaseDataObject>(e => e.HexTileDataObjectId);
+
+            modelBuilder.Entity<HexTileDataObject>()
+                .HasIndex(e => e.Id)
+                .IsUnique();
+
+            modelBuilder.Entity<GConnection>()
+                .HasOne(e => e.Player)
+                .WithMany(e => e.GConnections)
+                .HasForeignKey(e => e.PlayerId);
+
+            modelBuilder.Entity<Skill>()
+                .HasData(InfiniteCreativity.Models.CoreNS.Skill.SkillSeed.Values);
+
+            modelBuilder.Entity<SkillHolder>()
+                .HasOne(e => e.Skill)
+                .WithMany()
+                .HasForeignKey(e => e.SkillId);
+
+            modelBuilder.Entity<HexTileDataObject>()
+                .HasOne(e => e.Enemy)
+                .WithOne(e => e.Tile)
+                .HasForeignKey<HexTileDataObject>(e => e.EnemyId)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<BattleParticipant>()
+                .HasOne(e => e.Enemy)
+                .WithMany()
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Buff>();
+            modelBuilder.Entity<Rejuvenation>();
+            modelBuilder.Entity<BuffBlueprint>()
+                .HasData(InfiniteCreativity.Models.CoreNS.Skill.BuffBlueprintSeed.SelectMany(x => x.Value));
+        }
     }
 }

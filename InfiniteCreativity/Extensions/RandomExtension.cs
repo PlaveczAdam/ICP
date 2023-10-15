@@ -2,9 +2,9 @@
 {
     public static class RandomExtension
     {
-        public static T Next<T>(this Random random, List<T> items)
+        public static T? Next<T>(this Random random, List<T> items)
         {
-            return items[random.Next(0, items.Count)];
+            return items.Count == 0 ? default(T) : items[random.Next(0, items.Count)];
         }
 
         public static double NextDouble(this Random random, double min, double max)
@@ -16,6 +16,14 @@
         { 
             var duration = random.Next(min,max);
             return TimeSpan.FromMinutes(duration);
+        }
+
+        public static int NextCrit(this Random random, double critChance)
+        {
+            var guaranteed = (int)critChance;
+            var weight = critChance - guaranteed;
+            var roll = random.NextDouble();
+            return roll < weight ? guaranteed + 1 : guaranteed;
         }
     }
 }

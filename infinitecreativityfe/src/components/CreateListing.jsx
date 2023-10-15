@@ -9,10 +9,12 @@ function CreateListing(props) {
   const [price, setPrice] = useState(0);
   const [inventoryOpen, setInventoryOpen] = useState(false);
   const [counter, setCounter] = useState(1);
+  const [amount, setAmount] = useState(1);
+
   async function handleCreate() {
     const res = await fetch("/api/listing", {
       method: "POST",
-      body: JSON.stringify({ itemId: item.id, price: price }),
+      body: JSON.stringify({ itemId: item.id, price: price, amount: amount }),
       headers: { "Content-Type": "application/json" },
     });
     if (res.ok) {
@@ -73,6 +75,19 @@ function CreateListing(props) {
             ))}
           </Box>
         </Collapse>
+        <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="amount"
+              label="Amount"
+              name="amount"
+              autoFocus
+              InputProps={{ inputProps: { min: "1", max: item?.amount??1, step: "1" } }}
+              type="number"
+              value={amount}
+              onChange={(e) => setAmount(e.target.value)}
+            />
         <TextField
           margin="normal"
           required

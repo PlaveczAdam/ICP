@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InfiniteCreativity", "Infin
 EndProject
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "infinitecreativityfe", "InfiniteCreativityFE\infinitecreativityfe.esproj", "{36829832-A57D-42CA-9ABF-11BDBAD072F1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DTOs", "DTOs\DTOs.csproj", "{0C0590A7-DD89-4779-9D1B-5E1E25505740}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,6 +25,10 @@ Global
 		{36829832-A57D-42CA-9ABF-11BDBAD072F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{36829832-A57D-42CA-9ABF-11BDBAD072F1}.Release|Any CPU.Build.0 = Release|Any CPU
 		{36829832-A57D-42CA-9ABF-11BDBAD072F1}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{0C0590A7-DD89-4779-9D1B-5E1E25505740}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C0590A7-DD89-4779-9D1B-5E1E25505740}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0C0590A7-DD89-4779-9D1B-5E1E25505740}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C0590A7-DD89-4779-9D1B-5E1E25505740}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
