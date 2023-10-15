@@ -664,6 +664,7 @@ namespace InfiniteCreativity.Services.GameNS
                     case BuffType.Rejuvenation:
                         return new Rejuvenation()
                         {
+                            ID = Guid.NewGuid(),
                             Duration = x.Duration,
                             BattleParticipant = target
                         };
