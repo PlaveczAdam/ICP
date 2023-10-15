@@ -487,7 +487,7 @@ namespace InfiniteCreativity.Services.GameNS
             var result = new List<ShowBattleEventDTO>();
             battle.Participants.ForEach(x =>
             {
-                foreach (var condition in x.Conditions)
+                foreach (var condition in x.Conditions.OrderBy(y => y.ConditionType))
                 {
                     result.AddRange(condition.Tick(_mapper));
                     if (x.Conditions.Count == 0)
