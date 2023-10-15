@@ -487,7 +487,14 @@ namespace InfiniteCreativity.Services.GameNS
             var result = new List<ShowBattleEventDTO>();
             battle.Participants.ForEach(x =>
             {
-                x.Conditions.ForEach(y => result.AddRange(y.Tick(_mapper)));
+                foreach (var condition in x.Conditions)
+                {
+                    result.AddRange(condition.Tick(_mapper));
+                    if (x.Conditions.Count == 0)
+                    {
+                        break;
+                    }
+                }
                 var expiredConditions = x.Conditions.Where(y => y.Duration <= 0);
                 expiredConditions.ForEach(y => result.Add(new ShowBattleEventConditionExpiredDTO()
                 {
