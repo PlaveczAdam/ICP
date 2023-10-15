@@ -665,6 +665,7 @@ namespace InfiniteCreativity.Services.GameNS
                         return new Rejuvenation()
                         {
                             Duration = x.Duration,
+                            BattleParticipant = target
                         };
                     default: throw new InvalidOperationException();
                 }
