@@ -80,10 +80,14 @@ namespace DTOs.Game
         public ShowBuffDTO Buff { get; set; }
     }
 
-    public class ShowBattleEventRejuvenationTickDTO : ShowBattleEventDTO
+    public class ShowBattleEventBuffTickDTO : ShowBattleEventDTO
+    {
+        public ShowBuffDTO Buff { get; set; }
+    }
+
+    public class ShowBattleEventRejuvenationTickDTO : ShowBattleEventBuffTickDTO
     {
         public double NewAbilityResource { get; set; }
-        public ShowBuffDTO Buff { get; set; }
     }
 
     public class ShowBattleEventBuffExpiredDTO : ShowBattleEventDTO
@@ -91,15 +95,20 @@ namespace DTOs.Game
         public ShowBuffDTO Buff { get; set; }
     }
 
-    public class ShowBattleEventBleedTickDTO : ShowBattleEventDTO
+    public class ShowBattleEventBleedTickDTO : ShowBattleEventConditionTickDTO
     {
-        public ShowConditionDTO Condition { get; set; }
         public double NewTargetHealth { get; set; }
     }
     public class ShowBattleEventApplyConditionDTO : ShowBattleEventDTO
     {
         public ShowConditionDTO Condition { get; set; }
     }
+
+    public class ShowBattleEventConditionTickDTO : ShowBattleEventDTO
+    {
+        public ShowConditionDTO Condition { get; set; }
+    }
+
     public class ShowBattleEventConditionExpiredDTO : ShowBattleEventDTO
     {
         public ShowConditionDTO Condition { get; set; }
