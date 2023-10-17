@@ -14,5 +14,6 @@ namespace DTOs.Game
         public string Description { get; set; }
         public BuffType BuffType { get; set; }
         public int Duration { get; set; }
+        public bool StacksDuration { get; set; }
     }
 }
