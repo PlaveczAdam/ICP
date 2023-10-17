@@ -9,5 +9,6 @@ namespace DTOs.Enums.GameNS
     public enum ConditionType
     {
         Bleed,
+        Weakness,
     }
 }

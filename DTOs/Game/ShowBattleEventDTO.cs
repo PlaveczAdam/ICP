@@ -113,4 +113,8 @@ namespace DTOs.Game
     {
         public ShowConditionDTO Condition { get; set; }
     }
+    public class ShowBattleEventSkillCooldownDTO : ShowBattleEventDTO
+    {
+
+    }
 }

@@ -39,6 +39,19 @@ namespace InfiniteCreativity.Models.CoreNS
                 }
             },
             {
+                StackableType.GenericDebuff,
+                new Skill {
+                    Id = Guid.Parse("0DD69A53-D1FD-4D80-8ADD-AF15AC0666A6"),
+                    Name = "Debuff",
+                    Description = "nincs",
+                    Cooldown = 0,
+                    ResourceCost = 1,
+                    AbilityGaugeCost = 2,
+                    Damage = 2,
+                    TargetType = TargetType.Enemy
+                }
+            },
+            {
                 StackableType.HealSkill,
                 new Skill {
                     Id = Guid.Parse("be29078b-1e09-4b15-8802-77a8e3c8fd09"),
@@ -48,6 +61,19 @@ namespace InfiniteCreativity.Models.CoreNS
                     ResourceCost = 2,
                     AbilityGaugeCost = 1,
                     Damage = 2,
+                    TargetType = TargetType.Ally,
+                }
+            },
+            {
+                StackableType.ContinousBuff,
+                new Skill {
+                    Id = Guid.Parse("1CEFB293-B21C-415C-A2F9-A8B74104624E"),
+                    Name = "Generic Continous Buff",
+                    Description = "buff",
+                    Cooldown = 2,
+                    ResourceCost = 2,
+                    AbilityGaugeCost = 1,
+                    Damage = 0,
                     TargetType = TargetType.Ally,
                 }
             },
@@ -68,6 +94,19 @@ namespace InfiniteCreativity.Models.CoreNS
                 }
             },
             {
+                StackableType.GenericDebuff,
+                new SkillHolder {
+                    Name = "Debuff",
+                    Description = "nincs",
+                    ImageName = ImageName.Stone,
+                    ItemType = ItemType.Skill,
+                    StackableType = StackableType.GenericDebuff,
+                    Value = 1,
+                    Rarity = RarityType.Common,
+                    SkillId = SkillSeed[StackableType.GenericDebuff].Id,
+                }
+            },
+            {
                 StackableType.HealSkill,
                 new SkillHolder {
                     Name = "GenericHealing",
@@ -80,10 +119,23 @@ namespace InfiniteCreativity.Models.CoreNS
                     SkillId = SkillSeed[StackableType.HealSkill].Id,
                 }
             },
+            {
+                StackableType.ContinousBuff,
+                new SkillHolder {
+                    Name = "Generic Continous Buff",
+                    Description = "buff",
+                    ImageName = ImageName.TheRock,
+                    ItemType = ItemType.Skill,
+                    StackableType = StackableType.ContinousBuff,
+                    Value = 1,
+                    Rarity = RarityType.Common,
+                    SkillId = SkillSeed[StackableType.ContinousBuff].Id,
+                }
+            },
         };
 
         public static Dictionary<StackableType, List<ConditionBlueprint>> ConditionBlueprintSeed = new Dictionary<StackableType, List<ConditionBlueprint>>() {
-        {
+            {
                 StackableType.FirstSkill,
                 new List<ConditionBlueprint> () {
                     new ConditionBlueprint
@@ -95,10 +147,22 @@ namespace InfiniteCreativity.Models.CoreNS
                     },
                 }
             },
+            {
+                StackableType.GenericDebuff,
+                new List<ConditionBlueprint> () {
+                    new ConditionBlueprint
+                    {
+                        ID = Guid.Parse("316EC03B-C2CD-4196-AAEF-E3FA0C203D6D"),
+                        ConditionType = ConditionType.Weakness,
+                        Duration = 10,
+                        SkillId = SkillSeed[StackableType.GenericDebuff].Id
+                    },
+                }
+            },
         };
 
         public static Dictionary<StackableType, List<BuffBlueprint>> BuffBlueprintSeed = new Dictionary<StackableType, List<BuffBlueprint>>() {
-        {
+            {
                 StackableType.HealSkill,
                 new List<BuffBlueprint> () {
                     new BuffBlueprint
@@ -110,9 +174,22 @@ namespace InfiniteCreativity.Models.CoreNS
                     },
                 }
             },
+
+            {
+                StackableType.ContinousBuff,
+                new List<BuffBlueprint> () {
+                    new BuffBlueprint
+                    {
+                        ID = Guid.Parse("B4B2E548-24F8-4A86-8308-B634284FB0E8"),
+                        BuffType = BuffType.Might,
+                        Duration = 10,
+                        SkillId = SkillSeed[StackableType.ContinousBuff].Id
+                    },
+                }
+            },
         };
 
-        public IEnumerable<ShowBattleEventDTO> Activate(BattleParticipant enemy, BattleParticipant caster, IMapper mapper)
+        public IEnumerable<ShowBattleEventDTO> Activate(BattleParticipant enemy, BattleParticipant caster, IMapper mapper )
         {
             var damage = Damage * caster.Character!.AbilityDamage;
             var crit = _rnd.NextCrit(caster.Character.CriticalChance);

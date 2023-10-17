@@ -8,6 +8,8 @@
         Fish,
         TheRock,
         FirstSkill,
-        HealSkill
+        HealSkill,
+        ContinousBuff,
+        GenericDebuff
     }
 }

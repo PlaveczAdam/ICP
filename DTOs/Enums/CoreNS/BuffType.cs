@@ -9,6 +9,6 @@ namespace DTOs.Enums.CoreNS
     public enum BuffType
     {
         Rejuvenation,
-
+        Might,
     }
 }

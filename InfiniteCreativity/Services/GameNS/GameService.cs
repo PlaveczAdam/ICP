@@ -387,6 +387,7 @@ namespace InfiniteCreativity.Services.GameNS
             }
             var mapAccessor = new GameMapAccessor(gconn.Map);
             gconn.Battle.HasStarted = true;
+            gconn.Characters.ForEach(x => x.Character.SkillSlots.ForEach(y => y.CurrentCooldown = 0));
             var enemyActions = HandleEnemyTurn(gconn.Battle, mapAccessor);
             var battleState = _mapper.Map<ShowBattleStateDTO>(gconn.Battle);
             battleState.BattleEvents = enemyActions;
@@ -407,6 +408,7 @@ namespace InfiniteCreativity.Services.GameNS
             {
                 actions.AddRange(TickBuffs(battle));
                 actions.AddRange(TickConditions(battle));
+                actions.Add(ProcessCooldown(battle));
                 if (characterParticipants.All(x => x.Character.CurrentHealth <= 0))
                 {
                     actions.Add(HandleDefeat(battle, mapAccessor));
@@ -437,7 +439,7 @@ namespace InfiniteCreativity.Services.GameNS
 
             actions.AddRange(TickBuffs(battle));
             actions.AddRange(TickConditions(battle));
-
+            actions.Add(ProcessCooldown(battle));
             if (characterParticipants.All(x => x.Character.CurrentHealth <= 0))
             {
                 actions.Add(HandleDefeat(battle, mapAccessor));
@@ -462,6 +464,14 @@ namespace InfiniteCreativity.Services.GameNS
             });
 
             return actions;
+        }
+
+        private ShowBattleEventDTO ProcessCooldown(Battle battle)
+        {
+            battle.Participants
+                .Where(x => x.Character is not null)
+                    .ForEach(x => x.Character.SkillSlots.ForEach(y => y.CurrentCooldown--));
+            return new ShowBattleEventSkillCooldownDTO { };
         }
 
         private IEnumerable<ShowBattleEventDTO> TickBuffs(Battle battle)
@@ -686,6 +696,11 @@ namespace InfiniteCreativity.Services.GameNS
             var skill = battle.NextInTurn.Character.SkillSlots.First(x => x.Id == skillAction.SkillSlotId);
             var target = battle.Participants.First(x => x.Id == skillAction.TargetId && x.Character is not null);
 
+            if (skill.CurrentCooldown > 0)
+            {
+                throw new InvalidOperationException("Skill on cooldown.");
+            }
+
             if (target.Character.CurrentHealth <= 0)
             {
                 throw new InvalidOperationException("Already dead.");
@@ -715,6 +730,7 @@ namespace InfiniteCreativity.Services.GameNS
 
             var buffs = skill.SkillHolder.Skill.Buffs;
             result.AddRange(ApplyBuffs(buffs, target, battle.NextInTurn));
+            skill.CurrentCooldown = skill.SkillHolder.Skill.Cooldown;
 
             if (battle.NextInTurn.CurrentActionGauge == 0)
             {
@@ -825,6 +841,11 @@ namespace InfiniteCreativity.Services.GameNS
             var skill = battle.NextInTurn.Character.SkillSlots.First(x => x.Id == skillAction.SkillSlotId);
             var enemy = battle.Participants.First(x => x.Id == skillAction.TargetId);
 
+            if (skill.CurrentCooldown > 0)
+            {
+                throw new InvalidOperationException("Skill on cooldown.");
+            }
+
             if (enemy.Enemy.Health <= 0)
             {
                 throw new InvalidOperationException("Already dead.");
@@ -842,6 +863,7 @@ namespace InfiniteCreativity.Services.GameNS
 
             List<ShowBattleEventDTO> result = new();
             result.AddRange(skill.SkillHolder.Skill.Activate(enemy, battle.NextInTurn, _mapper));
+            skill.CurrentCooldown = skill.SkillHolder.Skill.Cooldown;
 
             result.AddRange(ApplyConditions(skill.SkillHolder.Skill.Conditions, enemy ,battle.NextInTurn));
 
