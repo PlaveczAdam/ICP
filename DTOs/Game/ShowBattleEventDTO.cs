@@ -77,7 +77,7 @@ namespace DTOs.Game
 
     public class ShowBattleEventApplyBuffDTO : ShowBattleEventDTO
     {
-        public ShowBuffDTO Buff { get; set; }
+        public List<ShowBuffDTO> Buffs { get; set; }
     }
 
     public class ShowBattleEventBuffTickDTO : ShowBattleEventDTO

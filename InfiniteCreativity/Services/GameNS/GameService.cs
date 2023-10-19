@@ -854,12 +854,14 @@ namespace InfiniteCreativity.Services.GameNS
                 }
             });
 
-            return buffs.Select(x => new ShowBattleEventApplyBuffDTO
+            var res = new List<ShowBattleEventApplyBuffDTO>();
+            res.Add(new ShowBattleEventApplyBuffDTO
             {
-                Buff = _mapper.Map<ShowBuffDTO>(x),
+                Buffs = _mapper.Map<List<ShowBuffDTO>>(buffs),
                 SourceParticipantId = source.Id,
                 TargetParticipantId = target.Id
             });
+            return res;
         }
 
         private IEnumerable<ShowBattleEventDTO> PlayerUsesSkill(CreatePlayerActionUseSkillOnEnemy skillAction, Battle battle, GameMapAccessor mapAccessor)
