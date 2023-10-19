@@ -183,7 +183,8 @@ namespace InfiniteCreativity.Models.CoreNS
                         ID = Guid.Parse("B4B2E548-24F8-4A86-8308-B634284FB0E8"),
                         BuffType = BuffType.Might,
                         Duration = 10,
-                        SkillId = SkillSeed[StackableType.ContinousBuff].Id
+                        SkillId = SkillSeed[StackableType.ContinousBuff].Id, 
+                        Stacks = 99
                     },
                 }
             },

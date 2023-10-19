@@ -803,26 +803,33 @@ namespace InfiniteCreativity.Services.GameNS
 
         private IEnumerable<ShowBattleEventDTO> ApplyBuffs(ICollection<BuffBlueprint> buffBps, BattleParticipant target, BattleParticipant source)
         {
-            var buffs = buffBps.Select<BuffBlueprint, Buff>(x =>
+            var buffs = buffBps.SelectMany<BuffBlueprint, Buff>(x =>
             {
-                switch (x.BuffType)
+                var res = new List<Buff>();
+                for (int i = 0; i < x.Stacks; i++)
                 {
-                    case BuffType.Rejuvenation:
-                        return new Rejuvenation()
-                        {
-                            ID = Guid.NewGuid(),
-                            Duration = x.Duration,
-                            BattleParticipant = target
-                        };
-                    case BuffType.Might:
-                        return new Might()
-                        {
-                            ID = Guid.NewGuid(),
-                            Duration = x.Duration,
-                            BattleParticipant = target
-                        };
-                    default: throw new InvalidOperationException();
+                    switch (x.BuffType)
+                    {
+                        case BuffType.Rejuvenation:
+                            res.Add(new Rejuvenation()
+                            {
+                                ID = Guid.NewGuid(),
+                                Duration = x.Duration,
+                                BattleParticipant = target
+                            });
+                            break;
+                        case BuffType.Might:
+                            res.Add( new Might()
+                            {
+                                ID = Guid.NewGuid(),
+                                Duration = x.Duration,
+                                BattleParticipant = target
+                            });
+                            break;
+                        default: throw new InvalidOperationException();
+                    }
                 }
+                return res;
             }).ToList();
 
             buffs.ForEach(x =>
