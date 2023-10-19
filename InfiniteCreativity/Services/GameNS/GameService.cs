@@ -17,6 +17,7 @@ using InfiniteCreativity.Services.MapPatherNS;
 using Map;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Linq;
 using static MoreLinq.Extensions.ForEachExtension;
 
 namespace InfiniteCreativity.Services.GameNS
@@ -746,7 +747,7 @@ namespace InfiniteCreativity.Services.GameNS
 
         private IEnumerable<ShowBattleEventDTO> ApplyConditions(ICollection<ConditionBlueprint> conditionBps, BattleParticipant target, BattleParticipant source)
         {
-            var conditions = conditionBps.Select(x =>
+            var conditions = conditionBps.Select<ConditionBlueprint, Condition>(x =>
             {
                 switch (x.ConditionType)
                 {
@@ -757,6 +758,13 @@ namespace InfiniteCreativity.Services.GameNS
                             Duration = x.Duration,
                             BattleParticipant = target,
                             ConditionDamageMultiplier = source.Character.AbilityDamage * 0.5
+                        };
+                    case ConditionType.Weakness:
+                        return new Weakness()
+                        {
+                            ID = Guid.NewGuid(),
+                            Duration = x.Duration,
+                            BattleParticipant = target,
                         };
                     default: throw new InvalidOperationException();
                 }
@@ -795,12 +803,19 @@ namespace InfiniteCreativity.Services.GameNS
 
         private IEnumerable<ShowBattleEventDTO> ApplyBuffs(ICollection<BuffBlueprint> buffBps, BattleParticipant target, BattleParticipant source)
         {
-            var buffs = buffBps.Select(x =>
+            var buffs = buffBps.Select<BuffBlueprint, Buff>(x =>
             {
                 switch (x.BuffType)
                 {
                     case BuffType.Rejuvenation:
                         return new Rejuvenation()
+                        {
+                            ID = Guid.NewGuid(),
+                            Duration = x.Duration,
+                            BattleParticipant = target
+                        };
+                    case BuffType.Might:
+                        return new Might()
                         {
                             ID = Guid.NewGuid(),
                             Duration = x.Duration,
