@@ -116,7 +116,8 @@ namespace InfiniteCreativity.Models.CoreNS
         public IEnumerable<ShowBattleEventDTO> AutoAttack(BattleParticipant enemy, BattleParticipant attacker)
         {
             var crit = _rnd.NextCrit(CriticalChance);
-            var damage = Damage * Math.Pow(CriticalMultiplier, crit);
+            var modifiers = attacker.CalculateStatModifications();
+            var damage = Damage * Math.Pow(CriticalMultiplier, crit) * modifiers.DamageMultiplier;
 
             enemy.Enemy!.TakeDamage(damage);
             attacker.CurrentActionGauge -= 1;

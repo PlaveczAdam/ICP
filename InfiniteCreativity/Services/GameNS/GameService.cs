@@ -727,6 +727,10 @@ namespace InfiniteCreativity.Services.GameNS
             {
                 result.AddRange(skill.SkillHolder.Skill.ActivateHeal(target, battle.NextInTurn, _mapper));
             }
+            else
+            {
+                result.AddRange(skill.SkillHolder.Skill.ActivateBuffOnly(target, battle.NextInTurn, _mapper));
+            }
 
             var buffs = skill.SkillHolder.Skill.Buffs;
             result.AddRange(ApplyBuffs(buffs, target, battle.NextInTurn));

@@ -51,4 +51,41 @@ namespace InfiniteCreativity.Models.CoreNS
             };
         }
     }
+
+    public class StatModifications
+    {
+        public double DamageMultiplier { get; set; } = 1;
+        public double DefenseMultiplier { get; set; } = 1;
+        public StatModifications Merge(StatModifications other) {
+            return new StatModifications() { DamageMultiplier = DamageMultiplier * other.DamageMultiplier, DefenseMultiplier = DefenseMultiplier * other.DefenseMultiplier};
+        }
+    }
+
+    public abstract class PassiveBuff : Buff
+    { 
+        public abstract StatModifications StatModifications { get; }
+        public override ShowBattleEventDTO Tick(IMapper mapper)
+        {
+            Duration--;
+            return new ShowBattleEventBuffTickDTO() {
+                SourceParticipantId = BattleParticipant.Id,
+                TargetParticipantId = BattleParticipant.Id,
+                Buff = mapper.Map<ShowBuffDTO>(this),
+            };
+        }
+    }
+
+    public class Might : PassiveBuff
+    {
+        public override string Name => "Might";
+
+        public override string Description => "stronk";
+
+        public override BuffType BuffType => BuffType.Might;
+
+        public override bool StacksDuration => false;
+        public override StatModifications StatModifications => new StatModifications { 
+            DamageMultiplier = 1.05
+        };
+    }
 }

@@ -42,12 +42,12 @@ namespace InfiniteCreativity.Models.CoreNS
                 StackableType.GenericDebuff,
                 new Skill {
                     Id = Guid.Parse("0DD69A53-D1FD-4D80-8ADD-AF15AC0666A6"),
-                    Name = "Debuff",
+                    Name = "Weakness",
                     Description = "nincs",
                     Cooldown = 0,
                     ResourceCost = 1,
                     AbilityGaugeCost = 2,
-                    Damage = 2,
+                    Damage = 0,
                     TargetType = TargetType.Enemy
                 }
             },
@@ -193,7 +193,8 @@ namespace InfiniteCreativity.Models.CoreNS
         {
             var damage = Damage * caster.Character!.AbilityDamage;
             var crit = _rnd.NextCrit(caster.Character.CriticalChance);
-            damage *= Math.Pow(caster.Character.CriticalMultiplier,  crit);
+            var modifier = caster.CalculateStatModifications();
+            damage *= Math.Pow(caster.Character.CriticalMultiplier,  crit) * modifier.DamageMultiplier;
 
             enemy.Enemy!.TakeDamage(damage);
             caster.Character.CurrentAbilityResource -= ResourceCost;
@@ -230,6 +231,24 @@ namespace InfiniteCreativity.Models.CoreNS
                     SourceParticipantId = caster.Id,
                     TargetParticipantId = character.Id,
                     NewTargetHp = character.Character.CurrentHealth,
+                    NewAbilityGauge = caster.CurrentActionGauge,
+                    NewResource = caster.Character.CurrentAbilityResource,
+                    Skill = mapper.Map<ShowSkillDTO>(this),
+                }
+            };
+        }
+
+        internal IEnumerable<ShowBattleEventDTO> ActivateBuffOnly(BattleParticipant character, BattleParticipant caster, IMapper mapper)
+        {
+            caster.Character.CurrentAbilityResource -= ResourceCost;
+            caster.CurrentActionGauge -= AbilityGaugeCost;
+
+            return new List<ShowBattleEventDTO>()
+            {
+                new ShowBattleEventCharacterBuffOnlyDTO()
+                {
+                    SourceParticipantId = caster.Id,
+                    TargetParticipantId = character.Id,
                     NewAbilityGauge = caster.CurrentActionGauge,
                     NewResource = caster.Character.CurrentAbilityResource,
                     Skill = mapper.Map<ShowSkillDTO>(this),

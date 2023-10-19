@@ -15,6 +15,12 @@ namespace InfiniteCreativity.Models.CoreNS
         public int ActionGauge => (int)CurrentSpeed / 10;
         public List<Buff> Buffs { get; set; } = new List<Buff>();
         public List<Condition> Conditions { get; set; } = new List<Condition>();
+        public StatModifications CalculateStatModifications()
+        {
+            var buffModifications = Buffs.Where(x => x is PassiveBuff).Cast<PassiveBuff>().Aggregate(new StatModifications(), (acc, curr) => acc.Merge(curr.StatModifications));
+            var conditionModifications = Conditions.Where(x => x is PassiveCondition).Cast<PassiveCondition>().Aggregate(new StatModifications(), (acc, curr) => acc.Merge(curr.StatModifications));
+            return buffModifications.Merge(conditionModifications);
+        }
 
         public double GetCurrentHealth() {
             if (Enemy is not null)

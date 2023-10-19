@@ -71,4 +71,37 @@ namespace InfiniteCreativity.Models.CoreNS
         }
 
     }
+
+    public abstract class PassiveCondition : Condition
+    {
+        public abstract StatModifications StatModifications { get; }
+        public override List<ShowBattleEventDTO> Tick(IMapper mapper)
+        {
+            Duration--;
+            return new List<ShowBattleEventDTO>()
+            {
+                new ShowBattleEventConditionTickDTO()
+                {
+                    SourceParticipantId = BattleParticipant.Id,
+                    TargetParticipantId = BattleParticipant.Id,
+                    Condition = mapper.Map<ShowConditionDTO>(this),
+                }
+            };
+        }
+    }
+
+    public class Weakness : PassiveCondition
+    {
+        public override string Name => "Weakness";
+
+        public override string Description => "meh.";
+
+        public override ConditionType ConditionType => ConditionType.Weakness;
+
+        public override bool StacksDuration => true;
+
+        public override StatModifications StatModifications => new StatModifications() { 
+            DamageMultiplier = 0.5,
+        };
+    }
 }

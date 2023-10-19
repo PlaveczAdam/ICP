@@ -117,4 +117,10 @@ namespace DTOs.Game
     {
 
     }
+    public class ShowBattleEventCharacterBuffOnlyDTO : ShowBattleEventDTO
+    {
+        public ShowSkillDTO Skill { get; set; }
+        public int NewAbilityGauge { get; set; }
+        public double NewResource { get; set; }
+    }
 }
