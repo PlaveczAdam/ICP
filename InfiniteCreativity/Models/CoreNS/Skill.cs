@@ -77,6 +77,19 @@ namespace InfiniteCreativity.Models.CoreNS
                     TargetType = TargetType.Ally,
                 }
             },
+            {
+                StackableType.BigBleed,
+                new Skill {
+                    Id = Guid.Parse("3464D035-CACD-44BB-ADE9-DA5A1CA2B0D9"),
+                    Name = "BigBleed",
+                    Description = "n",
+                    Cooldown = 1,
+                    ResourceCost = 1,
+                    AbilityGaugeCost = 1,
+                    Damage = 0.5,
+                    TargetType = TargetType.Enemy,
+                }
+            },
         };
 
         public static Dictionary<StackableType, SkillHolder> SkillHolder = new Dictionary<StackableType, SkillHolder>() {
@@ -132,6 +145,19 @@ namespace InfiniteCreativity.Models.CoreNS
                     SkillId = SkillSeed[StackableType.ContinousBuff].Id,
                 }
             },
+            {
+                StackableType.BigBleed,
+                new SkillHolder {
+                    Name = "BigBleed",
+                    Description = "n",
+                    ImageName = ImageName.TheRock,
+                    ItemType = ItemType.Skill,
+                    StackableType = StackableType.BigBleed,
+                    Value = 1,
+                    Rarity = RarityType.Common,
+                    SkillId = SkillSeed[StackableType.BigBleed].Id,
+                }
+            },
         };
 
         public static Dictionary<StackableType, List<ConditionBlueprint>> ConditionBlueprintSeed = new Dictionary<StackableType, List<ConditionBlueprint>>() {
@@ -156,6 +182,19 @@ namespace InfiniteCreativity.Models.CoreNS
                         ConditionType = ConditionType.Weakness,
                         Duration = 10,
                         SkillId = SkillSeed[StackableType.GenericDebuff].Id
+                    },
+                }
+            },
+            {
+                StackableType.BigBleed,
+                new List<ConditionBlueprint> () {
+                    new ConditionBlueprint
+                    {
+                        ID = Guid.Parse("2A57C132-FDA6-4C02-85A5-D774B4D8555D"),
+                        ConditionType = ConditionType.Bleed,
+                        Duration = 10,
+                        SkillId = SkillSeed[StackableType.BigBleed].Id,
+                        Stacks = 99,
                     },
                 }
             },

@@ -10,6 +10,7 @@
         FirstSkill,
         HealSkill,
         ContinousBuff,
-        GenericDebuff
+        GenericDebuff,
+        BigBleed,
     }
 }

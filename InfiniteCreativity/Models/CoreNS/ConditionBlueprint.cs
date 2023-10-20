@@ -9,5 +9,6 @@ namespace InfiniteCreativity.Models.CoreNS
         public ConditionType ConditionType { get; set; }
         public int Duration { get; set; }
         public Guid SkillId { get; set; }
+        public int Stacks { get; set; } = 1;
     }
 }

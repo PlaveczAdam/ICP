@@ -101,7 +101,7 @@ namespace DTOs.Game
     }
     public class ShowBattleEventApplyConditionDTO : ShowBattleEventDTO
     {
-        public ShowConditionDTO Condition { get; set; }
+        public List<ShowConditionDTO> Conditions { get; set; }
     }
 
     public class ShowBattleEventConditionTickDTO : ShowBattleEventDTO

@@ -747,27 +747,34 @@ namespace InfiniteCreativity.Services.GameNS
 
         private IEnumerable<ShowBattleEventDTO> ApplyConditions(ICollection<ConditionBlueprint> conditionBps, BattleParticipant target, BattleParticipant source)
         {
-            var conditions = conditionBps.Select<ConditionBlueprint, Condition>(x =>
+            var conditions = conditionBps.SelectMany<ConditionBlueprint, Condition>(x =>
             {
-                switch (x.ConditionType)
+                var res = new List<Condition>();
+                for (int i = 0; i < x.Stacks; i++)
                 {
-                    case ConditionType.Bleed:
-                        return new Bleed()
-                        {
-                            ID = Guid.NewGuid(),
-                            Duration = x.Duration,
-                            BattleParticipant = target,
-                            ConditionDamageMultiplier = source.Character.AbilityDamage * 0.5
-                        };
-                    case ConditionType.Weakness:
-                        return new Weakness()
-                        {
-                            ID = Guid.NewGuid(),
-                            Duration = x.Duration,
-                            BattleParticipant = target,
-                        };
-                    default: throw new InvalidOperationException();
+                    switch (x.ConditionType)
+                    {
+                        case ConditionType.Bleed:
+                            res.Add( new Bleed()
+                            {
+                                ID = Guid.NewGuid(),
+                                Duration = x.Duration,
+                                BattleParticipant = target,
+                                ConditionDamageMultiplier = source.Character.AbilityDamage * 0.5
+                            });
+                            break;
+                        case ConditionType.Weakness:
+                            res.Add( new Weakness()
+                            {
+                                ID = Guid.NewGuid(),
+                                Duration = x.Duration,
+                                BattleParticipant = target,
+                            });
+                            break;
+                        default: throw new InvalidOperationException();
+                    }
                 }
+                return res;
             }).ToList();
 
             conditions.ForEach(x =>
@@ -792,13 +799,14 @@ namespace InfiniteCreativity.Services.GameNS
                     target.Conditions.Add(x);
                 }
             });
-
-            return conditions.Select(x => new ShowBattleEventApplyConditionDTO
+            var res = new List<ShowBattleEventApplyConditionDTO>();
+            res.Add(new ShowBattleEventApplyConditionDTO
             {
-                Condition = _mapper.Map<ShowConditionDTO>(x),
+                Conditions = _mapper.Map<List<ShowConditionDTO>>(conditions),
                 SourceParticipantId = source.Id,
                 TargetParticipantId = target.Id
             });
+            return res;
         }
 
         private IEnumerable<ShowBattleEventDTO> ApplyBuffs(ICollection<BuffBlueprint> buffBps, BattleParticipant target, BattleParticipant source)
