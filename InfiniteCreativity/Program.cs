@@ -75,6 +75,7 @@ builder.Services.AddHostedService<QuestScheduler>();
 builder.Services.AddScoped<MapPather>();
 builder.Services.AddScoped<MapGenerator>();
 builder.Services.AddScoped<TurnSimulator>();
+builder.Services.AddScoped<MapGeneratorPresets>();
 
 builder.Services.AddSingleton<MapPresetFragments>();
 

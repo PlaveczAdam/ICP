@@ -36,7 +36,7 @@ namespace InfiniteCreativity.Migrations
                     b.HasIndex("HexTileDataObjectId")
                         .IsUnique();
 
-                    b.ToTable("EntityBase");
+                    b.ToTable("EntityBase", (string)null);
                 });
 
             modelBuilder.Entity("Entities.MapDataObject", b =>
@@ -59,7 +59,7 @@ namespace InfiniteCreativity.Migrations
                     b.HasIndex("GConnectionId")
                         .IsUnique();
 
-                    b.ToTable("Map");
+                    b.ToTable("Map", (string)null);
                 });
 
             modelBuilder.Entity("InfiniteCreativity.Models.CoreNS.BattleParticipant", b =>
@@ -94,7 +94,7 @@ namespace InfiniteCreativity.Migrations
 
                     b.HasIndex("EnemyId");
 
-                    b.ToTable("BattleParticipants");
+                    b.ToTable("BattleParticipants", (string)null);
                 });
 
             modelBuilder.Entity("InfiniteCreativity.Models.CoreNS.Buff", b =>
@@ -116,7 +116,7 @@ namespace InfiniteCreativity.Migrations
 
                     b.HasIndex("BattleParticipantId");
 
-                    b.ToTable("Buff");
+                    b.ToTable("Buff", (string)null);
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("Buff");
 
@@ -145,7 +145,7 @@ namespace InfiniteCreativity.Migrations
 
                     b.HasIndex("SkillId");
 
-                    b.ToTable("BuffBlueprint");
+                    b.ToTable("BuffBlueprint", (string)null);
 
                     b.HasData(
                         new
@@ -244,7 +244,7 @@ namespace InfiniteCreativity.Migrations
 
                     b.HasIndex("WeaponId");
 
-                    b.ToTable("Character");
+                    b.ToTable("Character", (string)null);
                 });
 
             modelBuilder.Entity("InfiniteCreativity.Models.CoreNS.CharacterSkillSlot", b =>
@@ -271,7 +271,7 @@ namespace InfiniteCreativity.Migrations
 
                     b.HasIndex("SkillHolderId");
 
-                    b.ToTable("CharacterSkillSlot");
+                    b.ToTable("CharacterSkillSlot", (string)null);
                 });
 
             modelBuilder.Entity("InfiniteCreativity.Models.CoreNS.Condition", b =>
@@ -296,7 +296,7 @@ namespace InfiniteCreativity.Migrations
 
                     b.HasIndex("BattleParticipantId");
 
-                    b.ToTable("Condition");
+                    b.ToTable("Condition", (string)null);
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("Condition");
 
@@ -325,7 +325,7 @@ namespace InfiniteCreativity.Migrations
 
                     b.HasIndex("SkillId");
 
-                    b.ToTable("ConditionBlueprint");
+                    b.ToTable("ConditionBlueprint", (string)null);
 
                     b.HasData(
                         new
@@ -378,7 +378,7 @@ namespace InfiniteCreativity.Migrations
 
                     b.HasIndex("PlayerId");
 
-                    b.ToTable("FeConnection");
+                    b.ToTable("FeConnection", (string)null);
                 });
 
             modelBuilder.Entity("InfiniteCreativity.Models.CoreNS.Item", b =>
@@ -424,7 +424,7 @@ namespace InfiniteCreativity.Migrations
 
                     b.HasIndex("QuestId");
 
-                    b.ToTable("Item");
+                    b.ToTable("Item", (string)null);
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("Item");
 
@@ -455,7 +455,7 @@ namespace InfiniteCreativity.Migrations
 
                     b.HasIndex("SellerId");
 
-                    b.ToTable("Listing");
+                    b.ToTable("Listing", (string)null);
                 });
 
             modelBuilder.Entity("InfiniteCreativity.Models.CoreNS.Message", b =>
@@ -483,7 +483,7 @@ namespace InfiniteCreativity.Migrations
 
                     b.HasIndex("SenderId");
 
-                    b.ToTable("Message");
+                    b.ToTable("Message", (string)null);
                 });
 
             modelBuilder.Entity("InfiniteCreativity.Models.CoreNS.Player", b =>
@@ -511,7 +511,7 @@ namespace InfiniteCreativity.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Player");
+                    b.ToTable("Player", (string)null);
                 });
 
             modelBuilder.Entity("InfiniteCreativity.Models.CoreNS.Quest", b =>
@@ -550,7 +550,7 @@ namespace InfiniteCreativity.Migrations
 
                     b.HasIndex("CharacterId");
 
-                    b.ToTable("Quest");
+                    b.ToTable("Quest", (string)null);
                 });
 
             modelBuilder.Entity("InfiniteCreativity.Models.CoreNS.Skill", b =>
@@ -584,7 +584,7 @@ namespace InfiniteCreativity.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Skill");
+                    b.ToTable("Skill", (string)null);
 
                     b.HasData(
                         new
@@ -660,7 +660,7 @@ namespace InfiniteCreativity.Migrations
 
                     b.HasIndex("NextInTurnId");
 
-                    b.ToTable("Battle");
+                    b.ToTable("Battle", (string)null);
                 });
 
             modelBuilder.Entity("InfiniteCreativity.Models.GameNS.Enemys.Enemy", b =>
@@ -689,7 +689,7 @@ namespace InfiniteCreativity.Migrations
 
                     b.HasIndex("GConnectionId");
 
-                    b.ToTable("Enemy");
+                    b.ToTable("Enemy", (string)null);
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("Enemy");
 
@@ -721,7 +721,7 @@ namespace InfiniteCreativity.Migrations
 
                     b.HasIndex("PlayerId");
 
-                    b.ToTable("GConnection");
+                    b.ToTable("GConnection", (string)null);
                 });
 
             modelBuilder.Entity("InfiniteCreativity.Models.GameNS.GameCharacter", b =>
@@ -745,7 +745,7 @@ namespace InfiniteCreativity.Migrations
 
                     b.HasIndex("ConnectionId");
 
-                    b.ToTable("GameCharacter");
+                    b.ToTable("GameCharacter", (string)null);
                 });
 
             modelBuilder.Entity("InfiniteCreativity.Models.GameNS.HexTileDataObject", b =>
@@ -785,7 +785,7 @@ namespace InfiniteCreativity.Migrations
 
                     b.HasIndex("MapDataObjectId");
 
-                    b.ToTable("HexTiles");
+                    b.ToTable("HexTiles", (string)null);
                 });
 
             modelBuilder.Entity("InfiniteCreativity.Models.CoreNS.Might", b =>
