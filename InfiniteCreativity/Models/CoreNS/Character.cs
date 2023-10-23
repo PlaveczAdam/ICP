@@ -86,10 +86,7 @@ namespace InfiniteCreativity.Models.CoreNS
         public int? Row { get; set; }
         public int? Col { get; set; }
 
-        public void TakeDamage(double damage)
-        {
-            CurrentHealth -= Math.Max(damage - Defense, 0);
-        }
+        
         public void TakeHealing(double heal)
         {
             if (CurrentHealth < Health)
@@ -101,11 +98,26 @@ namespace InfiniteCreativity.Models.CoreNS
                 }
             }
         }
+        public void TakeDamage(double damage)
+        {
+            CurrentHealth -= Math.Max(damage - Defense, 0);
+        }
+
+        public void TakeConditionDamage(double cDamage)
+        {
+            CurrentHealth -= Math.Max(cDamage, 0);
+
+            if (CurrentHealth <= 0)
+            {
+                CurrentHealth = 0;
+            }
+        }
 
         public IEnumerable<ShowBattleEventDTO> AutoAttack(BattleParticipant enemy, BattleParticipant attacker)
         {
             var crit = _rnd.NextCrit(CriticalChance);
-            var damage = Damage * Math.Pow(CriticalMultiplier, crit);
+            var modifiers = attacker.CalculateStatModifications();
+            var damage = Damage * Math.Pow(CriticalMultiplier, crit) * modifiers.DamageMultiplier;
 
             enemy.Enemy!.TakeDamage(damage);
             attacker.CurrentActionGauge -= 1;

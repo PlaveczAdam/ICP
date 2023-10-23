@@ -1,4 +1,5 @@
 ﻿using DataObjects;
+using DTOs.Game;
 using Entities;
 using InfiniteCreativity.Models.Enums.GameNS;
 using InfiniteCreativity.Models.GameNS.Enemys;
@@ -22,7 +23,19 @@ namespace InfiniteCreativity.Models.GameNS
         public EntityBaseDataObject? DetailEntity { get; set; }
         public Enemy? Enemy { get; set; }
         public Guid? EnemyId { get; set; }
+        [NotMapped]
+        public int FreeNeighboursRight { get; set; }
+        [NotMapped]
+        public int FreeNeighboursDown { get; set; }
 
+        public bool CanFragmentFit(MapFragmentPresetDTO fragment)
+        {
+            if (FreeNeighboursRight >= fragment.Map[0].Count && FreeNeighboursDown >= fragment.Map.Count)
+            {
+                return true;
+            }
+            return false;
+        }
         public List<HexTileDataObject> GetNeighbours()
         {
             var neighbours = new List<HexTileDataObject>();

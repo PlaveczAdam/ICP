@@ -5,6 +5,7 @@ using InfiniteCreativity.Models.Enums.CoreNS;
 using InfiniteCreativity.Services.CoreNS;
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace InfiniteCreativity.Models.GameNS.Enemys
 {
@@ -38,6 +39,8 @@ namespace InfiniteCreativity.Models.GameNS.Enemys
         public List<ShowBattleEventDTO> Turn(List<BattleParticipant> characterParticipants, BattleParticipant selfParticipant)
         {
             var result = new List<ShowBattleEventDTO>();
+            var modifiers = selfParticipant.CalculateStatModifications();
+
             while (selfParticipant.CurrentActionGauge > 0)
             {
                 var validTargets = characterParticipants
@@ -49,7 +52,7 @@ namespace InfiniteCreativity.Models.GameNS.Enemys
                 var target = validTargets
                     .MaxBy(x => x.Character!.Defense);
 
-                target!.Character!.TakeDamage(CalculateDamage());
+                target!.Character!.TakeDamage(CalculateDamage(modifiers));
 
                 result.Add(new ShowBattleEventEnemyAttackDTO()
                 {
@@ -65,6 +68,7 @@ namespace InfiniteCreativity.Models.GameNS.Enemys
                         TargetParticipantId = target.Id,
                     });
                     target.Buffs.Clear();
+                    target.Conditions.Clear();
                 }
 
                 selfParticipant.CurrentActionGauge--;
@@ -72,17 +76,27 @@ namespace InfiniteCreativity.Models.GameNS.Enemys
 
             return result;
         }
-        public double CalculateDamage()
+        public double CalculateDamage(StatModifications modifications)
         {
             var critPower = _rnd.NextCrit(CriticalChance);
             var critMultiplier = Math.Pow(CriticalMultiplier, critPower);
 
-            return Damage * critMultiplier;
+            return Damage * critMultiplier * modifications.DamageMultiplier;
         }
 
         public void TakeDamage(double damage)
         {
             Health -= Math.Max(damage - Defense, 0);
+        }
+
+        public void TakeConditionDamage(double cDamage)
+        {
+            Health -= Math.Max(cDamage, 0);
+
+            if (Health <= 0)
+            {
+                Health = 0;
+            }
         }
     }
 }

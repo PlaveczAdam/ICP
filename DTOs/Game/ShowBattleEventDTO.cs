@@ -77,17 +77,50 @@ namespace DTOs.Game
 
     public class ShowBattleEventApplyBuffDTO : ShowBattleEventDTO
     {
+        public List<ShowBuffDTO> Buffs { get; set; }
+    }
+
+    public class ShowBattleEventBuffTickDTO : ShowBattleEventDTO
+    {
         public ShowBuffDTO Buff { get; set; }
     }
 
-    public class ShowBattleEventRejuvenationTickDTO : ShowBattleEventDTO
+    public class ShowBattleEventRejuvenationTickDTO : ShowBattleEventBuffTickDTO
     {
         public double NewAbilityResource { get; set; }
-        public ShowBuffDTO Buff { get; set; }
     }
 
     public class ShowBattleEventBuffExpiredDTO : ShowBattleEventDTO
     {
         public ShowBuffDTO Buff { get; set; }
+    }
+
+    public class ShowBattleEventBleedTickDTO : ShowBattleEventConditionTickDTO
+    {
+        public double NewTargetHealth { get; set; }
+    }
+    public class ShowBattleEventApplyConditionDTO : ShowBattleEventDTO
+    {
+        public List<ShowConditionDTO> Conditions { get; set; }
+    }
+
+    public class ShowBattleEventConditionTickDTO : ShowBattleEventDTO
+    {
+        public ShowConditionDTO Condition { get; set; }
+    }
+
+    public class ShowBattleEventConditionExpiredDTO : ShowBattleEventDTO
+    {
+        public ShowConditionDTO Condition { get; set; }
+    }
+    public class ShowBattleEventSkillCooldownDTO : ShowBattleEventDTO
+    {
+
+    }
+    public class ShowBattleEventCharacterBuffOnlyDTO : ShowBattleEventDTO
+    {
+        public ShowSkillDTO Skill { get; set; }
+        public int NewAbilityGauge { get; set; }
+        public double NewResource { get; set; }
     }
 }

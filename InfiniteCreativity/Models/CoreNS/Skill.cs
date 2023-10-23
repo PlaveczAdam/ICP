@@ -22,6 +22,7 @@ namespace InfiniteCreativity.Models.CoreNS
         public int Cooldown { get; set; }
         public TargetType TargetType { get; set; }
         public ICollection<BuffBlueprint> Buffs { get; set; } = new List<BuffBlueprint>();
+        public ICollection<ConditionBlueprint> Conditions { get; set; } = new List<ConditionBlueprint>();
 
         public static Dictionary<StackableType, Skill> SkillSeed = new Dictionary<StackableType, Skill>() {
             {
@@ -38,6 +39,19 @@ namespace InfiniteCreativity.Models.CoreNS
                 }
             },
             {
+                StackableType.GenericDebuff,
+                new Skill {
+                    Id = Guid.Parse("0DD69A53-D1FD-4D80-8ADD-AF15AC0666A6"),
+                    Name = "Weakness",
+                    Description = "nincs",
+                    Cooldown = 0,
+                    ResourceCost = 1,
+                    AbilityGaugeCost = 2,
+                    Damage = 0,
+                    TargetType = TargetType.Enemy
+                }
+            },
+            {
                 StackableType.HealSkill,
                 new Skill {
                     Id = Guid.Parse("be29078b-1e09-4b15-8802-77a8e3c8fd09"),
@@ -50,7 +64,34 @@ namespace InfiniteCreativity.Models.CoreNS
                     TargetType = TargetType.Ally,
                 }
             },
+            {
+                StackableType.ContinousBuff,
+                new Skill {
+                    Id = Guid.Parse("1CEFB293-B21C-415C-A2F9-A8B74104624E"),
+                    Name = "Generic Continous Buff",
+                    Description = "buff",
+                    Cooldown = 2,
+                    ResourceCost = 2,
+                    AbilityGaugeCost = 1,
+                    Damage = 0,
+                    TargetType = TargetType.Ally,
+                }
+            },
+            {
+                StackableType.BigBleed,
+                new Skill {
+                    Id = Guid.Parse("3464D035-CACD-44BB-ADE9-DA5A1CA2B0D9"),
+                    Name = "BigBleed",
+                    Description = "n",
+                    Cooldown = 1,
+                    ResourceCost = 1,
+                    AbilityGaugeCost = 1,
+                    Damage = 0.5,
+                    TargetType = TargetType.Enemy,
+                }
+            },
         };
+
         public static Dictionary<StackableType, SkillHolder> SkillHolder = new Dictionary<StackableType, SkillHolder>() {
             {
                 StackableType.FirstSkill,
@@ -66,6 +107,19 @@ namespace InfiniteCreativity.Models.CoreNS
                 }
             },
             {
+                StackableType.GenericDebuff,
+                new SkillHolder {
+                    Name = "Debuff",
+                    Description = "nincs",
+                    ImageName = ImageName.Stone,
+                    ItemType = ItemType.Skill,
+                    StackableType = StackableType.GenericDebuff,
+                    Value = 1,
+                    Rarity = RarityType.Common,
+                    SkillId = SkillSeed[StackableType.GenericDebuff].Id,
+                }
+            },
+            {
                 StackableType.HealSkill,
                 new SkillHolder {
                     Name = "GenericHealing",
@@ -78,10 +132,76 @@ namespace InfiniteCreativity.Models.CoreNS
                     SkillId = SkillSeed[StackableType.HealSkill].Id,
                 }
             },
+            {
+                StackableType.ContinousBuff,
+                new SkillHolder {
+                    Name = "Generic Continous Buff",
+                    Description = "buff",
+                    ImageName = ImageName.TheRock,
+                    ItemType = ItemType.Skill,
+                    StackableType = StackableType.ContinousBuff,
+                    Value = 1,
+                    Rarity = RarityType.Common,
+                    SkillId = SkillSeed[StackableType.ContinousBuff].Id,
+                }
+            },
+            {
+                StackableType.BigBleed,
+                new SkillHolder {
+                    Name = "BigBleed",
+                    Description = "n",
+                    ImageName = ImageName.TheRock,
+                    ItemType = ItemType.Skill,
+                    StackableType = StackableType.BigBleed,
+                    Value = 1,
+                    Rarity = RarityType.Common,
+                    SkillId = SkillSeed[StackableType.BigBleed].Id,
+                }
+            },
+        };
+
+        public static Dictionary<StackableType, List<ConditionBlueprint>> ConditionBlueprintSeed = new Dictionary<StackableType, List<ConditionBlueprint>>() {
+            {
+                StackableType.FirstSkill,
+                new List<ConditionBlueprint> () {
+                    new ConditionBlueprint
+                    {
+                        ID = Guid.Parse("C0AEFCAB-0958-469F-A331-EA1B0967B557"),
+                        ConditionType = ConditionType.Bleed,
+                        Duration = 10,
+                        SkillId = SkillSeed[StackableType.FirstSkill].Id
+                    },
+                }
+            },
+            {
+                StackableType.GenericDebuff,
+                new List<ConditionBlueprint> () {
+                    new ConditionBlueprint
+                    {
+                        ID = Guid.Parse("316EC03B-C2CD-4196-AAEF-E3FA0C203D6D"),
+                        ConditionType = ConditionType.Weakness,
+                        Duration = 10,
+                        SkillId = SkillSeed[StackableType.GenericDebuff].Id
+                    },
+                }
+            },
+            {
+                StackableType.BigBleed,
+                new List<ConditionBlueprint> () {
+                    new ConditionBlueprint
+                    {
+                        ID = Guid.Parse("2A57C132-FDA6-4C02-85A5-D774B4D8555D"),
+                        ConditionType = ConditionType.Bleed,
+                        Duration = 10,
+                        SkillId = SkillSeed[StackableType.BigBleed].Id,
+                        Stacks = 99,
+                    },
+                }
+            },
         };
 
         public static Dictionary<StackableType, List<BuffBlueprint>> BuffBlueprintSeed = new Dictionary<StackableType, List<BuffBlueprint>>() {
-         {
+            {
                 StackableType.HealSkill,
                 new List<BuffBlueprint> () {
                     new BuffBlueprint
@@ -93,12 +213,28 @@ namespace InfiniteCreativity.Models.CoreNS
                     },
                 }
             },
+
+            {
+                StackableType.ContinousBuff,
+                new List<BuffBlueprint> () {
+                    new BuffBlueprint
+                    {
+                        ID = Guid.Parse("B4B2E548-24F8-4A86-8308-B634284FB0E8"),
+                        BuffType = BuffType.Might,
+                        Duration = 10,
+                        SkillId = SkillSeed[StackableType.ContinousBuff].Id, 
+                        Stacks = 99
+                    },
+                }
+            },
         };
-        public IEnumerable<ShowBattleEventDTO> Activate(BattleParticipant enemy, BattleParticipant caster, IMapper mapper)
+
+        public IEnumerable<ShowBattleEventDTO> Activate(BattleParticipant enemy, BattleParticipant caster, IMapper mapper )
         {
             var damage = Damage * caster.Character!.AbilityDamage;
             var crit = _rnd.NextCrit(caster.Character.CriticalChance);
-            damage *= Math.Pow(caster.Character.CriticalMultiplier,  crit);
+            var modifier = caster.CalculateStatModifications();
+            damage *= Math.Pow(caster.Character.CriticalMultiplier,  crit) * modifier.DamageMultiplier;
 
             enemy.Enemy!.TakeDamage(damage);
             caster.Character.CurrentAbilityResource -= ResourceCost;
@@ -135,6 +271,24 @@ namespace InfiniteCreativity.Models.CoreNS
                     SourceParticipantId = caster.Id,
                     TargetParticipantId = character.Id,
                     NewTargetHp = character.Character.CurrentHealth,
+                    NewAbilityGauge = caster.CurrentActionGauge,
+                    NewResource = caster.Character.CurrentAbilityResource,
+                    Skill = mapper.Map<ShowSkillDTO>(this),
+                }
+            };
+        }
+
+        internal IEnumerable<ShowBattleEventDTO> ActivateBuffOnly(BattleParticipant character, BattleParticipant caster, IMapper mapper)
+        {
+            caster.Character.CurrentAbilityResource -= ResourceCost;
+            caster.CurrentActionGauge -= AbilityGaugeCost;
+
+            return new List<ShowBattleEventDTO>()
+            {
+                new ShowBattleEventCharacterBuffOnlyDTO()
+                {
+                    SourceParticipantId = caster.Id,
+                    TargetParticipantId = character.Id,
                     NewAbilityGauge = caster.CurrentActionGauge,
                     NewResource = caster.Character.CurrentAbilityResource,
                     Skill = mapper.Map<ShowSkillDTO>(this),

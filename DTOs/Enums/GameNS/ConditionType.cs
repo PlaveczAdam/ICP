@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DTOs.Enums.CoreNS
+namespace DTOs.Enums.GameNS
 {
-    public enum BuffType
+    public enum ConditionType
     {
-        Rejuvenation,
-        Might,
+        Bleed,
+        Weakness,
     }
 }
