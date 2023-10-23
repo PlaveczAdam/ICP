@@ -141,7 +141,7 @@ namespace Map
             startTile.GetNeighbours().ForEach(x => x.ReservedForPath = true);
 
             PlaceFragments(mapData, settings);
-            GenerateTrees(mapData, settings);
+            //GenerateTrees(mapData, settings);
         }
 
         private void PlaceFragments(GameMapAccessor mapData, MapGeneratorSettings settings)
@@ -151,7 +151,7 @@ namespace Map
             CalculateFreeNeighbours(mapData);
             foreach (var currentFragment in fragments)
             {
-                var candidates = mapData.HexTiles.SelectMany(x => x).Where(x => x.CanFragmentFit(currentFragment)).Shuffle();
+                var candidates = mapData.HexTiles.SelectMany(x => x).Where(x => x.RowIdx % 2 != 0 && x.CanFragmentFit(currentFragment)).Shuffle();
                 var actualPosition = candidates.FirstOrDefault(x => DoesPresetFragmentFit(mapData, x, currentFragment));
                 if (actualPosition is null)
                 {
