@@ -57,7 +57,7 @@ namespace InfiniteCreativity.Models.CoreNS
                 new SkillHolder {
                     Name = "First",
                     Description = "nincs",
-                    ImageName = ImageName.Stone,
+                    ImageName = ImageName.Damage,
                     ItemType = ItemType.Skill,
                     StackableType = StackableType.FirstSkill,
                     Value = 1,
@@ -70,7 +70,7 @@ namespace InfiniteCreativity.Models.CoreNS
                 new SkillHolder {
                     Name = "GenericHealing",
                     Description = "good for health",
-                    ImageName = ImageName.TheRock,
+                    ImageName = ImageName.Healing,
                     ItemType = ItemType.Skill,
                     StackableType = StackableType.HealSkill,
                     Value = 1,

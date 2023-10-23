@@ -15,5 +15,9 @@
 
         public const string Stone = "stone.png";
         public const string TheRock = "therock.png";
+
+        public const string Healing = "healing.png";
+        public const string Bleeding = "bleeding.png;";
+        public const string Damage = "damage.png";
     }
 }
