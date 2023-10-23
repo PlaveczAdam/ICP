@@ -363,7 +363,7 @@ namespace InfiniteCreativity.Services.GameNS
             var gma = new GameMapAccessor(gconn.Map);
 
             var emptyTiles = gma.HexTiles.SelectMany(hexTiles => hexTiles)
-                .Where(hexTile => hexTile.TileContent.IsWalkable() && !characters.Any(y=>(y.Character.Col == hexTile.ColIdx && y.Character.Row == hexTile.RowIdx)))
+                .Where(hexTile => hexTile.TileContent.IsSpawnable() && !characters.Any(y=>(y.Character.Col == hexTile.ColIdx && y.Character.Row == hexTile.RowIdx)))
                 .ToList().ShuffleInPlace(_rnd);
 
             var enemyTiles = Enumerable.Range(0, (int)_rnd.NextDouble(emptyTiles.Count() * 0.1, emptyTiles.Count() * 0.2)).Select(x => emptyTiles[x]);
