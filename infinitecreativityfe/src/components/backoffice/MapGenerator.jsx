@@ -15,7 +15,7 @@ function MapGenerator(props) {
   const [imp, setImp] = useState();
   const [map, setMap] = useState([]);
 
-  const scale = 7 / rowSize;
+  const scale = 5 / rowSize;
 
   function handleMapGenerateClick() {
     let newMap = [];
@@ -76,17 +76,17 @@ function MapGenerator(props) {
         {map.map((x) => (
           <Box
             display="flex"
-            marginTop={`${-53 * scale}px`}
-            gap={`${65 * scale}px`}
-            marginLeft={x[0].row % 2 === 0 ? `${92.5 * scale}px` : 0}
+            marginTop={`${-51 * scale}px`}
+            gap={`${0 * scale}px`}
+            marginLeft={x[0].row % 2 === 0 ? `${86.5 * scale}px` : 0}
             key={x[0].row}
             zIndex={colSize-x[0].row}
           >
             {x.map((y) => (
               <Box key={y.col} flexShrink={0} flexGrow={0} display="flex">
                 <img
-                  width={`${120 * scale}px`}
-                  height={`${104 * scale}px`}
+                  width={`${173 * scale}px`}
+                  height={`${200 * scale}px`}
                   src={images[y.content]}
                   onClick={(e) => handleClick(y, 1, e)}
                   onContextMenu={(e) => handleClick(y, -1, e)}
