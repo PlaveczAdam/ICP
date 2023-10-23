@@ -34,6 +34,7 @@ namespace InfiniteCreativity.Services.GameNS
         private INotificationService _notificationService;
         private MapPather _mapPather;
         private TurnSimulator _turnSimulator;
+        private MapGeneratorPresets _mapGeneratorPresets;
 
         public GameService(InfiniteCreativityContext context,
             ICharacterService characterService,
@@ -43,8 +44,8 @@ namespace InfiniteCreativity.Services.GameNS
             IGameEndService gameEndService,
             INotificationService notificationService,
             MapPather mapPather,
-            TurnSimulator turnSimulator
-            )
+            TurnSimulator turnSimulator,
+            MapGeneratorPresets mapGeneratorPresets)
         {
             _context = context;
             _characterService = characterService;
@@ -55,6 +56,7 @@ namespace InfiniteCreativity.Services.GameNS
             _notificationService = notificationService;
             _mapPather = mapPather;
             _turnSimulator = turnSimulator;
+            _mapGeneratorPresets = mapGeneratorPresets;
         }
 
         public async Task EndGame()
@@ -211,7 +213,7 @@ namespace InfiniteCreativity.Services.GameNS
             }
             var characters = createGameDTO.CharacterIds.Select(async x => await _characterService.GetCharacterById(x, currentPlayer, withEquipment: true)).Select(x=>x.Result).ToList();
             MapGenerator generator = new();
-            var map = generator.GenerateAndPlacePlayer(characters);
+            var map = generator.GenerateAndPlacePlayer(characters, _mapGeneratorPresets.GetPresetByMapType(createGameDTO.Maptype));
             map.GConnection = currentPlayer.GConnections.First();
             var ind = 0;
             characters.ForEach(x => _context.GameCharacter.Add(new GameCharacter()

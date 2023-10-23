@@ -33,6 +33,7 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js';
+import BoHome from "./components/backoffice/BoHome";
 
 ChartJS.register(
   RadialLinearScale,
@@ -568,6 +569,10 @@ function App() {
                   justifyContent="center"
                 >
                   <Routes>
+                    <Route 
+                    path="/bo"
+                    element={<BoHome></BoHome>}>
+                    </Route>
                     <Route
                       path="/registration"
                       element={<Registration />}
