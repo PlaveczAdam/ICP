@@ -141,7 +141,7 @@ namespace Map
             startTile.GetNeighbours().ForEach(x => x.ReservedForPath = true);
 
             PlaceFragments(mapData, settings);
-            //GenerateTrees(mapData, settings);
+            GenerateTrees(mapData, settings);
         }
 
         private void PlaceFragments(GameMapAccessor mapData, MapGeneratorSettings settings)
