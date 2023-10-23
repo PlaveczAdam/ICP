@@ -212,6 +212,7 @@ namespace Map
                         {
                             leftNeighbours[k].FreeNeighboursRight = leftNeighbours.Count - k;
                         }
+                        leftNeighbours.Clear();
                     }
                     else
                     { 
@@ -234,6 +235,7 @@ namespace Map
                         {
                             upNeighbours[k].FreeNeighboursDown = upNeighbours.Count - k;
                         }
+                        upNeighbours.Clear();
                     }
                     else
                     {
