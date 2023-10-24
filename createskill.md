@@ -1,0 +1,10 @@
+- [ ] Add new `StackableType`.
+- [ ] Add new `SkillSeed`.
+  - [ ] Generate new Guid for id.
+- [ ] Add new `SkillHolder`.
+- [ ] (OPTIONAL) Set `Buff(s)` or `Condition(s)`
+  - [About buffs and conditions](buff.md)
+  - [About passive buffs and conditions](passivebuff.md)
+- [ ] Add to loot pool ItemBlueprints.
+- [ ] Send icon to game.
+- [ ] `Add-Migration` and `Update-Database`
