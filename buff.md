@@ -1,1 +1,10 @@
-- [ ] Create new derived class from Buff or PassiveBuff.
+- [ ] Add new Bufftype to `Bufftype.cs`.
+- [ ] Add new ShowBattleEvent(new)TickDTO to `ShowBattleEventDTO.cs`.
+  - [ ] Include new value in DTO.
+- [ ] Create new derived class from `Buff.cs`.
+- [ ] Implement members of derived class.
+- [ ] Add `modelBuilder.Entity<#Regeneration#>();` to `InfiniteCreativityContext.cs`.
+- [ ] (OPTIONAL) Add new skill to `Skill.cs`.                   todo insert link
+- [ ] Create a new record in `BuffBlueprintSeed`.
+  - [ ] Generate new Guid for id.
+- [ ] Send buff icon to game.
