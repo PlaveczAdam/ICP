@@ -27,6 +27,7 @@ namespace InfiniteCreativity.Models.GameNS
         public int FreeNeighboursRight { get; set; }
         [NotMapped]
         public int FreeNeighboursDown { get; set; }
+        public EnemyBlueprint? EnemyBlueprint { get; set; }
 
         public bool CanFragmentFit(MapFragmentPresetDTO fragment)
         {

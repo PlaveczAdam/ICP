@@ -16,10 +16,10 @@ namespace InfiniteCreativity.Services.GameNS.EnemyGeneratorNS
             "BigChonker"
         };
 
-        public Enemy Generate(double level)
+        public Enemy Generate(double level, bool? isBoss = null, EnemyType? type = null)
         {
             Enemy enemy;
-            var isboss = _rnd.Next(3) == 0;
+            var isboss = isBoss ?? _rnd.Next(3) == 0;
             if (isboss)
             {
                 enemy = new Boss();
@@ -29,7 +29,7 @@ namespace InfiniteCreativity.Services.GameNS.EnemyGeneratorNS
                 enemy = new Enemy();
             }
             enemy.Level = _rnd.NextDouble(Math.Max(level - 5, 1), level + 5);
-            enemy.EnemyType = _rnd.Next(Enum.GetValues(typeof(EnemyType)).Cast<EnemyType>().ToList());
+            enemy.EnemyType = type ?? _rnd.Next(Enum.GetValues(typeof(EnemyType)).Cast<EnemyType>().ToList());
             enemy.Health = enemy.MaxHealth;
 
             switch (enemy)

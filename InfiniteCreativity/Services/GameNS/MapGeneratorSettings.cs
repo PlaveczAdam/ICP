@@ -31,27 +31,27 @@ namespace InfiniteCreativity.Services.GameNS
                 TreeBatchMax = 10,
                 MapFragmentPresets = new List<MapFragmentPresetDTO> {
                 _mapPresetFragments.Preset2,
+                _mapPresetFragments.Preset3,
                 _mapPresetFragments.Preset2,
+                _mapPresetFragments.Preset3,
                 _mapPresetFragments.Preset2,
+                _mapPresetFragments.Preset3,
                 _mapPresetFragments.Preset2,
+                _mapPresetFragments.Preset3,
                 _mapPresetFragments.Preset2,
+                _mapPresetFragments.Preset3,
                 _mapPresetFragments.Preset2,
+                _mapPresetFragments.Preset3,
                 _mapPresetFragments.Preset2,
+                _mapPresetFragments.Preset3,
                 _mapPresetFragments.Preset2,
+                _mapPresetFragments.Preset3,
                 _mapPresetFragments.Preset2,
+                _mapPresetFragments.Preset3,
                 _mapPresetFragments.Preset2,
+                _mapPresetFragments.Preset3,
                 _mapPresetFragments.Preset2,
-                _mapPresetFragments.Preset2,
-                _mapPresetFragments.Preset2,
-                _mapPresetFragments.Preset2,
-                _mapPresetFragments.Preset2,
-                _mapPresetFragments.Preset2,
-                _mapPresetFragments.Preset2,
-                _mapPresetFragments.Preset2,
-                _mapPresetFragments.Preset2,
-                _mapPresetFragments.Preset2,
-                _mapPresetFragments.Preset2,
-                _mapPresetFragments.Preset2,
+                _mapPresetFragments.Preset3,
                 }
             };
             Preset2 = new MapGeneratorSettings
@@ -66,10 +66,26 @@ namespace InfiniteCreativity.Services.GameNS
                 _mapPresetFragments.Preset1,
                 }
             };
+            Preset3 = new MapGeneratorSettings
+            {
+                Rows = 10,
+                Columns = 10,
+                LandBias = 0.6f,
+                WaterFrequency = 0.05f,
+                TreeToLandRatio = 0.25f,
+                TreeBatchMax = 10,
+                MapFragmentPresets = new List<MapFragmentPresetDTO> {
+                _mapPresetFragments.Preset2,
+                _mapPresetFragments.Preset3,
+                _mapPresetFragments.Preset2,
+                _mapPresetFragments.Preset3,
+                }
+            };
         }
 
         public MapGeneratorSettings Preset1;
         public MapGeneratorSettings Preset2;
+        public MapGeneratorSettings Preset3;
 
         public MapGeneratorSettings GetPresetByMapType(MapType maptype)
         { 
@@ -79,6 +95,8 @@ namespace InfiniteCreativity.Services.GameNS
                     return Preset1;
                 case MapType.Preset2: 
                     return Preset2;
+                case MapType.Preset3:
+                    return Preset3;
                 default: 
                     throw new InvalidOperationException();
             }

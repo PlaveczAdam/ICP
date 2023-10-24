@@ -172,6 +172,14 @@ namespace Map
                     var fragmentTile = currentFragment.Map[i][j];
                     maptile.ReservedForPath = true;
                     maptile.TileContent = fragmentTile.Content;
+                    if (fragmentTile.Enemy is not null)
+                    {
+                        maptile.EnemyBlueprint = new EnemyBlueprint()
+                        {
+                            Type = fragmentTile.Enemy.Type,
+                            IsBoss = fragmentTile.Enemy.IsBoss,
+                        };
+                    }
                 }
             }
         }

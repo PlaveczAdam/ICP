@@ -18,6 +18,7 @@ using Map;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using static MoreLinq.Extensions.ForEachExtension;
 
 namespace InfiniteCreativity.Services.GameNS
@@ -115,7 +116,14 @@ namespace InfiniteCreativity.Services.GameNS
             }
             if (withMap)
             {
-                gconn = gconn.Include(x => x.Map).ThenInclude(x => x.HexTiles).ThenInclude(x => x.Enemy).AsSplitQuery();
+                gconn = gconn
+                    .Include(x => x.Map)
+                        .ThenInclude(x => x.HexTiles)
+                            .ThenInclude(x => x.Enemy)
+                    .Include(x => x.Map)
+                        .ThenInclude(x => x.HexTiles)
+                            .ThenInclude(x => x.EnemyBlueprint)
+                                .AsSplitQuery();
             }
             if (withEnemy)
             {
@@ -362,8 +370,14 @@ namespace InfiniteCreativity.Services.GameNS
             var level = characters.Average(x => x.Character.Level);
             var gma = new GameMapAccessor(gconn.Map);
 
+            var preDefinedEnemy = gma.HexTiles.SelectMany(x => x).Where(x => x.EnemyBlueprint is not null);
+            preDefinedEnemy.ForEach(x => {
+                x.Enemy = _enemyGenerator.Generate(level + 2, isBoss: x.EnemyBlueprint.IsBoss, type: x.EnemyBlueprint.Type);
+                x.Enemy.GConnection = gconn;
+            });
+
             var emptyTiles = gma.HexTiles.SelectMany(hexTiles => hexTiles)
-                .Where(hexTile => hexTile.TileContent.IsSpawnable() && !characters.Any(y=>(y.Character.Col == hexTile.ColIdx && y.Character.Row == hexTile.RowIdx)))
+                .Where(hexTile => hexTile.TileContent.IsSpawnable() && !characters.Any(y=>(y.Character.Col == hexTile.ColIdx && y.Character.Row == hexTile.RowIdx)) && hexTile.Enemy is null)
                 .ToList().ShuffleInPlace(_rnd);
 
             var enemyTiles = Enumerable.Range(0, (int)_rnd.NextDouble(emptyTiles.Count() * 0.1, emptyTiles.Count() * 0.2)).Select(x => emptyTiles[x]);

@@ -1,0 +1,1 @@
+[ ] Create new derived class from Buff or PassiveBuff.

@@ -1,4 +1,5 @@
-﻿using InfiniteCreativity.Models.Enums.GameNS;
+﻿using InfiniteCreativity.Models.Enums.CoreNS;
+using InfiniteCreativity.Models.Enums.GameNS;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,13 @@ namespace DTOs.Game
         public int Row { get; set; }
         public int Col { get; set; }
         public TileContent Content { get; set; }
+        public MapFragmentEnemyDTO Enemy { get; set; }
+    }
+
+    public class MapFragmentEnemyDTO 
+    { 
+        public bool IsBoss { get; set; }
+        public EnemyType Type { get; set; }
     }
 
     public class MapFragmentPresetDTO

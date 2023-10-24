@@ -12,6 +12,8 @@ namespace DTOs.Enums.GameNS
         [Description("Large")]
         Preset1,
         [Description("Smol")]
-        Preset2
+        Preset2,
+        [Description("Szakáll")]
+        Preset3
     }
 }
