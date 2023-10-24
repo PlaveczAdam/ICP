@@ -89,7 +89,9 @@ namespace InfiniteCreativity.Data
 
             modelBuilder.Entity<Buff>();
             modelBuilder.Entity<Rejuvenation>();
+            modelBuilder.Entity<Regeneration>();
             modelBuilder.Entity<Might>();
+            modelBuilder.Entity<DefenseUp>();
             modelBuilder.Entity<BuffBlueprint>()
                 .HasData(InfiniteCreativity.Models.CoreNS.Skill.BuffBlueprintSeed.SelectMany(x => x.Value));
 

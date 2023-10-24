@@ -10,5 +10,7 @@ namespace DTOs.Enums.CoreNS
     {
         Rejuvenation,
         Might,
+        Regeneration,
+        DefenseUp
     }
 }

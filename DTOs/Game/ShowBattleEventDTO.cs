@@ -123,4 +123,8 @@ namespace DTOs.Game
         public int NewAbilityGauge { get; set; }
         public double NewResource { get; set; }
     }
+    public class ShowBattleEventRegenerationTickDTO : ShowBattleEventBuffTickDTO
+    {
+        public double NewHealth { get; set; }
+    }
 }

@@ -740,7 +740,7 @@ namespace InfiniteCreativity.Services.GameNS
 
             List<ShowBattleEventDTO> result = new();
 
-            if (skill.SkillHolder.StackableType == StackableType.HealSkill)
+            if (skill.SkillHolder.Skill.Damage > 0)
             {
                 result.AddRange(skill.SkillHolder.Skill.ActivateHeal(target, battle.NextInTurn, _mapper));
             }
@@ -844,6 +844,22 @@ namespace InfiniteCreativity.Services.GameNS
                             break;
                         case BuffType.Might:
                             res.Add( new Might()
+                            {
+                                ID = Guid.NewGuid(),
+                                Duration = x.Duration,
+                                BattleParticipant = target
+                            });
+                            break;
+                        case BuffType.DefenseUp:
+                            res.Add(new DefenseUp()
+                            {
+                                ID = Guid.NewGuid(),
+                                Duration = x.Duration,
+                                BattleParticipant = target
+                            });
+                            break;
+                        case BuffType.Regeneration:
+                            res.Add(new Regeneration()
                             {
                                 ID = Guid.NewGuid(),
                                 Duration = x.Duration,

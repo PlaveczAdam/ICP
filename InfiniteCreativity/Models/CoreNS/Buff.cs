@@ -52,6 +52,35 @@ namespace InfiniteCreativity.Models.CoreNS
         }
     }
 
+    public class Regeneration : Buff
+    {
+        public override string Name => "Regeneration";
+
+        public override string Description => "Regenerates health";
+
+        public override BuffType BuffType => BuffType.Regeneration;
+
+        public override bool StacksDuration => true;
+
+        public override ShowBattleEventDTO Tick(IMapper mapper)
+        {
+            Duration--;
+            BattleParticipant.Character.CurrentHealth += BattleParticipant.Character.Health * 0.05;
+            if (BattleParticipant.Character.CurrentHealth > BattleParticipant.Character.Health)
+            {
+                BattleParticipant.Character.CurrentHealth = BattleParticipant.Character.Health;
+            }
+
+            return new ShowBattleEventRegenerationTickDTO()
+            {
+                SourceParticipantId = BattleParticipant.Id,
+                TargetParticipantId = BattleParticipant.Id,
+                Buff = mapper.Map<ShowBuffDTO>(this),
+                NewHealth = BattleParticipant.Character.CurrentHealth,
+            };
+        }
+    }
+
     public class StatModifications
     {
         public double DamageMultiplier { get; set; } = 1;
@@ -86,6 +115,20 @@ namespace InfiniteCreativity.Models.CoreNS
         public override bool StacksDuration => false;
         public override StatModifications StatModifications => new StatModifications { 
             DamageMultiplier = 1.05
+        };
+    }
+    public class DefenseUp : PassiveBuff
+    {
+        public override string Name => "DefenseUp";
+
+        public override string Description => "stronk";
+
+        public override BuffType BuffType => BuffType.DefenseUp;
+
+        public override bool StacksDuration => true;
+        public override StatModifications StatModifications => new StatModifications
+        {
+            DefenseMultiplier = 1.3
         };
     }
 }

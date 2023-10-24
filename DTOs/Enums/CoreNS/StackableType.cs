@@ -12,5 +12,6 @@
         ContinousBuff,
         GenericDebuff,
         BigBleed,
+        BigProtection
     }
 }

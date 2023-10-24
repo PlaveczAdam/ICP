@@ -90,6 +90,19 @@ namespace InfiniteCreativity.Models.CoreNS
                     TargetType = TargetType.Enemy,
                 }
             },
+            {
+                StackableType.BigProtection,
+                new Skill {
+                    Id = Guid.Parse("B17E04D7-5C6F-4465-A38F-3EFE1AACF724"),
+                    Name = "BigProtection",
+                    Description = "n",
+                    Cooldown = 1,
+                    ResourceCost = 1,
+                    AbilityGaugeCost = 1,
+                    Damage = 0,
+                    TargetType = TargetType.Ally,
+                }
+            },
         };
 
         public static Dictionary<StackableType, SkillHolder> SkillHolder = new Dictionary<StackableType, SkillHolder>() {
@@ -158,6 +171,19 @@ namespace InfiniteCreativity.Models.CoreNS
                     SkillId = SkillSeed[StackableType.BigBleed].Id,
                 }
             },
+            {
+                StackableType.BigProtection,
+                new SkillHolder {
+                    Name = "BigProtection",
+                    Description = "n",
+                    ImageName = ImageName.TheRock,
+                    ItemType = ItemType.Skill,
+                    StackableType = StackableType.BigProtection,
+                    Value = 1,
+                    Rarity = RarityType.Common,
+                    SkillId = SkillSeed[StackableType.BigProtection].Id,
+                }
+            },
         };
 
         public static Dictionary<StackableType, List<ConditionBlueprint>> ConditionBlueprintSeed = new Dictionary<StackableType, List<ConditionBlueprint>>() {
@@ -211,9 +237,30 @@ namespace InfiniteCreativity.Models.CoreNS
                         Duration = 10,
                         SkillId = SkillSeed[StackableType.HealSkill].Id
                     },
+                    new BuffBlueprint
+                    {
+                        ID = Guid.Parse("3960C868-E5DF-4D13-A91E-7BCE5FDE63C7"),
+                        BuffType = BuffType.Regeneration,
+                        Duration = 10,
+                        SkillId = SkillSeed[StackableType.HealSkill].Id
+                    }, 
+                    new BuffBlueprint
+                    {
+                        ID = Guid.Parse("C3B09419-556E-4D30-BCA9-9718BDCBC333"),
+                        BuffType = BuffType.DefenseUp,
+                        Duration = 10,
+                        SkillId = SkillSeed[StackableType.HealSkill].Id
+                    },
+                    new BuffBlueprint
+                    {
+                        ID = Guid.Parse("D6B517B1-5879-4CD0-AC10-D3E6486B1052"),
+                        BuffType = BuffType.Might,
+                        Duration = 10,
+                        SkillId = SkillSeed[StackableType.HealSkill].Id,
+                        Stacks = 420
+                    },
                 }
             },
-
             {
                 StackableType.ContinousBuff,
                 new List<BuffBlueprint> () {
@@ -227,6 +274,18 @@ namespace InfiniteCreativity.Models.CoreNS
                     },
                 }
             },
+            {
+                StackableType.BigProtection,
+                new List<BuffBlueprint> () {
+                    new BuffBlueprint
+                    {
+                        ID = Guid.Parse("CB84CA00-0830-42A9-8680-058AB80D3A3C"),
+                        BuffType = BuffType.DefenseUp,
+                        Duration = 10,
+                        SkillId = SkillSeed[StackableType.BigProtection].Id,
+                    },
+                }
+            },
         };
 
         public IEnumerable<ShowBattleEventDTO> Activate(BattleParticipant enemy, BattleParticipant caster, IMapper mapper )
@@ -236,7 +295,7 @@ namespace InfiniteCreativity.Models.CoreNS
             var modifier = caster.CalculateStatModifications();
             damage *= Math.Pow(caster.Character.CriticalMultiplier,  crit) * modifier.DamageMultiplier;
 
-            enemy.Enemy!.TakeDamage(damage);
+            enemy.Enemy!.TakeDamage(damage, enemy.CalculateStatModifications());
             caster.Character.CurrentAbilityResource -= ResourceCost;
             caster.CurrentActionGauge -= AbilityGaugeCost;
 

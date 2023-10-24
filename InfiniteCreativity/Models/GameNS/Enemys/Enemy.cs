@@ -51,8 +51,8 @@ namespace InfiniteCreativity.Models.GameNS.Enemys
                 }
                 var target = validTargets
                     .MaxBy(x => x.Character!.Defense);
-
-                target!.Character!.TakeDamage(CalculateDamage(modifiers));
+                var targetModifiers = target.CalculateStatModifications();
+                target!.Character!.TakeDamage(CalculateDamage(modifiers), targetModifiers);
 
                 result.Add(new ShowBattleEventEnemyAttackDTO()
                 {
@@ -84,9 +84,9 @@ namespace InfiniteCreativity.Models.GameNS.Enemys
             return Damage * critMultiplier * modifications.DamageMultiplier;
         }
 
-        public void TakeDamage(double damage)
+        public void TakeDamage(double damage, StatModifications modifications)
         {
-            Health -= Math.Max(damage - Defense, 0);
+            Health -= Math.Max(damage - (Defense * modifications.DefenseMultiplier), 0);
         }
 
         public void TakeConditionDamage(double cDamage)

@@ -98,9 +98,9 @@ namespace InfiniteCreativity.Models.CoreNS
                 }
             }
         }
-        public void TakeDamage(double damage)
+        public void TakeDamage(double damage, StatModifications modifications)
         {
-            CurrentHealth -= Math.Max(damage - Defense, 0);
+            CurrentHealth -= Math.Max(damage - (Defense * modifications.DefenseMultiplier), 0);
         }
 
         public void TakeConditionDamage(double cDamage)
@@ -119,7 +119,7 @@ namespace InfiniteCreativity.Models.CoreNS
             var modifiers = attacker.CalculateStatModifications();
             var damage = Damage * Math.Pow(CriticalMultiplier, crit) * modifiers.DamageMultiplier;
 
-            enemy.Enemy!.TakeDamage(damage);
+            enemy.Enemy!.TakeDamage(damage, enemy.CalculateStatModifications());
             attacker.CurrentActionGauge -= 1;
 
             var res = new List<ShowBattleEventDTO>(){
