@@ -1,1 +1,1 @@
-[ ] Create new derived class from Buff or PassiveBuff.
+- [ ] Create new derived class from Buff or PassiveBuff.
