@@ -5,6 +5,7 @@
 - [ ] Implement members of derived class.
 - [ ] Add `modelBuilder.Entity<#Regeneration#>();` to `InfiniteCreativityContext.cs`.
 - [ ] (OPTIONAL) Add new skill to `Skill.cs`.                   todo insert link
-- [ ] Create a new record in `BuffBlueprintSeed`.
+- [ ] Create a new record in `BuffBlueprintSeed` in `Skill.cs`.
   - [ ] Generate new Guid for id.
 - [ ] Send buff icon to game.
+- [ ] `Add-Migration` and `Update-Database`.
