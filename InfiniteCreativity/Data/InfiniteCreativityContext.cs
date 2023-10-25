@@ -76,6 +76,11 @@ namespace InfiniteCreativity.Data
                 .WithMany()
                 .HasForeignKey(e => e.SkillId);
 
+            modelBuilder.Entity<CharacterSkillSlot>()
+                .HasOne(e => e.SkillHolder)
+                .WithMany()
+                .OnDelete(DeleteBehavior.SetNull);
+
             modelBuilder.Entity<HexTileDataObject>()
                 .HasOne(e => e.Enemy)
                 .WithOne(e => e.Tile)
