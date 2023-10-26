@@ -213,12 +213,14 @@ namespace InfiniteCreativity.Services.GameNS
             }
             var currentPlayer = await _playerService.GetCurrentPlayer(withGConnections:true);
 
-
             var oldMap = _context.Map.FirstOrDefault(x=>x.GConnection==currentPlayer.GConnections.First());
             if (oldMap is not null)
-            { 
-                _context.Remove(oldMap);
+            {
+                await _gameEndService.Endgame(currentPlayer.GConnections.First().ConnectionID, removeGameObjectsOnly:true);
+                await _context.SaveChangesAsync();
+                currentPlayer = await _playerService.GetCurrentPlayer(withGConnections: true);
             }
+
             var characters = createGameDTO.CharacterIds.Select(async x => await _characterService.GetCharacterById(x, currentPlayer, withEquipment: true)).Select(x=>x.Result).ToList();
             MapGenerator generator = new();
             var map = generator.GenerateAndPlacePlayer(characters, _mapGeneratorPresets.GetPresetByMapType(createGameDTO.Maptype));

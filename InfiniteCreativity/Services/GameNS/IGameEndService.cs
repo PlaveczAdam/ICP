@@ -2,6 +2,6 @@
 {
     public interface IGameEndService
     {
-        public Task Endgame(string gConnectionId);
+        public Task Endgame(string gConnectionId, bool removeGameObjectsOnly = false);
     }
 }
