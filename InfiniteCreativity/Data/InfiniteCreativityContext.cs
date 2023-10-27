@@ -127,6 +127,7 @@ namespace InfiniteCreativity.Data
             modelBuilder.Entity<Condition>();
             modelBuilder.Entity<Bleed>();
             modelBuilder.Entity<Weakness>();
+            modelBuilder.Entity<Taunt>();
             modelBuilder.Entity<ConditionBlueprint>()
                 .HasData(InfiniteCreativity.Models.CoreNS.Skill.ConditionBlueprintSeed.SelectMany(x => x.Value));
 
