@@ -103,6 +103,19 @@ namespace InfiniteCreativity.Models.CoreNS
                     TargetType = TargetType.Ally,
                 }
             },
+            {
+                StackableType.Taunt,
+                new Skill {
+                    Id = Guid.Parse("C4C4ED52-A0BF-449A-80EC-A9F38338A695"),
+                    Name = "Taunt",
+                    Description = "n",
+                    Cooldown = 1,
+                    ResourceCost = 1,
+                    AbilityGaugeCost = 1,
+                    Damage = 0,
+                    TargetType = TargetType.Enemy,
+                }
+            },
         };
 
         public static Dictionary<StackableType, SkillHolder> SkillHolder = new Dictionary<StackableType, SkillHolder>() {
@@ -184,6 +197,19 @@ namespace InfiniteCreativity.Models.CoreNS
                     SkillId = SkillSeed[StackableType.BigProtection].Id,
                 }
             },
+            {
+                StackableType.Taunt,
+                new SkillHolder {
+                    Name = "Taunt",
+                    Description = "n",
+                    ImageName = ImageName.Taunt,
+                    ItemType = ItemType.Skill,
+                    StackableType = StackableType.Taunt,
+                    Value = 1,
+                    Rarity = RarityType.Common,
+                    SkillId = SkillSeed[StackableType.Taunt].Id,
+                }
+            },
         };
 
         public static Dictionary<StackableType, List<ConditionBlueprint>> ConditionBlueprintSeed = new Dictionary<StackableType, List<ConditionBlueprint>>() {
@@ -221,6 +247,18 @@ namespace InfiniteCreativity.Models.CoreNS
                         Duration = 10,
                         SkillId = SkillSeed[StackableType.BigBleed].Id,
                         Stacks = 99,
+                    },
+                }
+            },
+            {
+                StackableType.Taunt,
+                new List<ConditionBlueprint> () {
+                    new ConditionBlueprint
+                    {
+                        ID = Guid.Parse("6CBFCDA0-7914-4891-959C-4536EB568137"),
+                        ConditionType = ConditionType.Taunt,
+                        Duration = 20,
+                        SkillId = SkillSeed[StackableType.Taunt].Id,
                     },
                 }
             },

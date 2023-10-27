@@ -5,7 +5,6 @@ using InfiniteCreativity.Models.Enums.CoreNS;
 using InfiniteCreativity.Services.CoreNS;
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace InfiniteCreativity.Models.GameNS.Enemys
 {
@@ -40,16 +39,22 @@ namespace InfiniteCreativity.Models.GameNS.Enemys
         {
             var result = new List<ShowBattleEventDTO>();
             var modifiers = selfParticipant.CalculateStatModifications();
+            var forceTarget = selfParticipant.Conditions.FirstOrDefault(x => x is Taunt)?.Caster;
 
             while (selfParticipant.CurrentActionGauge > 0)
             {
+                if (forceTarget?.GetCurrentHealth() <= 0)
+                {
+                    forceTarget = null;
+                }
+
                 var validTargets = characterParticipants
                     .Where(x => x.Character.CurrentHealth > 0);
                 if (validTargets.Count() == 0)
                 {
                     return result;
                 }
-                var target = validTargets
+                var target = forceTarget ?? validTargets
                     .MaxBy(x => x.Character!.Defense);
                 var targetModifiers = target.CalculateStatModifications();
                 target!.Character!.TakeDamage(CalculateDamage(modifiers), targetModifiers);

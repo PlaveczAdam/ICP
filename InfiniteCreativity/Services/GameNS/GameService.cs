@@ -778,7 +778,8 @@ namespace InfiniteCreativity.Services.GameNS
                                 ID = Guid.NewGuid(),
                                 Duration = x.Duration,
                                 BattleParticipant = target,
-                                ConditionDamageMultiplier = source.Character.AbilityDamage * 0.5
+                                ConditionDamageMultiplier = source.Character.AbilityDamage * 0.5,
+                                Caster = source
                             });
                             break;
                         case ConditionType.Weakness:
@@ -787,6 +788,16 @@ namespace InfiniteCreativity.Services.GameNS
                                 ID = Guid.NewGuid(),
                                 Duration = x.Duration,
                                 BattleParticipant = target,
+                                Caster = source
+                            });
+                            break;
+                        case ConditionType.Taunt:
+                            res.Add(new Taunt()
+                            {
+                                ID = Guid.NewGuid(),
+                                Duration = x.Duration,
+                                BattleParticipant = target,
+                                Caster = source
                             });
                             break;
                         default: throw new InvalidOperationException();
@@ -806,6 +817,7 @@ namespace InfiniteCreativity.Services.GameNS
                         x.Duration = oldCondition.Duration;
                         x.ID = oldCondition.ID;
                         x.ConditionDamageMultiplier = oldCondition.ConditionDamageMultiplier;
+                        oldCondition.Caster = source;
                     }
                     else
                     {
@@ -841,7 +853,8 @@ namespace InfiniteCreativity.Services.GameNS
                             {
                                 ID = Guid.NewGuid(),
                                 Duration = x.Duration,
-                                BattleParticipant = target
+                                BattleParticipant = target, 
+                                Caster = source
                             });
                             break;
                         case BuffType.Might:
@@ -849,7 +862,8 @@ namespace InfiniteCreativity.Services.GameNS
                             {
                                 ID = Guid.NewGuid(),
                                 Duration = x.Duration,
-                                BattleParticipant = target
+                                BattleParticipant = target,
+                                Caster = source
                             });
                             break;
                         case BuffType.DefenseUp:
@@ -857,7 +871,8 @@ namespace InfiniteCreativity.Services.GameNS
                             {
                                 ID = Guid.NewGuid(),
                                 Duration = x.Duration,
-                                BattleParticipant = target
+                                BattleParticipant = target,
+                                Caster = source
                             });
                             break;
                         case BuffType.Regeneration:
@@ -865,7 +880,8 @@ namespace InfiniteCreativity.Services.GameNS
                             {
                                 ID = Guid.NewGuid(),
                                 Duration = x.Duration,
-                                BattleParticipant = target
+                                BattleParticipant = target,
+                                Caster = source
                             });
                             break;
                         default: throw new InvalidOperationException();
@@ -884,6 +900,7 @@ namespace InfiniteCreativity.Services.GameNS
                         oldBuff.Duration += x.Duration;
                         x.Duration = oldBuff.Duration;
                         x.ID = oldBuff.ID;
+                        oldBuff.Caster = source;
                     }
                     else
                     {

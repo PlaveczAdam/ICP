@@ -23,6 +23,9 @@ namespace InfiniteCreativity.Models.CoreNS
 
         public abstract List<ShowBattleEventDTO> Tick(IMapper mapper);
         public BattleParticipant BattleParticipant { get; set; }
+        public BattleParticipant Caster { get; set; }
+        public Guid BattleParticipantId { get; set; }
+        public Guid CasterId { get; set; }
     }
 
     public class Bleed : Condition
@@ -103,5 +106,18 @@ namespace InfiniteCreativity.Models.CoreNS
         public override StatModifications StatModifications => new StatModifications() { 
             DamageMultiplier = 0.5,
         };
+    }
+
+    public class Taunt : PassiveCondition
+    {
+        public override string Name => "Taunt";
+
+        public override string Description => "n";
+
+        public override ConditionType ConditionType => ConditionType.Taunt;
+
+        public override bool StacksDuration => true;
+
+        public override StatModifications StatModifications => new StatModifications();
     }
 }

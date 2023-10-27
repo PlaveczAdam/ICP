@@ -92,6 +92,30 @@ namespace InfiniteCreativity.Data
                 .WithMany()
                 .OnDelete(DeleteBehavior.Cascade);
 
+            modelBuilder.Entity<BattleParticipant>()
+                .HasMany(e => e.Buffs)
+                .WithOne(e => e.BattleParticipant)
+                .HasForeignKey(e => e.BattleParticipantId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Buff>()
+                .HasOne(e => e.Caster)
+                .WithMany()
+                .HasForeignKey(e => e.CasterId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<BattleParticipant>()
+                .HasMany(e => e.Conditions)
+                .WithOne(e => e.BattleParticipant)
+                .HasForeignKey(e => e.BattleParticipantId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Condition>()
+                .HasOne(e => e.Caster)
+                .WithMany()
+                .HasForeignKey(e => e.CasterId)
+                .OnDelete(DeleteBehavior.Cascade);
+
             modelBuilder.Entity<Buff>();
             modelBuilder.Entity<Rejuvenation>();
             modelBuilder.Entity<Regeneration>();

@@ -21,6 +21,9 @@ namespace InfiniteCreativity.Models.CoreNS
 
         public abstract ShowBattleEventDTO Tick(IMapper mapper);
         public BattleParticipant BattleParticipant { get; set; }
+        public BattleParticipant Caster { get; set; } 
+        public Guid BattleParticipantId { get; set; }
+        public Guid CasterId { get; set; }
     }
 
     public class Rejuvenation : Buff

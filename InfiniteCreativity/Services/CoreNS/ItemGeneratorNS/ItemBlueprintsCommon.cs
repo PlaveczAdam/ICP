@@ -146,6 +146,7 @@ namespace InfiniteCreativity.Services.CoreNS.ItemGeneratorNS
             Skill.SkillHolder[StackableType.GenericDebuff],
             Skill.SkillHolder[StackableType.BigBleed],
             Skill.SkillHolder[StackableType.BigProtection],
+            Skill.SkillHolder[StackableType.Taunt],
         };
     }
 }

@@ -10,5 +10,6 @@ namespace DTOs.Enums.GameNS
     {
         Bleed,
         Weakness,
+        Taunt
     }
 }
