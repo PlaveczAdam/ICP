@@ -451,7 +451,7 @@ namespace InfiniteCreativity.Services.GameNS
                     SourceParticipantId = nextInTurn.Id,
                     TargetParticipantId = nextInTurn.Id
                 });
-                actions.AddRange(nextInTurn.Enemy.Turn(characterParticipants, nextInTurn));
+                actions.AddRange(nextInTurn.Enemy.Turn(characterParticipants, enemyParticipants));
 
                 nextInTurn = _turnSimulator.GetNext(battle);
             }

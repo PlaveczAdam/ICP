@@ -110,6 +110,12 @@ namespace InfiniteCreativity.Data
                 .HasForeignKey(e => e.BattleParticipantId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            modelBuilder.Entity<BattleParticipant>()
+                .HasOne(e => e.Enemy)
+                .WithOne(e => e.BattleParticipant)
+                .HasForeignKey<BattleParticipant>(e => e.EnemyId)
+                .OnDelete(DeleteBehavior.SetNull);
+
             modelBuilder.Entity<Condition>()
                 .HasOne(e => e.Caster)
                 .WithMany()

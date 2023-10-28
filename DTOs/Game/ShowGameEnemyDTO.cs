@@ -1,4 +1,5 @@
-﻿using InfiniteCreativity.Models.Enums.CoreNS;
+﻿using DTOs.Enums.CoreNS;
+using InfiniteCreativity.Models.Enums.CoreNS;
 
 namespace InfiniteCreativity.DTO.Game
 {
@@ -15,5 +16,7 @@ namespace InfiniteCreativity.DTO.Game
         public double Damage { get; set; }
         public double CriticalChance { get; set; }
         public double CriticalMultiplier { get; set; }
+        public EnemyBehaviourType BehaviourType { get; set; }
+
     }
 }

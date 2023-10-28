@@ -2,7 +2,7 @@
 {
     public static class RandomExtension
     {
-        public static T? Next<T>(this Random random, List<T> items)
+        public static T? Next<T>(this Random random, IList<T> items)
         {
             return items.Count == 0 ? default(T) : items[random.Next(0, items.Count)];
         }
@@ -24,6 +24,12 @@
             var weight = critChance - guaranteed;
             var roll = random.NextDouble();
             return roll < weight ? guaranteed + 1 : guaranteed;
+        }
+
+        public static T Next<T>(this Random random) where T : Enum
+        {
+            var values = Enum.GetValues(typeof(T)).Cast<T>().ToList();
+            return random.Next(values);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using DTOs.Game;
+﻿using DTOs.Enums.CoreNS;
+using DTOs.Game;
 using InfiniteCreativity.Extensions;
 using InfiniteCreativity.Models.CoreNS;
 using InfiniteCreativity.Models.Enums.CoreNS;
@@ -19,6 +20,7 @@ namespace InfiniteCreativity.Models.GameNS.Enemys
         public double Health { get; set; }
         public GConnection GConnection { get; set; }
         public HexTileDataObject? Tile { get; set; }
+        public EnemyBehaviourType BehaviourType { get; set; }
 
         [NotMapped]
         public string Name => EnemyType.ToString();
@@ -34,59 +36,59 @@ namespace InfiniteCreativity.Models.GameNS.Enemys
         public double CriticalMultiplier => EnemyStatComputer.CalculateCriticalMultiplier(Level, EnemyType);
         [NotMapped]
         public double Speed => EnemyStatComputer.CalculateSpeed(EnemyType);
+        [NotMapped]
+        private EnemyBehaviour? _enemyBehaviour;
+        public BattleParticipant? BattleParticipant { get; set; }
 
-        public List<ShowBattleEventDTO> Turn(List<BattleParticipant> characterParticipants, BattleParticipant selfParticipant)
+        public Enemy()
+        {
+            if (BattleParticipant is not null)
+            {
+                _enemyBehaviour = EnemyBehaviour.Create(BattleParticipant);
+            }
+        }
+
+        public List<ShowBattleEventDTO> Turn(List<BattleParticipant> characterParticipants, List<BattleParticipant> enemyParticipants)
         {
             var result = new List<ShowBattleEventDTO>();
-            var modifiers = selfParticipant.CalculateStatModifications();
-            var forceTarget = selfParticipant.Conditions.FirstOrDefault(x => x is Taunt)?.Caster;
+            var forceTarget = BattleParticipant.Conditions.FirstOrDefault(x => x is Taunt)?.Caster;
 
-            while (selfParticipant.CurrentActionGauge > 0)
+            while (BattleParticipant.CurrentActionGauge > 0)
             {
+                var alivePlayers = characterParticipants.Where(x => x.IsAlive).ToList();
+                var aliveEnemys = enemyParticipants.Where(x => x.IsAlive).ToList();
+                var selfModifiers = BattleParticipant.CalculateStatModifications();
+
                 if (forceTarget?.GetCurrentHealth() <= 0)
                 {
                     forceTarget = null;
                 }
 
-                var validTargets = characterParticipants
-                    .Where(x => x.Character.CurrentHealth > 0);
-                if (validTargets.Count() == 0)
+                if (alivePlayers.Count() == 0)
                 {
                     return result;
                 }
-                var target = forceTarget ?? validTargets
-                    .MaxBy(x => x.Character!.Defense);
-                var targetModifiers = target.CalculateStatModifications();
-                target!.Character!.TakeDamage(CalculateDamage(modifiers), targetModifiers);
 
-                result.Add(new ShowBattleEventEnemyAttackDTO()
-                {
-                    SourceParticipantId = selfParticipant.Id,
-                    TargetParticipantId = target.Id,
-                    NewTargetHp = target.Character.CurrentHealth
-                });
-                if (target.Character.CurrentHealth <= 0)
+                var target = _enemyBehaviour.SelectTarget(alivePlayers, aliveEnemys, forceTarget);
+                var targetModifiers = target.CalculateStatModifications();
+
+                result.AddRange(_enemyBehaviour.ActionTurn(target, targetModifiers, selfModifiers));
+
+                if (!target.IsAlive)
                 {
                     result.Add(new ShowBattleEventParticipantDiesDTO()
                     {
-                        SourceParticipantId = selfParticipant.Id,
+                        SourceParticipantId = BattleParticipant.Id,
                         TargetParticipantId = target.Id,
                     });
                     target.Buffs.Clear();
                     target.Conditions.Clear();
                 }
 
-                selfParticipant.CurrentActionGauge--;
+                BattleParticipant.CurrentActionGauge--;
             }
 
             return result;
-        }
-        public double CalculateDamage(StatModifications modifications)
-        {
-            var critPower = _rnd.NextCrit(CriticalChance);
-            var critMultiplier = Math.Pow(CriticalMultiplier, critPower);
-
-            return Damage * critMultiplier * modifications.DamageMultiplier;
         }
 
         public void TakeDamage(double damage, StatModifications modifications)
