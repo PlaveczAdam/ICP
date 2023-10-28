@@ -39,6 +39,7 @@ namespace InfiniteCreativity.Models.GameNS.Enemys
         [NotMapped]
         private EnemyBehaviour? _enemyBehaviour;
         public BattleParticipant? BattleParticipant { get; set; }
+        [NotMapped]
         public EnemyBehaviour? EnemyBehaviour { 
             get
             { 
