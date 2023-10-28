@@ -122,6 +122,11 @@ namespace InfiniteCreativity.Data
                 .HasForeignKey(e => e.CasterId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            modelBuilder.Entity<Battle>()
+                .HasMany(e => e.Participants)
+                .WithOne()
+                .OnDelete(DeleteBehavior.Cascade);
+
             modelBuilder.Entity<Buff>();
             modelBuilder.Entity<Rejuvenation>();
             modelBuilder.Entity<Regeneration>();
