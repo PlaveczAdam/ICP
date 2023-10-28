@@ -7,5 +7,6 @@ namespace InfiniteCreativity.Models.CoreNS
         public int EquipCount { get; set; }
         [NotMapped]
         public bool IsEquipped => EquipCount > 0;
+        public string ModelName { get; set; }
     }
 }

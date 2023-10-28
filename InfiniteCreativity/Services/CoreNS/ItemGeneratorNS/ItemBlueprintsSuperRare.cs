@@ -21,7 +21,8 @@ namespace InfiniteCreativity.Services.CoreNS.ItemGeneratorNS
                 CritChance = 3,
                 CritMultiplier = 100,
                 Value = 10,
-                Rarity = RarityType.SuperRare
+                Rarity = RarityType.SuperRare,
+                ModelName = ItemModelName.Excalibur,
             },
             new Ranged
             {
@@ -34,7 +35,8 @@ namespace InfiniteCreativity.Services.CoreNS.ItemGeneratorNS
                 CritChance = 2, 
                 CritMultiplier = 50,
                 Value = 5,
-                Rarity = RarityType.SuperRare
+                Rarity = RarityType.SuperRare,
+                ModelName = ItemModelName.Excalibur,
             },
             new Melee
             {
@@ -47,7 +49,8 @@ namespace InfiniteCreativity.Services.CoreNS.ItemGeneratorNS
                 CritChance = 3, 
                 CritMultiplier = 75,
                 Value = 15,
-                Rarity = RarityType.SuperRare
+                Rarity = RarityType.SuperRare,
+                ModelName = ItemModelName.Excalibur,
             },
             new Head{
                 Name = "Bucket",

@@ -3,6 +3,7 @@ using InfiniteCreativity.Models.CoreNS.ArmorNs;
 using InfiniteCreativity.Models.CoreNS.Materials;
 using InfiniteCreativity.Models.CoreNS.Weapons;
 using InfiniteCreativity.Models.Enums.CoreNS;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace InfiniteCreativity.Services.CoreNS.ItemGeneratorNS
 {
@@ -21,7 +22,8 @@ namespace InfiniteCreativity.Services.CoreNS.ItemGeneratorNS
                 CritChance = 3,
                 CritMultiplier = 100,
                 Value = 10,
-                Rarity = RarityType.Rare
+                Rarity = RarityType.Rare,
+                ModelName = ItemModelName.Excalibur,
             },
             new Ranged
             {
@@ -34,7 +36,8 @@ namespace InfiniteCreativity.Services.CoreNS.ItemGeneratorNS
                 CritChance = 2,
                 CritMultiplier = 50,
                 Value = 5,
-                Rarity = RarityType.Rare
+                Rarity = RarityType.Rare,
+                ModelName = ItemModelName.Excalibur,
             },
             new Melee
             {
@@ -47,7 +50,8 @@ namespace InfiniteCreativity.Services.CoreNS.ItemGeneratorNS
                 CritChance = 3, 
                 CritMultiplier = 75,
                 Value = 15,
-                Rarity = RarityType.Rare
+                Rarity = RarityType.Rare,
+                ModelName = ItemModelName.Excalibur,
             },
             new Head{
                 Name = "Bucket",
