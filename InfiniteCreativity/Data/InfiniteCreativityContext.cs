@@ -127,6 +127,12 @@ namespace InfiniteCreativity.Data
                 .WithOne()
                 .OnDelete(DeleteBehavior.Cascade);
 
+            modelBuilder.Entity<Battle>()
+                .HasOne(e => e.NextInTurn)
+                .WithOne()
+                .HasForeignKey<Battle>(e => e.NextInTurnId)
+                .OnDelete(DeleteBehavior.SetNull);
+
             modelBuilder.Entity<Buff>();
             modelBuilder.Entity<Rejuvenation>();
             modelBuilder.Entity<Regeneration>();
