@@ -40,9 +40,10 @@ namespace InfiniteCreativity.Models.GameNS.Enemys
         private EnemyBehaviour? _enemyBehaviour;
         public BattleParticipant? BattleParticipant { get; set; }
 
-        public Enemy()
+        public Enemy(BattleParticipant? battleParticipant)
         {
-            if (BattleParticipant is not null)
+            BattleParticipant = battleParticipant;
+            if (battleParticipant is not null)
             {
                 _enemyBehaviour = EnemyBehaviour.Create(BattleParticipant);
             }
