@@ -39,14 +39,16 @@ namespace InfiniteCreativity.Models.GameNS.Enemys
         [NotMapped]
         private EnemyBehaviour? _enemyBehaviour;
         public BattleParticipant? BattleParticipant { get; set; }
-
-        public Enemy(BattleParticipant? battleParticipant)
-        {
-            BattleParticipant = battleParticipant;
-            if (battleParticipant is not null)
-            {
-                _enemyBehaviour = EnemyBehaviour.Create(BattleParticipant);
+        public EnemyBehaviour? EnemyBehaviour { 
+            get
+            { 
+                if(_enemyBehaviour is null && this.BattleParticipant is not null)
+                {
+                    _enemyBehaviour = EnemyBehaviour.Create(BattleParticipant);
+                }
+                return _enemyBehaviour;
             }
+            set => _enemyBehaviour = value; 
         }
 
         public List<ShowBattleEventDTO> Turn(List<BattleParticipant> characterParticipants, List<BattleParticipant> enemyParticipants)
@@ -70,10 +72,10 @@ namespace InfiniteCreativity.Models.GameNS.Enemys
                     return result;
                 }
 
-                var target = _enemyBehaviour.SelectTarget(alivePlayers, aliveEnemys, forceTarget);
+                var target = EnemyBehaviour.SelectTarget(alivePlayers, aliveEnemys, forceTarget);
                 var targetModifiers = target.CalculateStatModifications();
 
-                result.AddRange(_enemyBehaviour.ActionTurn(target, targetModifiers, selfModifiers));
+                result.AddRange(EnemyBehaviour.ActionTurn(target, targetModifiers, selfModifiers));
 
                 if (!target.IsAlive)
                 {
