@@ -21,6 +21,7 @@ namespace InfiniteCreativity.Services.GameNS.EnemyGeneratorNS
         {
             Enemy enemy;
             var isboss = isBoss ?? _rnd.Next(3) == 0;
+
             if (isboss)
             {
                 enemy = new Boss();

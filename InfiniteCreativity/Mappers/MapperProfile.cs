@@ -51,7 +51,7 @@ namespace InfiniteCreativity.Mappers
             CreateMap<GameMapAccessor, ShowGameMapDTO>();
             CreateMap<HexTileDataObject, ShowGameHexTileDataObjectDTO>();
 
-            CreateMap<Enemy, ShowGameEnemyDTO>();
+            CreateMap<Enemy, ShowGameEnemyDTO>().IncludeAllDerived();
             CreateMap<Boss, ShowGameBossDTO>();
 
             CreateMap<Skill, ShowSkillDTO>();
