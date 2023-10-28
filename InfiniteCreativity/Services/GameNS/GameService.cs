@@ -176,13 +176,13 @@ namespace InfiniteCreativity.Services.GameNS
                     .Include(x => x.Battle)
                         .ThenInclude(x => x.Participants)
                             .ThenInclude(x => x.Enemy)
-                                .AsSplitQuery()
                     .Include(x => x.Battle)
                         .ThenInclude(x => x.Participants)
                             .ThenInclude(x => x.Buffs)
                     .Include(x => x.Battle)
                         .ThenInclude(x => x.Participants)
-                            .ThenInclude(x => x.Conditions);
+                            .ThenInclude(x => x.Conditions)
+                                .AsSplitQuery();
             }
             return await gconn.Where(x => x.Id == currentPlayer.GConnections.First().Id).SingleAsync();
         }
@@ -557,6 +557,8 @@ namespace InfiniteCreativity.Services.GameNS
                 x.Character.Row = targetTile.RowIdx;
                 x.Character.Col = targetTile.ColIdx;
             });
+            battle.NextInTurn = null;
+            _context.SaveChanges();
             _context.Remove(battle);
             return new ShowBattleEventCombatEndDefeatDTO();
         }
@@ -619,8 +621,9 @@ namespace InfiniteCreativity.Services.GameNS
                 default:
                     throw new ArgumentException("Invalid player action.");
             }
+            bool isVictory = res.Any(x => x is ShowBattleEventCombatEndVictoryDTO);
             bool isDefeated = res.Any(x => x is ShowBattleEventCombatEndDefeatDTO);
-            if ( !isDefeated && battle.Participants.Where(x => (x.Enemy?.Health ?? 0) > 0).Count() == 0)
+            if ( !isVictory && !isDefeated && battle.Participants.Where(x => (x.Enemy?.Health ?? 0) > 0).Count() == 0)
             {
                 res.Add(HandleVictory(battle, mapAccessor));
             }
@@ -636,12 +639,12 @@ namespace InfiniteCreativity.Services.GameNS
         private ShowBattleEventDTO HandleVictory(Battle battle, GameMapAccessor mapAccessor)
         {
             var originalEnemy = battle.Participants.First(x => x.Enemy?.Tile is not null);
+            var starterPlayer = battle.Participants.First(x => x.Character is not null && x.Character.Row == originalEnemy.Enemy.Tile.RowIdx && x.Character.Col == originalEnemy.Enemy.Tile.ColIdx);
 
             battle.Participants
-                .Where(x => x.Enemy is not null)
-                .ForEach(x => _context.Remove(x.Enemy!));
+                 .Where(x => x.Enemy is not null)
+                 .ForEach(x => _context.Remove(x.Enemy!));
 
-            var starterPlayer = battle.Participants.First(x => x.Character is not null && x.Character.Row == originalEnemy.Enemy.Tile.RowIdx && x.Character.Col == originalEnemy.Enemy.Tile.ColIdx);
 
             battle.Participants.Where(x => x.Character is not null).ForEach(x =>
             {
@@ -649,6 +652,8 @@ namespace InfiniteCreativity.Services.GameNS
                 x.Character.CurrentHealth = x.Character.Health;
                 x.Character.CurrentAbilityResource = x.Character.AbilityResource;
             });
+            battle.NextInTurn = null;
+            _context.SaveChanges();
             _context.Remove(battle);
             return new ShowBattleEventCombatEndVictoryDTO();
         }
@@ -706,6 +711,8 @@ namespace InfiniteCreativity.Services.GameNS
                 x.Character.CurrentHealth = x.Character.Health;
                 x.Character.CurrentAbilityResource = x.Character.AbilityResource;
             });
+            battle.NextInTurn = null;
+            _context.SaveChanges();
             _context.Remove(battle);
             return new List<ShowBattleEventDTO>() { new ShowBattleEventCombatEndFleeDTO() };
         }
