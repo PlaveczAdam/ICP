@@ -23,11 +23,11 @@ namespace InfiniteCreativity.Services.GameNS.EnemyGeneratorNS
             var isboss = isBoss ?? _rnd.Next(3) == 0;
             if (isboss)
             {
-                enemy = new Boss();
+                enemy = new Boss(null);
             }
             else
             {
-                enemy = new Enemy();
+                enemy = new Enemy(null);
             }
 
             enemy.Level = _rnd.NextDouble(Math.Max(level - 5, 1), level + 5);
