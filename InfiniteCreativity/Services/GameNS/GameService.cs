@@ -329,6 +329,7 @@ namespace InfiniteCreativity.Services.GameNS
             var battle = new Battle() { Participants = new List<BattleParticipant>()};
             gconn.Battle = battle;
             var battleParticEnemy = new BattleParticipant();
+            battleParticEnemy.Id = Guid.NewGuid();
             battleParticEnemy.Enemy = enemy;
             battleParticEnemy.CurrentSpeed = enemy.Speed;
             battle.Participants.Add(battleParticEnemy);
@@ -343,6 +344,7 @@ namespace InfiniteCreativity.Services.GameNS
 
             enemyList.ForEach(x =>{
                 var battleParticEnemy = new BattleParticipant();
+                battleParticEnemy.Id = Guid.NewGuid();
                 battleParticEnemy.Enemy = x;
                 battleParticEnemy.CurrentSpeed = x.Speed;
                 x.GConnection = enemy.GConnection;
@@ -351,6 +353,7 @@ namespace InfiniteCreativity.Services.GameNS
 
             chars.ForEach(x => {
                 var battleParticipantChar = new BattleParticipant();
+                battleParticipantChar.Id = Guid.NewGuid();
                 battleParticipantChar.Character = x;
                 battleParticipantChar.CurrentSpeed = x.Speed;
                 x.CurrentAbilityResource = x.AbilityResource;
@@ -407,7 +410,7 @@ namespace InfiniteCreativity.Services.GameNS
             var mapAccessor = new GameMapAccessor(gconn.Map);
             gconn.Battle.HasStarted = true;
             gconn.Characters.ForEach(x => x.Character.SkillSlots.ForEach(y => y.CurrentCooldown = 0));
-            var enemyActions = HandleEnemyTurn(gconn.Battle, mapAccessor);
+            var enemyActions = HandleNpcTurn(gconn.Battle, mapAccessor);
             var battleState = _mapper.Map<ShowBattleStateDTO>(gconn.Battle);
             battleState.BattleEvents = enemyActions;
             battleState.TurnPredictions = _turnSimulator.Predict(gconn.Battle, 20);
@@ -416,31 +419,31 @@ namespace InfiniteCreativity.Services.GameNS
             return battleState;
         }
 
-        private List<ShowBattleEventDTO> HandleEnemyTurn(Battle battle, GameMapAccessor mapAccessor)
+        private List<ShowBattleEventDTO> HandleNpcTurn(Battle battle, GameMapAccessor mapAccessor)
         {
             var actions = new List<ShowBattleEventDTO>();
             var nextInTurn = _turnSimulator.GetNext(battle);
             var characterParticipants = battle.Participants.Where(x => x.Character is not null).ToList();
             var enemyParticipants = battle.Participants.Where(x => x.Enemy is not null).ToList();
 
-            while (nextInTurn.Enemy != null)
+            while (nextInTurn.Character is null)
             {
                 actions.AddRange(TickBuffs(battle));
                 actions.AddRange(TickConditions(battle));
                 actions.Add(ProcessCooldown(battle));
-                if (characterParticipants.All(x => x.Character.CurrentHealth <= 0))
+                if (characterParticipants.All(x => !x.IsAlive))
                 {
                     actions.Add(HandleDefeat(battle, mapAccessor));
                     return actions;
                 }
 
-                if (enemyParticipants.All(x => x.GetCurrentHealth() <= 0))
+                if (enemyParticipants.All(x => !x.IsAlive))
                 {
                     actions.Add(HandleVictory(battle, mapAccessor));
                     return actions;
                 }
 
-                if (nextInTurn.GetCurrentHealth() <= 0)
+                if (!nextInTurn.IsAlive)
                 {
                     nextInTurn = _turnSimulator.GetNext(battle);
                     continue;
@@ -451,7 +454,7 @@ namespace InfiniteCreativity.Services.GameNS
                     SourceParticipantId = nextInTurn.Id,
                     TargetParticipantId = nextInTurn.Id
                 });
-                actions.AddRange(nextInTurn.Enemy.Turn(characterParticipants, enemyParticipants));
+                actions.AddRange(nextInTurn.Turn(battle.Participants.ToList()));
 
                 nextInTurn = _turnSimulator.GetNext(battle);
             }
@@ -459,21 +462,21 @@ namespace InfiniteCreativity.Services.GameNS
             actions.AddRange(TickBuffs(battle));
             actions.AddRange(TickConditions(battle));
             actions.Add(ProcessCooldown(battle));
-            if (characterParticipants.All(x => x.Character.CurrentHealth <= 0))
+            if (characterParticipants.All(x => !x.IsAlive))
             {
                 actions.Add(HandleDefeat(battle, mapAccessor));
                 return actions;
             }
 
-            if (enemyParticipants.All(x => x.GetCurrentHealth() <= 0))
+            if (enemyParticipants.All(x => !x.IsAlive))
             {
                 actions.Add(HandleVictory(battle, mapAccessor));
                 return actions;
             }
 
-            if (nextInTurn.GetCurrentHealth() <= 0)
+            if (!nextInTurn.IsAlive)
             {    
-                actions.AddRange(HandleEnemyTurn(battle, mapAccessor));
+                actions.AddRange(HandleNpcTurn(battle, mapAccessor));
             }
 
             actions.Add(new ShowBattleEventNextInTurnDTO()
@@ -544,6 +547,11 @@ namespace InfiniteCreativity.Services.GameNS
             battle.Participants
                 .Where(x => x.Enemy is not null && originalEnemy != x)
                 .ForEach(x => _context.Remove(x.Enemy!));
+
+            battle.Participants
+                 .Where(x => x.Minion is not null)
+                 .ForEach(x => _context.Remove(x.Minion!));
+
             var starterPlayer = battle.Participants.First(x => x.Character is not null && x.Character.Row == originalEnemy.Enemy.Tile.RowIdx && x.Character.Col == originalEnemy.Enemy.Tile.ColIdx);
 
             var targetTiles = mapAccessor.HexTiles.SelectMany(x => x).Where(x => x.TileContent == TileContent.City);
@@ -618,6 +626,9 @@ namespace InfiniteCreativity.Services.GameNS
                 case CreatePlayerActionUseSkillOnAlly skillAction:
                     res.AddRange(PlayerUsesSkillOnAlly(skillAction, battle, mapAccessor));
                     break;
+                case CreatePlayerActionUseSkillOnAny skillAction:
+                    res.AddRange(PlayerUsesNonTargetedSkill(skillAction, battle, mapAccessor));
+                    break;
                 default:
                     throw new ArgumentException("Invalid player action.");
             }
@@ -635,6 +646,44 @@ namespace InfiniteCreativity.Services.GameNS
             return newBattleState;
         }
 
+        private List<ShowBattleEventDTO> PlayerUsesNonTargetedSkill(CreatePlayerActionUseSkillOnAny skillAction, Battle battle, GameMapAccessor mapAccessor)
+        {
+            var skill = battle.NextInTurn.Character.SkillSlots.First(x => x.Id == skillAction.SkillSlotId);
+
+            if (skill.CurrentCooldown > 0)
+            {
+                throw new InvalidOperationException("Skill on cooldown.");
+            }
+
+            if (battle.NextInTurn.Character.AbilityResource < skill.SkillHolder.Skill.ResourceCost)
+            {
+                throw new InvalidOperationException("Not enough resource.");
+            }
+
+            if (battle.NextInTurn.CurrentActionGauge < skill.SkillHolder.Skill.AbilityGaugeCost)
+            {
+                throw new InvalidOperationException("Not enough gauge.");
+            }
+
+            List<ShowBattleEventDTO> result = new();
+            skill.CurrentCooldown = skill.SkillHolder.Skill.Cooldown;
+
+            result.AddRange(SummonMinions(skill.SkillHolder.Skill.Summons, battle, battle.NextInTurn));
+
+            if (battle.NextInTurn.CurrentActionGauge == 0)
+            {
+                result.AddRange(HandleNpcTurn(battle, mapAccessor));
+            }
+
+            return result;
+        }
+
+        private List<ShowBattleEventDTO> SummonMinions(ICollection<MinionBlueprint> summons, Battle battle, BattleParticipant caster)
+        {
+            var res = new List<ShowBattleEventDTO>();
+            res.AddRange(summons.Select(x => Minion.Summon(x.Type, battle, caster, _mapper)));
+            return res;
+        }
 
         private ShowBattleEventDTO HandleVictory(Battle battle, GameMapAccessor mapAccessor)
         {
@@ -645,6 +694,9 @@ namespace InfiniteCreativity.Services.GameNS
                  .Where(x => x.Enemy is not null)
                  .ForEach(x => _context.Remove(x.Enemy!));
 
+            battle.Participants
+                 .Where(x => x.Minion is not null)
+                 .ForEach(x => _context.Remove(x.Minion!));
 
             battle.Participants.Where(x => x.Character is not null).ForEach(x =>
             {
@@ -664,7 +716,7 @@ namespace InfiniteCreativity.Services.GameNS
 
             List<ShowBattleEventDTO> result = new();
 
-            if (enemy.Enemy.Health <= 0)
+            if (!enemy.IsAlive)
             {
                 throw new InvalidOperationException("Already dead.");
             }
@@ -678,7 +730,7 @@ namespace InfiniteCreativity.Services.GameNS
 
             if (battle.NextInTurn.CurrentActionGauge == 0)
             {
-                result.AddRange(HandleEnemyTurn(battle, mapAccessor));
+                result.AddRange(HandleNpcTurn(battle, mapAccessor));
             }
 
 
@@ -687,7 +739,7 @@ namespace InfiniteCreativity.Services.GameNS
 
         private IEnumerable<ShowBattleEventDTO> SkipPlayerTurn(Battle battle, GameMapAccessor mapAccessor)
         {
-            return HandleEnemyTurn(battle, mapAccessor);
+            return HandleNpcTurn(battle, mapAccessor);
         }
 
         private IEnumerable<ShowBattleEventDTO> FleeBattle(Battle battle, GameMapAccessor mapAccessor)
@@ -698,6 +750,10 @@ namespace InfiniteCreativity.Services.GameNS
             battle.Participants
                 .Where(x => x.Enemy is not null && originalEnemy != x)
                 .ForEach(x => _context.Remove(x.Enemy!));
+
+            battle.Participants
+                 .Where(x => x.Minion is not null)
+                 .ForEach(x => _context.Remove(x.Minion!));
 
             var starterPlayer = battle.Participants.First(x => x.Character is not null && x.Character.Row == originalEnemy.Enemy.Tile.RowIdx && x.Character.Col == originalEnemy.Enemy.Tile.ColIdx);
             var tileWithNeighbours = mapAccessor.GetTileByIndex(starterPlayer.Character.Row.Value, starterPlayer.Character.Col.Value);
@@ -764,7 +820,7 @@ namespace InfiniteCreativity.Services.GameNS
 
             if (battle.NextInTurn.CurrentActionGauge == 0)
             {
-                result.AddRange(HandleEnemyTurn(battle, mapAccessor));
+                result.AddRange(HandleNpcTurn(battle, mapAccessor));
             }
 
             return result;
@@ -940,7 +996,7 @@ namespace InfiniteCreativity.Services.GameNS
                 throw new InvalidOperationException("Skill on cooldown.");
             }
 
-            if (enemy.Enemy.Health <= 0)
+            if (!enemy.IsAlive)
             {
                 throw new InvalidOperationException("Already dead.");
             }
@@ -963,7 +1019,7 @@ namespace InfiniteCreativity.Services.GameNS
 
             if (battle.NextInTurn.CurrentActionGauge == 0)
             {
-                result.AddRange(HandleEnemyTurn(battle, mapAccessor));
+                result.AddRange(HandleNpcTurn(battle, mapAccessor));
             }
 
             return result;

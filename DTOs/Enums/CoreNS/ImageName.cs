@@ -20,6 +20,7 @@
         public const string Bleeding = "bleeding.png;";
         public const string Damage = "damage.png";
         public const string Taunt = "taunt.png";
-        
+        public const string BB = "bb.png";
+
     }
 }

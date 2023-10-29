@@ -20,8 +20,30 @@ namespace InfiniteCreativity.Models.CoreNS
         public Race Race { get; set; }
         public Profession Profession { get; set; }
         public int CurrentMovement { get; set; }
-        public double CurrentHealth { get; set; }
         public double CurrentAbilityResource { get; set; }
+        public BattleParticipant? BattleParticipant { get; set; }
+
+        private double _currentHealth;
+        public double CurrentHealth
+        {
+            get => _currentHealth;
+            set
+            {
+                if (_currentHealth > 0 && value <= 0)
+                {
+                    Die();
+                }
+                _currentHealth = value;
+            }
+        }
+
+        private void Die()
+        {
+            BattleParticipant.Buffs.Clear();
+            BattleParticipant.Conditions.Clear();
+            BattleParticipant.OwnedMinions.ForEach(x => x.OwnerDeath());
+
+        }
 
 
         [NotMapped]
@@ -119,26 +141,25 @@ namespace InfiniteCreativity.Models.CoreNS
             var modifiers = attacker.CalculateStatModifications();
             var damage = Damage * Math.Pow(CriticalMultiplier, crit) * modifiers.DamageMultiplier;
 
-            enemy.Enemy!.TakeDamage(damage, enemy.CalculateStatModifications());
+            enemy.TakeDamage(damage, enemy.CalculateStatModifications());
             attacker.CurrentActionGauge -= 1;
 
             var res = new List<ShowBattleEventDTO>(){
                 new ShowBattleEventAutoAttackDTO(){
                     SourceParticipantId = attacker.Id,
                     TargetParticipantId = enemy.Id,
-                    NewTargetHp = enemy.Enemy.Health,
+                    NewTargetHp = enemy.CurrentHealth,
                     NewAbilityGauge = attacker.CurrentActionGauge,
                 }
             };
 
-            if (enemy.Enemy.Health <= 0)
+            if (!enemy.IsAlive)
             {
                 res.Add(new ShowBattleEventParticipantDiesDTO()
                 {
                     SourceParticipantId = attacker.Id,
                     TargetParticipantId = enemy.Id,
                 });
-                enemy.Buffs.Clear();
             }
 
             return res;

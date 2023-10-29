@@ -43,31 +43,23 @@ namespace InfiniteCreativity.Models.CoreNS
             var result = new List<ShowBattleEventDTO>();
             Duration--;
 
-            if (BattleParticipant.Enemy is not null)
-            {
-                BattleParticipant.Enemy.TakeConditionDamage(2 * ConditionDamageMultiplier);
-            }
-            else
-            {
-                BattleParticipant.Character.TakeConditionDamage(2 * ConditionDamageMultiplier);
-            }
+            BattleParticipant.TakeConditionDamage(2 * ConditionDamageMultiplier);
 
             result.Add(new ShowBattleEventBleedTickDTO()
             {
                 SourceParticipantId = BattleParticipant.Id,
                 TargetParticipantId = BattleParticipant.Id,
                 Condition = mapper.Map<ShowConditionDTO>(this),
-                NewTargetHealth = BattleParticipant.GetCurrentHealth(),
+                NewTargetHealth = BattleParticipant.CurrentHealth,
             });
 
-            if (BattleParticipant.GetCurrentHealth() <= 0)
+            if (!BattleParticipant.IsAlive)
             {
                 result.Add(new ShowBattleEventParticipantDiesDTO()
                 {
                     SourceParticipantId = BattleParticipant.Id,
                     TargetParticipantId = BattleParticipant.Id,
                 });
-                BattleParticipant.Conditions.Clear();
             };
 
             return result;

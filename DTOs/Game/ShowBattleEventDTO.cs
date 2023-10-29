@@ -13,7 +13,7 @@ namespace DTOs.Game
 
     }
 
-    public class ShowBattleEventEnemyAttackDTO : ShowBattleEventDTO
+    public class ShowBattleEventNpcAttackDTO : ShowBattleEventDTO
     {
         public double NewTargetHp { get; set; }
     }
@@ -127,4 +127,9 @@ namespace DTOs.Game
     {
         public double NewHealth { get; set; }
     }
+    public class ShowBattleEventSummonDTO : ShowBattleEventDTO
+    {
+        public ShowBattleParticipantDTO Participant { get; set; }
+    }
+    
 }

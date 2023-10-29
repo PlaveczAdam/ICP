@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace DTOs.Enums.GameNS
 {
-    public enum TargetType
+    public enum Side
     {
+        Player,
         Enemy,
-        Ally,
-        Any
+        Rogue
     }
 }

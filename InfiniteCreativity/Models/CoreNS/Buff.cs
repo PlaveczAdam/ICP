@@ -68,18 +68,14 @@ namespace InfiniteCreativity.Models.CoreNS
         public override ShowBattleEventDTO Tick(IMapper mapper)
         {
             Duration--;
-            BattleParticipant.Character.CurrentHealth += BattleParticipant.Character.Health * 0.05;
-            if (BattleParticipant.Character.CurrentHealth > BattleParticipant.Character.Health)
-            {
-                BattleParticipant.Character.CurrentHealth = BattleParticipant.Character.Health;
-            }
+            BattleParticipant.CurrentHealth += BattleParticipant.Health * 0.05;
 
             return new ShowBattleEventRegenerationTickDTO()
             {
                 SourceParticipantId = BattleParticipant.Id,
                 TargetParticipantId = BattleParticipant.Id,
                 Buff = mapper.Map<ShowBuffDTO>(this),
-                NewHealth = BattleParticipant.Character.CurrentHealth,
+                NewHealth = BattleParticipant.CurrentHealth,
             };
         }
     }

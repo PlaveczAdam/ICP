@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace DTOs.Enums.GameNS
 {
-    public enum TargetType
+    public enum MinionType
     {
-        Enemy,
-        Ally,
-        Any
+        BB
     }
 }

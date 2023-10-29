@@ -13,6 +13,7 @@
         GenericDebuff,
         BigBleed,
         BigProtection,
-        Taunt
+        Taunt,
+        BB
     }
 }

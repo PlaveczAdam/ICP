@@ -23,6 +23,7 @@ namespace InfiniteCreativity.Models.CoreNS
         public TargetType TargetType { get; set; }
         public ICollection<BuffBlueprint> Buffs { get; set; } = new List<BuffBlueprint>();
         public ICollection<ConditionBlueprint> Conditions { get; set; } = new List<ConditionBlueprint>();
+        public ICollection<MinionBlueprint> Summons { get; set; } = new List<MinionBlueprint>();
 
         public static Dictionary<StackableType, Skill> SkillSeed = new Dictionary<StackableType, Skill>() {
             {
@@ -114,6 +115,19 @@ namespace InfiniteCreativity.Models.CoreNS
                     AbilityGaugeCost = 1,
                     Damage = 0,
                     TargetType = TargetType.Enemy,
+                }
+            },
+            {
+                StackableType.BB,
+                new Skill {
+                    Id = Guid.Parse("0D97F399-4303-43AB-AF02-EAB16FB5BE04"),
+                    Name = "BB",
+                    Description = "n",
+                    Cooldown = 0,
+                    ResourceCost = 1,
+                    AbilityGaugeCost = 2,
+                    Damage = 0,
+                    TargetType = TargetType.Any
                 }
             },
         };
@@ -208,6 +222,32 @@ namespace InfiniteCreativity.Models.CoreNS
                     Value = 1,
                     Rarity = RarityType.Common,
                     SkillId = SkillSeed[StackableType.Taunt].Id,
+                }
+            },
+            {
+                StackableType.BB,
+                new SkillHolder {
+                    Name = "BB",
+                    Description = "n",
+                    ImageName = ImageName.BB,
+                    ItemType = ItemType.Skill,
+                    StackableType = StackableType.BB,
+                    Value = 1,
+                    Rarity = RarityType.Common,
+                    SkillId = SkillSeed[StackableType.BB].Id,
+                }
+            },
+        };
+
+        public static Dictionary<StackableType, List<MinionBlueprint>> MinionBlueprintSeed = new Dictionary<StackableType, List<MinionBlueprint>>() {
+            {
+                StackableType.BB,
+                new List<MinionBlueprint> () {
+                    new MinionBlueprint
+                    {
+                        Id = Guid.Parse("C46DB327-C6C5-4EC2-B093-F5C7CC3BCA07"),
+                        Type = MinionType.BB,
+                    },
                 }
             },
         };
@@ -333,7 +373,7 @@ namespace InfiniteCreativity.Models.CoreNS
             var modifier = caster.CalculateStatModifications();
             damage *= Math.Pow(caster.Character.CriticalMultiplier,  crit) * modifier.DamageMultiplier;
 
-            enemy.Enemy!.TakeDamage(damage, enemy.CalculateStatModifications());
+            enemy.TakeDamage(damage, enemy.CalculateStatModifications());
             caster.Character.CurrentAbilityResource -= ResourceCost;
             caster.CurrentActionGauge -= AbilityGaugeCost;
 
@@ -343,7 +383,7 @@ namespace InfiniteCreativity.Models.CoreNS
                 {
                     SourceParticipantId = caster.Id,
                     TargetParticipantId = enemy.Id,
-                    NewTargetHp = enemy.Enemy.Health,
+                    NewTargetHp = enemy.CurrentHealth,
                     NewAbilityGauge = caster.CurrentActionGauge,
                     NewResource = caster.Character.CurrentAbilityResource,
                     Skill = mapper.Map<ShowSkillDTO>(this),

@@ -133,6 +133,24 @@ namespace InfiniteCreativity.Data
                 .HasForeignKey<Battle>(e => e.NextInTurnId)
                 .OnDelete(DeleteBehavior.SetNull);
 
+            modelBuilder.Entity<BattleParticipant>()
+                .HasOne(e => e.Minion)
+                .WithOne(e => e.BattleParticipant)
+                .HasForeignKey<BattleParticipant>(e => e.MinionId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<BattleParticipant>()
+                .HasOne(e => e.Character)
+                .WithOne(e => e.BattleParticipant)
+                .HasForeignKey<BattleParticipant>(e => e.CharacterId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Minion>()
+                .HasOne(e => e.Caster)
+                .WithMany(e => e.OwnedMinions)
+                .HasForeignKey(e => e.CasterId)
+                .OnDelete(DeleteBehavior.Cascade);
+
             modelBuilder.Entity<Buff>();
             modelBuilder.Entity<Rejuvenation>();
             modelBuilder.Entity<Regeneration>();
@@ -147,6 +165,11 @@ namespace InfiniteCreativity.Data
             modelBuilder.Entity<Taunt>();
             modelBuilder.Entity<ConditionBlueprint>()
                 .HasData(InfiniteCreativity.Models.CoreNS.Skill.ConditionBlueprintSeed.SelectMany(x => x.Value));
+
+            modelBuilder.Entity<Minion>();
+            modelBuilder.Entity<BB>();
+            modelBuilder.Entity<MinionBlueprint>()
+                .HasData(InfiniteCreativity.Models.CoreNS.Skill.MinionBlueprintSeed.SelectMany(x => x.Value));
 
         }
     }

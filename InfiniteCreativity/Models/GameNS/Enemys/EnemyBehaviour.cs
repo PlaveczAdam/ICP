@@ -25,28 +25,28 @@ namespace InfiniteCreativity.Models.GameNS.Enemys
             };
         }
 
-        public BattleParticipant? SelectTarget(List<BattleParticipant> alivePlayers, List<BattleParticipant> aliveEnemys, BattleParticipant? forceTarget)
+        public BattleParticipant? SelectTarget(List<BattleParticipant> aliveFriendly, List<BattleParticipant> aliveEnemy, BattleParticipant? forceTarget)
         {
             if (forceTarget is not null)
             {
                 return forceTarget;
             }else
             {
-                return SelectNonForcedTarget(alivePlayers, aliveEnemys);
+                return SelectNonForcedTarget(aliveFriendly, aliveEnemy);
             }
         }
 
-        protected abstract BattleParticipant? SelectNonForcedTarget(List<BattleParticipant> alivePlayers, List<BattleParticipant> aliveEnemys);
+        protected abstract BattleParticipant? SelectNonForcedTarget(List<BattleParticipant> aliveFriendly, List<BattleParticipant> aliveEnemy);
         public abstract List<ShowBattleEventDTO> ActionTurn(BattleParticipant target, StatModifications targetModifications, StatModifications selfModifitaions);
         protected ShowBattleEventDTO AutoAttack(BattleParticipant target, StatModifications targetModifications, StatModifications selfModifications)
         {
-            target!.Character!.TakeDamage(CalculateDamage(selfModifications), targetModifications);
+            target.TakeDamage(CalculateDamage(selfModifications), targetModifications);
 
-            return (new ShowBattleEventEnemyAttackDTO()
+            return (new ShowBattleEventNpcAttackDTO()
             {
                 SourceParticipantId = _selfParticipant.Id,
                 TargetParticipantId = target.Id,
-                NewTargetHp = target.Character.CurrentHealth
+                NewTargetHp = target.CurrentHealth
             });
         }
         private double CalculateDamage(StatModifications modifications)
@@ -71,9 +71,9 @@ namespace InfiniteCreativity.Models.GameNS.Enemys
             return result;
         }
 
-        protected override BattleParticipant? SelectNonForcedTarget(List<BattleParticipant> alivePlayers, List<BattleParticipant> aliveEnemys)
+        protected override BattleParticipant? SelectNonForcedTarget(List<BattleParticipant> aliveFriendly, List<BattleParticipant> aliveEnemy)
         {
-            var target = alivePlayers.MaxBy(x => x.Character.Defense);
+            var target = aliveEnemy.MaxBy(x => x.GetDefense());
             return target;
         }
     }
@@ -89,9 +89,9 @@ namespace InfiniteCreativity.Models.GameNS.Enemys
             result.Add(AutoAttack(target, targetModifications, selfModifitaions));
             return result;
         }
-        protected override BattleParticipant? SelectNonForcedTarget(List<BattleParticipant> alivePlayers, List<BattleParticipant> aliveEnemys)
+        protected override BattleParticipant? SelectNonForcedTarget(List<BattleParticipant> aliveFriendly, List<BattleParticipant> aliveEnemy)
         {
-            var target = alivePlayers.MinBy(x => x.Character.Defense);
+            var target = aliveEnemy.MinBy(x => x.GetDefense());
             return target;
         }
     }
