@@ -247,6 +247,7 @@ namespace InfiniteCreativity.Models.CoreNS
                     {
                         Id = Guid.Parse("C46DB327-C6C5-4EC2-B093-F5C7CC3BCA07"),
                         Type = MinionType.BB,
+                        SkillId = SkillSeed[StackableType.BB].Id
                     },
                 }
             },

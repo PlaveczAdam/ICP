@@ -223,5 +223,6 @@ namespace InfiniteCreativity.Models.CoreNS
     { 
         public Guid Id { get; set; }
         public MinionType Type { get; set; }
+        public Guid SkillId { get; set; }
     }
 }
