@@ -667,6 +667,8 @@ namespace InfiniteCreativity.Services.GameNS
 
             List<ShowBattleEventDTO> result = new();
             skill.CurrentCooldown = skill.SkillHolder.Skill.Cooldown;
+            battle.NextInTurn.CurrentActionGauge -= skill.SkillHolder.Skill.AbilityGaugeCost;
+            battle.NextInTurn.Character.CurrentAbilityResource -= skill.SkillHolder.Skill.ResourceCost;
 
             result.AddRange(SummonMinions(skill.SkillHolder.Skill.Summons, battle, battle.NextInTurn));
 
@@ -678,11 +680,19 @@ namespace InfiniteCreativity.Services.GameNS
             return result;
         }
 
-        private List<ShowBattleEventDTO> SummonMinions(ICollection<MinionBlueprint> summons, Battle battle, BattleParticipant caster)
+        private ShowBattleEventDTO SummonMinions(ICollection<MinionBlueprint> summons, Battle battle, BattleParticipant caster)
         {
-            var res = new List<ShowBattleEventDTO>();
-            res.AddRange(summons.Select(x => Minion.Summon(x.Type, battle, caster, _mapper)));
-            return res;
+            var res = new List<BattleParticipant>();
+            res.AddRange(summons.Select(x => Minion.Summon(x.Type, battle, caster)));
+            _context.Add(res);
+            return new ShowBattleEventSummonDTO() { 
+                NewAbilityGauge = caster.CurrentActionGauge,
+                NewResource = caster.Character.CurrentAbilityResource,
+                Participants = _mapper.Map<List<ShowBattleParticipantDTO>>(res),
+                SourceParticipantId = caster.Id,
+                TargetParticipantId = caster.Id,
+                TurnPredictions = _turnSimulator.Predict(battle, 20),
+            };
         }
 
         private ShowBattleEventDTO HandleVictory(Battle battle, GameMapAccessor mapAccessor)

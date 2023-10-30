@@ -154,7 +154,7 @@ namespace InfiniteCreativity.Models.CoreNS
             Side = SideAfterDeath;
         }
 
-        public static ShowBattleEventSummonDTO Summon(MinionType minionType, Battle battle, BattleParticipant caster, IMapper mapper) {
+        public static BattleParticipant Summon(MinionType minionType, Battle battle, BattleParticipant caster) {
             var entity = minionType switch
             {
                 MinionType.BB => new BB(),
@@ -177,14 +177,7 @@ namespace InfiniteCreativity.Models.CoreNS
             battle.Participants.Insert(afterIndex + 1, battleParticipant);
             battleParticipant.CurrentSpeed = entity.Speed;
 
-            var res = new ShowBattleEventSummonDTO()
-            {
-                Participant = mapper.Map<ShowBattleParticipantDTO>(battleParticipant),
-                SourceParticipantId = caster.Id,
-                TargetParticipantId = battleParticipant.Id,
-            };
-
-            return res;
+            return battleParticipant;
         }
     }
 

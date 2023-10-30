@@ -129,7 +129,10 @@ namespace DTOs.Game
     }
     public class ShowBattleEventSummonDTO : ShowBattleEventDTO
     {
-        public ShowBattleParticipantDTO Participant { get; set; }
+        public List<ShowBattleParticipantDTO> Participants { get; set; }
+        public int NewAbilityGauge { get; set; }
+        public double NewResource { get; set; }
+        public ICollection<Guid> TurnPredictions { get; set; }
     }
     
 }
