@@ -684,7 +684,7 @@ namespace InfiniteCreativity.Services.GameNS
         {
             var res = new List<BattleParticipant>();
             res.AddRange(summons.Select(x => Minion.Summon(x.Type, battle, caster)));
-            _context.Add(res);
+            _context.AddRange(res);
             return new ShowBattleEventSummonDTO() { 
                 NewAbilityGauge = caster.CurrentActionGauge,
                 NewResource = caster.Character.CurrentAbilityResource,
