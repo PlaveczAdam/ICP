@@ -34,8 +34,8 @@ namespace DTOs.Game
     }
     public class CreatePlayerActionUseSkillOnAny : CreatePlayerActionDTO
     {
-        public Guid TargetId { get; set; }
-        public Guid? SkillSlotId { get; set; }
+        public Guid? TargetId { get; set; }
+        public Guid SkillSlotId { get; set; }
     }
     
 }
