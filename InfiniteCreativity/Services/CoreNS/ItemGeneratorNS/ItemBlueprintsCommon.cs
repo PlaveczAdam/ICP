@@ -140,6 +140,22 @@ namespace InfiniteCreativity.Services.CoreNS.ItemGeneratorNS
                 Value = 1,
                 Rarity = RarityType.Common
             },
+
+            new Melee
+            {
+                Name = "Mevrix's curved sword",
+                ImageName = ImageName.Sword,
+                Description = "The trusted weapon of the infamous knight.",
+                ItemType = ItemType.Weapon,
+                WeaponType = WeaponType.Sword,
+                Damage = 10,
+                CritChance = 4,
+                CritMultiplier = 100,
+                Value = 300,
+                Rarity = RarityType.SuperRare,
+                ModelName = ItemModelName.MevSword,
+            },
+
             Skill.SkillHolder[StackableType.FirstSkill],
             Skill.SkillHolder[StackableType.HealSkill],
             Skill.SkillHolder[StackableType.ContinousBuff],

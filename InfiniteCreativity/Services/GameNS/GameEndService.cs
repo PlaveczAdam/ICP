@@ -39,6 +39,10 @@ namespace InfiniteCreativity.Services.GameNS
                     .ThenInclude(x => x.HexTiles)
                         .ThenInclude(x => x.DetailEntity)
                .FirstOrDefault(x => x.ConnectionID == gConnectionId);
+            if (gconn.Battle is not null)
+            {
+                _context.Remove(gconn.Battle);
+            }
             _context.GConnection.Remove(gconn);
             if (copy is not null)
             {

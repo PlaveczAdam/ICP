@@ -3,5 +3,6 @@
     public static class ItemModelName
     {
         public static string Excalibur => "Excalibur";
+        public static string MevSword => "MevSword";
     }
 }
