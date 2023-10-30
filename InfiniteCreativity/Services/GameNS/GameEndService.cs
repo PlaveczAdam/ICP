@@ -41,6 +41,8 @@ namespace InfiniteCreativity.Services.GameNS
                .FirstOrDefault(x => x.ConnectionID == gConnectionId);
             if (gconn.Battle is not null)
             {
+                gconn.Battle.NextInTurnId = null;
+                gconn.Battle.NextInTurn = null;
                 _context.Remove(gconn.Battle);
             }
             _context.GConnection.Remove(gconn);
