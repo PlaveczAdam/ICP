@@ -43,6 +43,7 @@ namespace InfiniteCreativity.Services.GameNS
             {
                 gconn.Battle.NextInTurnId = null;
                 gconn.Battle.NextInTurn = null;
+                await _context.SaveChangesAsync();
                 _context.Remove(gconn.Battle);
             }
             _context.GConnection.Remove(gconn);
