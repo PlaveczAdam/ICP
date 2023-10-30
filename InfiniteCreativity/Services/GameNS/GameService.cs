@@ -670,7 +670,7 @@ namespace InfiniteCreativity.Services.GameNS
             battle.NextInTurn.CurrentActionGauge -= skill.SkillHolder.Skill.AbilityGaugeCost;
             battle.NextInTurn.Character.CurrentAbilityResource -= skill.SkillHolder.Skill.ResourceCost;
 
-            result.AddRange(SummonMinions(skill.SkillHolder.Skill.Summons, battle, battle.NextInTurn));
+            result.Add(SummonMinions(skill.SkillHolder.Skill.Summons, battle, battle.NextInTurn));
 
             if (battle.NextInTurn.CurrentActionGauge == 0)
             {
