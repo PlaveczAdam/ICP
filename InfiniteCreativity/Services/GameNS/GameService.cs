@@ -182,7 +182,14 @@ namespace InfiniteCreativity.Services.GameNS
                     .Include(x => x.Battle)
                         .ThenInclude(x => x.Participants)
                             .ThenInclude(x => x.Conditions)
-                                .AsSplitQuery();
+                    .Include(x => x.Battle)
+                        .ThenInclude(x => x.Participants)
+                            .ThenInclude(x => x.Minion)
+                                .ThenInclude(x => x.Caster)
+                    .Include(x => x.Battle)
+                        .ThenInclude(x => x.Participants)
+                            .ThenInclude(x => x.OwnedMinions)
+                                    .AsSplitQuery();
             }
             return await gconn.Where(x => x.Id == currentPlayer.GConnections.First().Id).SingleAsync();
         }
