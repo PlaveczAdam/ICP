@@ -167,6 +167,7 @@ namespace InfiniteCreativity.Models.CoreNS
             entity.CasterId = caster.Id;
             entity.Side = caster.Side;
             entity.BattleParticipant = battleParticipant;
+            entity.CurrentHealth = entity.MaxHealth;
 
             battleParticipant.Id = Guid.NewGuid();
             battleParticipant.Minion = entity;
