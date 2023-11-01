@@ -5,38 +5,26 @@ namespace InfiniteCreativity.Services.CoreNS
     public static class EnemyStatComputer
     {
         private static Dictionary<EnemyType, double> _enemyTypeHealth = new() {
-            { EnemyType.Bean, 150 },
-            { EnemyType.Trunk, 200},
             { EnemyType.Slime, 50},
         };
 
         private static Dictionary<EnemyType, double> _enemyTypeDefense = new() {
-            { EnemyType.Bean, 1 },
-            { EnemyType.Trunk, 2},
              { EnemyType.Slime, 1},
         };
 
         private static Dictionary<EnemyType, double> _enemyTypeDamage = new() {
-            { EnemyType.Bean, 5 },
-            { EnemyType.Trunk, 10},
             { EnemyType.Slime, 1},
         };
 
         private static Dictionary<EnemyType, double> _enemyTypeCriticalChance = new() {
-            { EnemyType.Bean, 0.05 },
-            { EnemyType.Trunk, 0.1},
             { EnemyType.Slime, 0.1},
         };
 
         private static Dictionary<EnemyType, double> _enemyTypeCriticalMultiplier = new() {
-            { EnemyType.Bean, 1.5 },
-            { EnemyType.Trunk, 1.75},
             { EnemyType.Slime, 1.5},
         };
 
-        private static Dictionary<EnemyType, double> _enemyTypeSpeed = new() {
-            { EnemyType.Bean, 20 },
-            { EnemyType.Trunk, 50},
+        private static Dictionary<EnemyType, double> _enemyTypeSpeed = new() {,
             { EnemyType.Slime, 5},
         };
 

@@ -2,8 +2,6 @@
 {
     public enum EnemyType
     {
-        Bean,
-        Trunk,
         Slime
     }
 }
