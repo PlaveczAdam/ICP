@@ -32,6 +32,9 @@ namespace InfiniteCreativity.Services.GameNS
                .Include(x => x.Battle)
                     .ThenInclude(x => x.Participants)
                         .ThenInclude(x => x.Enemy)
+                .Include(x => x.Battle)
+                    .ThenInclude(x => x.Participants)
+                        .ThenInclude(x => x.Minion)
                .Include(x => x.Map)
                     .ThenInclude(x => x.HexTiles)
                         .ThenInclude(x => x.Enemy)
@@ -44,7 +47,7 @@ namespace InfiniteCreativity.Services.GameNS
                 gconn.Battle.NextInTurnId = null;
                 gconn.Battle.NextInTurn = null;
                 await _context.SaveChangesAsync();
-                _context.RemoveRange(gconn.Battle.Participants);
+                _context.RemoveRange(gconn.Battle.Participants.Select(x => x.Minion).Where(x => x is not null));
                 await _context.SaveChangesAsync();
             }
             _context.GConnection.Remove(gconn);
