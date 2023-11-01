@@ -25,7 +25,7 @@ namespace InfiniteCreativity.Services.CoreNS
         };
 
         private static Dictionary<EnemyType, double> _enemyTypeSpeed = new() {
-            { EnemyType.Slime, 5},
+            { EnemyType.Slime, 20},
         };
 
         internal static double CalculateCriticalChance(double level, EnemyType enemyType)
