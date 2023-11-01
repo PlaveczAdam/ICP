@@ -49,6 +49,7 @@ namespace InfiniteCreativity.Services.GameNS
                 await _context.SaveChangesAsync();
                 _context.RemoveRange(gconn.Battle.Participants.Select(x => x.Minion).Where(x => x is not null));
                 await _context.SaveChangesAsync();
+                _context.Remove(gconn.Battle);
             }
             _context.GConnection.Remove(gconn);
             if (copy is not null)
