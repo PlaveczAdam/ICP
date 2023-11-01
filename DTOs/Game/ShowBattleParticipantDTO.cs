@@ -19,6 +19,5 @@ namespace DTOs.Game
         public List<ShowBuffDTO> Buffs { get; set;}
         public List<ShowConditionDTO> Conditions { get; set; }
         public ShowGameMinionDTO? Minion { get; set; } 
-        public ShowBattleParticipantDTO? Caster { get; set; }
     }
 }
