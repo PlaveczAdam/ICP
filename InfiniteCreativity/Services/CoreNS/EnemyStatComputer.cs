@@ -13,7 +13,7 @@ namespace InfiniteCreativity.Services.CoreNS
         };
 
         private static Dictionary<EnemyType, double> _enemyTypeDamage = new() {
-            { EnemyType.Slime, 1},
+            { EnemyType.Slime, 20},
         };
 
         private static Dictionary<EnemyType, double> _enemyTypeCriticalChance = new() {
