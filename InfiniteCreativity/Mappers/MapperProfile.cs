@@ -53,6 +53,7 @@ namespace InfiniteCreativity.Mappers
 
             CreateMap<Enemy, ShowGameEnemyDTO>().IncludeAllDerived();
             CreateMap<Boss, ShowGameBossDTO>();
+            CreateMap<Minion, ShowGameMinionDTO>();
 
             CreateMap<Skill, ShowSkillDTO>();
             CreateMap<SkillHolder, ShowSkillHolderDTO>();

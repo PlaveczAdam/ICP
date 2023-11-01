@@ -4,5 +4,6 @@
     {
         Bean,
         Trunk,
+        Slime
     }
 }
