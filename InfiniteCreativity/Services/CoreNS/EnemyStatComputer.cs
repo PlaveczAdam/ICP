@@ -24,7 +24,7 @@ namespace InfiniteCreativity.Services.CoreNS
             { EnemyType.Slime, 1.5},
         };
 
-        private static Dictionary<EnemyType, double> _enemyTypeSpeed = new() {,
+        private static Dictionary<EnemyType, double> _enemyTypeSpeed = new() {
             { EnemyType.Slime, 5},
         };
 
