@@ -124,8 +124,8 @@ namespace InfiniteCreativity.Models.CoreNS
                     Name = "BB",
                     Description = "n",
                     Cooldown = 0,
-                    ResourceCost = 1,
-                    AbilityGaugeCost = 2,
+                    ResourceCost = 0,
+                    AbilityGaugeCost = 0,
                     Damage = 0,
                     TargetType = TargetType.Any
                 }
