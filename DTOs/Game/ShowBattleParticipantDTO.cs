@@ -1,4 +1,5 @@
-﻿using InfiniteCreativity.DTO.Game;
+﻿using DTOs.Enums.GameNS;
+using InfiniteCreativity.DTO.Game;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +19,7 @@ namespace DTOs.Game
         public double CurrentSpeed { get; set; }
         public List<ShowBuffDTO> Buffs { get; set;}
         public List<ShowConditionDTO> Conditions { get; set; }
-        public ShowGameMinionDTO? Minion { get; set; } 
+        public ShowGameMinionDTO? Minion { get; set; }
+        public Side Side { get; set; }
     }
 }
