@@ -108,7 +108,7 @@ namespace InfiniteCreativity.Models.CoreNS
                 return Character.CriticalMultiplier;
             } else
             {
-                return Minion.CriticalChance;
+                return Minion.CriticalMultiplier;
             }
         }
         public double GetDamage()
