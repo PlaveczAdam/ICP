@@ -653,6 +653,10 @@ namespace InfiniteCreativity.Services.GameNS
             }
 
             await _context.SaveChangesAsync();
+            if (isVictory || isDefeated)
+            { 
+                battle.Participants.Clear();
+            }
             var newBattleState = _mapper.Map<ShowBattleStateDTO>(battle);
             newBattleState.BattleEvents = res;
             newBattleState.TurnPredictions = isDefeated ? new () : _turnSimulator.Predict(battle, 10);
@@ -728,6 +732,7 @@ namespace InfiniteCreativity.Services.GameNS
                 x.Character.CurrentAbilityResource = x.Character.AbilityResource;
             });
             battle.NextInTurn = null;
+
             _context.SaveChanges();
             _context.Remove(battle);
             return new ShowBattleEventCombatEndVictoryDTO();
