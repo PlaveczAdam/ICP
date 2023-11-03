@@ -192,13 +192,13 @@ namespace InfiniteCreativity.Models.CoreNS
 
         public override int? Duration => null;
 
-        public override double Defense => 5;
+        public override double Defense => -1;
 
-        public override double CriticalChance => 0.1;
+        public override double CriticalChance => 10;
 
         public override double CriticalMultiplier => 2;
 
-        public override double Damage => 10;
+        public override double Damage => 100;
         public override double Speed => 20;
         protected override Side SideAfterDeath => Side.Rogue;
 
