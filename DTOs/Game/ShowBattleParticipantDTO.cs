@@ -21,5 +21,6 @@ namespace DTOs.Game
         public List<ShowConditionDTO> Conditions { get; set; }
         public ShowGameMinionDTO? Minion { get; set; }
         public Side Side { get; set; }
+        public List<ShowGameMinionDTO> OwnedMinions { get; set; }
     }
 }
