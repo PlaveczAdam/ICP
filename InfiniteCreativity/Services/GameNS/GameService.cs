@@ -647,13 +647,15 @@ namespace InfiniteCreativity.Services.GameNS
             }
             bool isVictory = res.Any(x => x is ShowBattleEventCombatEndVictoryDTO);
             bool isDefeated = res.Any(x => x is ShowBattleEventCombatEndDefeatDTO);
+            bool isfled = res.Any(x => x is ShowBattleEventCombatEndFleeDTO);
+
             if ( !isVictory && !isDefeated && battle.Participants.Where(x => (x.Enemy?.Health ?? 0) > 0).Count() == 0)
             {
                 res.Add(HandleVictory(battle, mapAccessor));
             }
 
             await _context.SaveChangesAsync();
-            if (isVictory || isDefeated)
+            if (isVictory || isDefeated || isfled)
             { 
                 battle.Participants.Clear();
             }
