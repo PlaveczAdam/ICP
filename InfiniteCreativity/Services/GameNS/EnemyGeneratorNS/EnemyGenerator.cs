@@ -46,7 +46,7 @@ namespace InfiniteCreativity.Services.GameNS.EnemyGeneratorNS
         }
         private Boss GenerateBoss(Boss boss)
         {
-            boss.Name = _rnd.Next(nameList);
+            boss.BossName = _rnd.Next(nameList);
             return boss;
         }
     }

@@ -41,7 +41,7 @@ namespace InfiniteCreativity.Models.GameNS.Enemys
         public EnemyBehaviourType BehaviourType { get; set; }
 
         [NotMapped]
-        public string Name => EnemyType.ToString();
+        public virtual string Name => EnemyType.ToString();
         [NotMapped]
         public virtual double MaxHealth => EnemyStatComputer.CalculateMaxHealth(Level, EnemyType);
         [NotMapped]
