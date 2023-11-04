@@ -5,7 +5,9 @@ namespace InfiniteCreativity.Models.GameNS.Enemys
 {
     public class Boss : Enemy
     {
-        public string Name { get; set; }
+        private string _name;
+
+        public string Name { get => _name; set => _name = value; }
         [NotMapped]
         public override double MaxHealth => base.MaxHealth * 2;
     }

@@ -151,6 +151,9 @@ namespace InfiniteCreativity.Data
                 .HasForeignKey(e => e.CasterId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            modelBuilder.Entity<Boss>()
+              .Property(e => e.Name);
+
             modelBuilder.Entity<Buff>();
             modelBuilder.Entity<Rejuvenation>();
             modelBuilder.Entity<Regeneration>();
