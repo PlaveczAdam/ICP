@@ -61,7 +61,7 @@ namespace InfiniteCreativity.Mappers
             CreateMap<Condition, ShowConditionDTO>();
 
             CreateMap<Battle, ShowBattleStateDTO>();
-            CreateMap<BattleParticipant, ShowBattleParticipantDTO>();
+            CreateMap<BattleParticipant, ShowBattleParticipantDTO>().ForMember(d => d.OwnedMinions, opt => opt.MapFrom(s => s.OwnedMinions.Select(x => x.BattleParticipant)));
 
             CreateMap<Quest, ShowQuestDTO>();
 
