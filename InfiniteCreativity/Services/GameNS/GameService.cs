@@ -423,10 +423,13 @@ namespace InfiniteCreativity.Services.GameNS
             var mapAccessor = new GameMapAccessor(gconn.Map);
             gconn.Battle.HasStarted = true;
             gconn.Characters.ForEach(x => x.Character.SkillSlots.ForEach(y => y.CurrentCooldown = 0));
+
+            var earlyBattle = _mapper.Map<ShowBattleStateDTO>(gconn.Battle);
             var enemyActions = HandleNpcTurn(gconn.Battle, mapAccessor);
-            var battleState = _mapper.Map<ShowBattleStateDTO>(gconn.Battle);
+            var battleState = gconn.Battle is null ? earlyBattle : _mapper.Map<ShowBattleStateDTO>(gconn.Battle);
+
             battleState.BattleEvents = enemyActions;
-            battleState.TurnPredictions = _turnSimulator.Predict(gconn.Battle, 20);
+            battleState.TurnPredictions = gconn.Battle is null ? new() : _turnSimulator.Predict(gconn.Battle, 20);
 
             await _context.SaveChangesAsync();
             return battleState;
