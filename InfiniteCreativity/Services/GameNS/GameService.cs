@@ -664,7 +664,7 @@ namespace InfiniteCreativity.Services.GameNS
             }
             var newBattleState = _mapper.Map<ShowBattleStateDTO>(battle);
             newBattleState.BattleEvents = res;
-            newBattleState.TurnPredictions = (isDefeated || isVictory) ? new () : _turnSimulator.Predict(battle, 10);
+            newBattleState.TurnPredictions = (isDefeated || isVictory || isfled) ? new () : _turnSimulator.Predict(battle, 10);
             return newBattleState;
         }
 
