@@ -62,7 +62,7 @@ namespace DTOs.Game
 
     public class ShowBattleEventParticipantDiesDTO : ShowBattleEventDTO
     {
-
+        public List<ShowBattleParticipantDTO> MinionsChangingSide { get; set; }
     }
 
     public class ShowBattleEventCombatEndDefeatDTO : ShowBattleEventDTO

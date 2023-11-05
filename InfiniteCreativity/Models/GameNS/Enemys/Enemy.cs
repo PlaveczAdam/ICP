@@ -1,4 +1,5 @@
-﻿using DTOs.Enums.CoreNS;
+﻿using AutoMapper;
+using DTOs.Enums.CoreNS;
 using DTOs.Game;
 using InfiniteCreativity.Extensions;
 using InfiniteCreativity.Models.CoreNS;
@@ -73,7 +74,7 @@ namespace InfiniteCreativity.Models.GameNS.Enemys
             set => _enemyBehaviour = value;
         }
 
-        public List<ShowBattleEventDTO> Turn(List<BattleParticipant> allParticipant)
+        public List<ShowBattleEventDTO> Turn(List<BattleParticipant> allParticipant, IMapper mapper)
         {
             var result = new List<ShowBattleEventDTO>();
             var forceTarget = BattleParticipant.Conditions.FirstOrDefault(x => x is Taunt)?.Caster;
@@ -107,6 +108,10 @@ namespace InfiniteCreativity.Models.GameNS.Enemys
                     {
                         SourceParticipantId = BattleParticipant.Id,
                         TargetParticipantId = target.Id,
+                        MinionsChangingSide = mapper.Map<List<ShowBattleParticipantDTO>>(
+                        target.OwnedMinions
+                            .Where(x => x.Side != target.Side)
+                            .Select(x => x.BattleParticipant)),
                     });
                 }
 

@@ -64,7 +64,7 @@ namespace InfiniteCreativity.Models.CoreNS
         protected abstract BattleParticipant? SelectNonForceTarget(List<BattleParticipant> aliveFriendly, List<BattleParticipant> aliveEnemy);
         protected abstract List<ShowBattleEventDTO> ActionTurn(BattleParticipant target, StatModifications targetModifiers, StatModifications selfModifiers);
 
-        public List<ShowBattleEventDTO> Turn(List<BattleParticipant> allParticipant)
+        public List<ShowBattleEventDTO> Turn(List<BattleParticipant> allParticipant, IMapper mapper)
         {
             var result = new List<ShowBattleEventDTO>();
             var forceTarget = BattleParticipant.Conditions.FirstOrDefault(x => x is Taunt)?.Caster;
@@ -98,6 +98,10 @@ namespace InfiniteCreativity.Models.CoreNS
                     {
                         SourceParticipantId = BattleParticipant.Id,
                         TargetParticipantId = target.Id,
+                        MinionsChangingSide = mapper.Map<List<ShowBattleParticipantDTO>>(
+                        target.OwnedMinions
+                            .Where(x => x.Side != target.Side)
+                            .Select(x => x.BattleParticipant)),
                     });
                 }
 
@@ -111,6 +115,7 @@ namespace InfiniteCreativity.Models.CoreNS
                 {
                     SourceParticipantId = BattleParticipant.Id,
                     TargetParticipantId = BattleParticipant.Id,
+                    MinionsChangingSide = new(),
                 });
             }
             return result;
@@ -192,13 +197,13 @@ namespace InfiniteCreativity.Models.CoreNS
 
         public override int? Duration => null;
 
-        public override double Defense => -1;
+        public override double Defense => 10;
 
-        public override double CriticalChance => 10;
+        public override double CriticalChance => 0.01;
 
         public override double CriticalMultiplier => 2;
 
-        public override double Damage => 100;
+        public override double Damage => 1;
         public override double Speed => 20;
         protected override Side SideAfterDeath => Side.Rogue;
 

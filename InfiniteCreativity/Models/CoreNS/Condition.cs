@@ -2,6 +2,7 @@
 using DTOs.Enums.CoreNS;
 using DTOs.Enums.GameNS;
 using DTOs.Game;
+using InfiniteCreativity.Models.GameNS.Enemys;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace InfiniteCreativity.Models.CoreNS
@@ -59,6 +60,10 @@ namespace InfiniteCreativity.Models.CoreNS
                 {
                     SourceParticipantId = BattleParticipant.Id,
                     TargetParticipantId = BattleParticipant.Id,
+                    MinionsChangingSide = mapper.Map<List<ShowBattleParticipantDTO>>(
+                    BattleParticipant.OwnedMinions
+                            .Where(x => x.Side != BattleParticipant.Side)
+                            .Select(x => x.BattleParticipant)),
                 });
             };
 

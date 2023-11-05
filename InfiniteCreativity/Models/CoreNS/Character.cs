@@ -1,4 +1,5 @@
-﻿using AutoMapper.Configuration.Conventions;
+﻿using AutoMapper;
+using AutoMapper.Configuration.Conventions;
 using DTOs.Game;
 using InfiniteCreativity.Extensions;
 using InfiniteCreativity.Models.CoreNS.ArmorNs;
@@ -135,7 +136,7 @@ namespace InfiniteCreativity.Models.CoreNS
             }
         }
 
-        public IEnumerable<ShowBattleEventDTO> AutoAttack(BattleParticipant enemy, BattleParticipant attacker)
+        public IEnumerable<ShowBattleEventDTO> AutoAttack(BattleParticipant enemy, BattleParticipant attacker, IMapper mapper)
         {
             var crit = _rnd.NextCrit(CriticalChance);
             var modifiers = attacker.CalculateStatModifications();
@@ -159,6 +160,10 @@ namespace InfiniteCreativity.Models.CoreNS
                 {
                     SourceParticipantId = attacker.Id,
                     TargetParticipantId = enemy.Id,
+                    MinionsChangingSide = mapper.Map<List<ShowBattleParticipantDTO>>(
+                        enemy.OwnedMinions
+                            .Where(x => x.Side != enemy.Side)
+                            .Select(x => x.BattleParticipant)),
                 });
             }
 

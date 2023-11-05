@@ -470,7 +470,7 @@ namespace InfiniteCreativity.Services.GameNS
                     SourceParticipantId = nextInTurn.Id,
                     TargetParticipantId = nextInTurn.Id
                 });
-                actions.AddRange(nextInTurn.Turn(battle.Participants.ToList()));
+                actions.AddRange(nextInTurn.Turn(battle.Participants.ToList(), _mapper));
 
                 nextInTurn = _turnSimulator.GetNext(battle);
             }
@@ -759,7 +759,7 @@ namespace InfiniteCreativity.Services.GameNS
                 throw new InvalidOperationException("Not enough gauge.");
             }
 
-            result.AddRange(battle.NextInTurn.Character.AutoAttack(enemy, battle.NextInTurn));
+            result.AddRange(battle.NextInTurn.Character.AutoAttack(enemy, battle.NextInTurn, _mapper));
 
             if (battle.NextInTurn.CurrentActionGauge == 0)
             {

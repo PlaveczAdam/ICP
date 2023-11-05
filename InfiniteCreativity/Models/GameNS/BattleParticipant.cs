@@ -1,4 +1,5 @@
-﻿using DTOs.Enums.GameNS;
+﻿using AutoMapper;
+using DTOs.Enums.GameNS;
 using DTOs.Game;
 using InfiniteCreativity.Models.GameNS.Enemys;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
@@ -142,11 +143,11 @@ namespace InfiniteCreativity.Models.CoreNS
             }
         }
 
-        public List<ShowBattleEventDTO> Turn(List<BattleParticipant> battleParticipants)
+        public List<ShowBattleEventDTO> Turn(List<BattleParticipant> battleParticipants, IMapper mapper)
         {
             if (Enemy is not null)
             {
-                return Enemy.Turn(battleParticipants);
+                return Enemy.Turn(battleParticipants, mapper);
             }
             else if (Character is not null)
             {
@@ -154,7 +155,7 @@ namespace InfiniteCreativity.Models.CoreNS
             }
             else
             {
-                return Minion.Turn(battleParticipants);
+                return Minion.Turn(battleParticipants, mapper);
             }
         }
         [NotMapped]
