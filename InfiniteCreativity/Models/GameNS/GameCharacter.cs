@@ -9,5 +9,6 @@ namespace InfiniteCreativity.Models.GameNS
         public Character Character { get; set; }
         public int Order { get; set; }
         public GConnection Connection { get; set; }
+        public int TreeCuttingLeft { get; set; } = 0;
     }
 }

@@ -33,6 +33,11 @@ namespace Extensions
             return type is TileContent.Empty or TileContent.City or TileContent.Dungeon or TileContent.Water;
         }
 
+        public static bool IsCuttable(this TileContent type)
+        {
+            return type is TileContent.Tree or TileContent.Tree2;
+        }
+
         public static bool IsSpawnable(this TileContent type)
         {
             return type is TileContent.Empty or TileContent.Water;

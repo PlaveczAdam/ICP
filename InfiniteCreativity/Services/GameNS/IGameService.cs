@@ -16,5 +16,6 @@ namespace InfiniteCreativity.Services.GameNS
         public Task<ShowBattleStateDTO> StartBattle();
         public Task<ShowBattleStateDTO> GetCurrentBattleState();
         public Task<ShowBattleStateDTO> MakePlayerTurn(CreatePlayerActionDTO playerAction);
+        public Task<ShowGameTurnDTO> CutTree(CreateTreeCutDTO playerAction);
     }
 }

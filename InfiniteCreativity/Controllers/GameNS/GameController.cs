@@ -66,6 +66,11 @@ namespace InfiniteCreativity.Controllers.GameNS
             return _gameService.MakePlayerTurn(playerAction);
         }
 
+        [HttpPost, Route("treecut")]
+        public Task<ShowGameTurnDTO> CutTree([FromBody] CreateTreeCutDTO playerAction)
+        {
+            return _gameService.CutTree(playerAction);
+        }
 
     }
 }

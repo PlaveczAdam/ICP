@@ -207,18 +207,37 @@ namespace InfiniteCreativity.Services.GameNS
             gconn.Turn++;
             var currInd = (gconn.Turn - 1) % gconn.Characters.Count();
             var character = characters[currInd];
-            character.Character.CurrentMovement = character.Character.Movement;
             var gTurnDTO = new ShowGameTurnDTO()
             {
                 Turn = gconn.Turn,
                 NextInTurnCharacterId = characters[currInd].Character.Id
             };
+
+            if (character.TreeCuttingLeft > 0)
+            { 
+                character.TreeCuttingLeft--;
+                if (character.TreeCuttingLeft == 0)
+                {
+                    gTurnDTO.CutTreeHexTileId = GetTilePlayerStandingOn(gconn, character.Character).Id;
+                }
+            }else
+            {
+                character.Character.CurrentMovement = character.Character.Movement;
+            }
+            
             await _context.SaveChangesAsync();
             await _notificationService.SendGNotification(gconn.PlayerId);
             return gTurnDTO;
         }
 
-        public async  Task StartGame(CreateGameDTO createGameDTO)
+        private HexTileDataObject GetTilePlayerStandingOn(GConnection gconn, Character ch)
+        {
+            var gma = new GameMapAccessor(gconn.Map);
+            var currentTile = gma.GetTileByIndex(ch.Row!.Value, ch.Col!.Value);
+            return currentTile;
+        }
+
+        public async Task StartGame(CreateGameDTO createGameDTO)
         {
             if (createGameDTO.CharacterIds.Count() > 3 || createGameDTO.CharacterIds.Count() < 0)
             {
@@ -1056,6 +1075,46 @@ namespace InfiniteCreativity.Services.GameNS
             }
 
             return result;
+        }
+
+        public async Task<ShowGameTurnDTO> CutTree(CreateTreeCutDTO playerAction)
+        {
+            var gconn = await GetGameConnectionDetailed(withGameCharacters: true, withCharacterDetail: true, withMap: true);
+            var characters = gconn.Characters.OrderBy(x => x.Order).ToList();
+            var currInd = (gconn.Turn - 1) % gconn.Characters.Count();
+            var character = characters[currInd];
+            var ch = character.Character;
+
+            if (ch.IsInCombat)
+            {
+                throw new InvalidOperationException();
+            }
+
+            var gma = new GameMapAccessor(gconn.Map);
+            var currentTile = gma.GetTileByIndex(ch.Row!.Value, ch.Col!.Value);
+            var remainingMovementPoints = ch.CurrentMovement;
+
+            if (remainingMovementPoints < 1)
+            { throw new InvalidOperationException(); }
+
+            var targetTileData = gma.GetTileByIndex(playerAction.Step.RowIndex, playerAction.Step.ColIndex);
+
+            if (targetTileData is null)
+            { throw new InvalidOperationException(); }
+            if (!targetTileData.TileContent.IsCuttable())
+            { throw new InvalidOperationException(); }
+            if (!currentTile.GetNeighbours().Contains(targetTileData))
+            { throw new InvalidOperationException(); }
+
+            ch.CurrentMovement = 0;
+            character.TreeCuttingLeft = 3;
+            ch.Col = targetTileData.ColIdx;
+            ch.Row = targetTileData.RowIdx;
+
+            await _context.SaveChangesAsync();
+            await _notificationService.SendGNotification(gconn.PlayerId);
+
+            return await ProgressTurn();
         }
     }
 }
