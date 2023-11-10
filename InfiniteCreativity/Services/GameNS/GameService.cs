@@ -202,7 +202,7 @@ namespace InfiniteCreativity.Services.GameNS
         
         public async Task<ShowGameTurnDTO> ProgressTurn()
         {
-            var gconn = await GetGameConnectionDetailed(withGameCharacters: true, withCharacterDetail: true, withInventory: true);
+            var gconn = await GetGameConnectionDetailed(withGameCharacters: true, withCharacterDetail: true, withInventory: true, withMap:true);
             var characters = gconn.Characters.OrderBy(x => x.Order).ToList();
             gconn.Turn++;
             var currInd = (gconn.Turn - 1) % gconn.Characters.Count();
