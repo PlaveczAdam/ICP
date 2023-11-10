@@ -221,7 +221,7 @@ namespace InfiniteCreativity.Services.GameNS
                     var tileplayerstandingon = GetTilePlayerStandingOn(gconn, character.Character);
                     gTurnDTO.CutTreeHexTileId = tileplayerstandingon.Id;
                     tileplayerstandingon.TileContent = TileContent.Empty;
-
+                    tileplayerstandingon.IsBeingCut = false;
                 }
             }else
             {
@@ -1104,6 +1104,8 @@ namespace InfiniteCreativity.Services.GameNS
 
             if (targetTileData is null)
             { throw new InvalidOperationException(); }
+            if (targetTileData.IsBeingCut)
+            { throw new InvalidOperationException(); }
             if (!targetTileData.TileContent.IsCuttable())
             { throw new InvalidOperationException(); }
             if (!currentTile.GetNeighbours().Contains(targetTileData))
@@ -1113,6 +1115,7 @@ namespace InfiniteCreativity.Services.GameNS
             character.TreeCuttingLeft = 3;
             ch.Col = targetTileData.ColIdx;
             ch.Row = targetTileData.RowIdx;
+            targetTileData.IsBeingCut = true;
 
             await _context.SaveChangesAsync();
             await _notificationService.SendGNotification(gconn.PlayerId);
