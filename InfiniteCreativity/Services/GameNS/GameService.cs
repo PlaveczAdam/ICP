@@ -218,7 +218,10 @@ namespace InfiniteCreativity.Services.GameNS
                 character.TreeCuttingLeft--;
                 if (character.TreeCuttingLeft == 0)
                 {
-                    gTurnDTO.CutTreeHexTileId = GetTilePlayerStandingOn(gconn, character.Character).Id;
+                    var tileplayerstandingon = GetTilePlayerStandingOn(gconn, character.Character);
+                    gTurnDTO.CutTreeHexTileId = tileplayerstandingon.Id;
+                    tileplayerstandingon.TileContent = TileContent.Empty;
+
                 }
             }else
             {
