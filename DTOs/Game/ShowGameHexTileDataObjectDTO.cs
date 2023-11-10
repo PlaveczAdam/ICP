@@ -13,5 +13,6 @@ namespace InfiniteCreativity.DTO.Game
         public bool ReservedForPath { get; set; }
         /*public EntityBaseDataObject? DetailEntity { get; set; }*/
         public ShowGameEnemyDTO? Enemy { get; set; }
+        public bool IsBeingCut { get; set; }
     }
 }
