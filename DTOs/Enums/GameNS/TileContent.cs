@@ -8,6 +8,7 @@
         Tree2,
         Water,
         City,
-        Dungeon
+        Dungeon,
+        Road
     }
 }

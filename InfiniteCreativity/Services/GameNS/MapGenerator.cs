@@ -7,7 +7,9 @@ using InfiniteCreativity.Models.CoreNS;
 using InfiniteCreativity.Models.Enums.GameNS;
 using InfiniteCreativity.Models.GameNS;
 using InfiniteCreativity.Services.GameNS;
+using InfiniteCreativity.Services.MapPatherNS;
 using MoreLinq.Extensions;
+using System.IO;
 
 namespace Map
 {
@@ -52,6 +54,7 @@ namespace Map
             }
 
             PopulateMap(mapData, settings);
+            GenerateRoads(mapData);
             InitPlayers(playersDataObjects);
             var mdo = new MapDataObject()
             {
@@ -60,6 +63,97 @@ namespace Map
                 HexTiles = mapData.HexTiles.SelectMany(x => x).ToList(),
             };
             return mdo;
+        }
+
+        private void GenerateRoads(GameMapAccessor mapData)
+        {
+            var cityWithState = new Dictionary<HexTileDataObject, int>();
+            mapData.HexTiles.SelectMany(x => x).Where(x => x.TileContent == TileContent.City).ForEach(x => cityWithState.Add(x, 0));
+            HexTileDataObject? previousCity = null;
+            HexTileDataObject? nextCity = null;
+
+            while (cityWithState.Any(x => x.Value < 2))
+            { 
+                var currentCity = nextCity ?? cityWithState.First(x => x.Value < 2).Key;
+                (List<HexTileDataObject> path, HexTileDataObject? connectedToCity) = FindNearest(currentCity, x => x.TileContent == TileContent.City && x != previousCity && x != currentCity && (previousCity is null || cityWithState[x] == 0));
+                cityWithState[currentCity] = 2;
+                nextCity = (connectedToCity != null && cityWithState[connectedToCity] == 2) ? null : connectedToCity;
+                path.ForEach(x => {
+                    if (x.TileContent == TileContent.Empty)
+                    {
+                        x.TileContent = TileContent.Road;
+                    }
+                });
+                previousCity = connectedToCity is null ? null : currentCity;
+            }
+        }
+
+        private List<HexTileDataObject> GeneratePath(GraphNode currentNode)
+        {
+            var path = new List<HexTileDataObject>();
+
+            var curr = currentNode;
+            while (curr != null)
+            {
+                path.Add(curr.Data);
+                curr = curr.Parent;
+            }
+            path.Reverse();
+            path.RemoveAt(0);
+            return path;
+
+        }
+
+        private (List<HexTileDataObject> path, HexTileDataObject? connectedToCity) FindNearest(HexTileDataObject currentCity, Func<HexTileDataObject, bool> condition)
+        {
+            var startNode = new GraphNode(currentCity)
+            {
+                TotalCost = 0
+            };
+            var openNodes = new PriorityQueue<GraphNode>();
+            openNodes.Enqueue(startNode, 0);
+            var closedNodes = new HashSet<GraphNode>();
+            while (!openNodes.IsEmpty())
+            {
+                var currentNode = openNodes.Dequeue();
+                if (condition(currentNode.Data))
+                {
+                    return (GeneratePath(currentNode), currentNode.Data);
+                }
+                closedNodes.Add(currentNode);
+                var neighbours = currentNode.Data.GetNeighbours().Where(x => x.TileContent != TileContent.Water).ToList();
+                foreach (var neighbour in neighbours)
+                {
+                    var neighbourNode = openNodes.FirstOrDefault(x => x.Data == neighbour) ??
+                                        new GraphNode(neighbour);
+                    if (!neighbour.IsWalkable())
+                    {
+                        closedNodes.Add(neighbourNode);
+                    }
+
+                    if (closedNodes.Contains(neighbourNode))
+                    {
+                        continue;
+                    }
+
+                    var newCost = currentNode.TotalCost + 1;
+
+                    if (openNodes.Contains(neighbourNode))
+                    {
+                        if (newCost >= neighbourNode.TotalCost)
+                        {
+                            continue;
+                        }
+
+                        openNodes.Remove(neighbourNode);
+                    }
+
+                    neighbourNode.TotalCost = newCost;
+                    neighbourNode.Parent = currentNode;
+                    openNodes.Enqueue(neighbourNode, neighbourNode.TotalCost);
+                }
+            }
+            return (new (), null);
         }
 
         private MapDataObject ProcessOverride()

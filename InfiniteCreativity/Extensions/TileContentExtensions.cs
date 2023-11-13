@@ -30,7 +30,7 @@ namespace Extensions
 
         public static bool IsWalkable(this TileContent type)
         {
-            return type is TileContent.Empty or TileContent.City or TileContent.Dungeon or TileContent.Water;
+            return type is TileContent.Empty or TileContent.City or TileContent.Dungeon or TileContent.Water or TileContent.Road;
         }
 
         public static bool IsCuttable(this TileContent type)
@@ -40,7 +40,7 @@ namespace Extensions
 
         public static bool IsSpawnable(this TileContent type)
         {
-            return type is TileContent.Empty or TileContent.Water;
+            return type is TileContent.Empty or TileContent.Water or TileContent.Road;
         }
     }
 }

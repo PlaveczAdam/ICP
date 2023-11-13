@@ -1,13 +1,16 @@
 ﻿using DTOs.Game;
+using InfiniteCreativity.Attributes;
 using InfiniteCreativity.DTO.Game;
 using InfiniteCreativity.Services.GameNS;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace InfiniteCreativity.Controllers.GameNS
 {
     [Authorize]
     [ApiController, Route("/api/game")]
+    [ReferenceLoop]
     public class GameController : Controller
     {
         private IGameService _gameService;
@@ -72,5 +75,12 @@ namespace InfiniteCreativity.Controllers.GameNS
             return _gameService.CutTree(playerAction);
         }
 
+        public override JsonResult Json(object? data)
+        {
+            return base.Json(data, new JsonSerializerSettings
+            {
+                PreserveReferencesHandling = Newtonsoft.Json.PreserveReferencesHandling.All
+        }) ;
+        }
     }
 }

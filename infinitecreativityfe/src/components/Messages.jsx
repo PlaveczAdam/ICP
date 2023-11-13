@@ -147,7 +147,7 @@ function Messages(props) {
             position="relative"
             ref={setScrollRef}
           >
-            {messages.map((x) => (
+            {messages?.map((x) => (
               <Message message={x} key={`${x.fromInbox}_${x.id}`}></Message>
             ))}
             <Collapse in={offsetY > 100} sx={{ position: "sticky", bottom: 0}}>

@@ -75,9 +75,7 @@ namespace InfiniteCreativity.Services.GameNS
                 TreeToLandRatio = 0.25f,
                 TreeBatchMax = 10,
                 MapFragmentPresets = new List<MapFragmentPresetDTO> {
-                _mapPresetFragments.Preset2,
                 _mapPresetFragments.Preset3,
-                _mapPresetFragments.Preset2,
                 _mapPresetFragments.Preset3,
                 }
             };
