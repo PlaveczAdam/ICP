@@ -12,6 +12,7 @@ import InventoryContextProvider from "./InventoryContextProvider";
 
 function Account(props) {
   const userCTX = useContext(UserContext);
+  const [activeButton, setActiveButton] = useState("home");
 
   if (!userCTX.user) {
     return null;
@@ -39,6 +40,12 @@ function Account(props) {
                 width: "100%",
               }}
               to="characters"
+              color={
+                activeButton === "characters"
+                  ? "activeButtonColor"
+                  : "primary"
+              }
+              onClick={() => setActiveButton("characters")}
             >
               Characters
             </Button>
@@ -50,6 +57,12 @@ function Account(props) {
               }}
               component={Link}
               to="inventory"
+              color={
+                activeButton === "inventory"
+                  ? "activeButtonColor"
+                  : "primary"
+              }
+              onClick={() => setActiveButton("inventory")}
             >
               Inventory
             </Button>

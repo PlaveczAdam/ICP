@@ -6,18 +6,30 @@ import Box from "@mui/material/Box";
 import { CircularProgress } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
+import InputAdornment from '@mui/material/InputAdornment';
+import IconButton from '@mui/material/IconButton';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from './UserContextProvider';
-
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 function Login(props) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isFailed, setIsFailed] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const userCTX = useContext(UserContext);
 
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
+  
   const handleSubmit = async (event) => {
     event.preventDefault();
     setIsLoading(true);
@@ -33,12 +45,26 @@ function Login(props) {
       userCTX.refresh();
       return;
     }
+    notify();
     setIsFailed(true);
     setIsLoading(false);
     setTimeout(() => {
       setIsFailed(false);
-    }, 2000)
+    }, 2770)
     console.log(await res.json());
+  };
+
+  const notify = () => {
+    toast.error("Invalid Username or Password!", {
+      position: "top-center",
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+    });
   };
 
   return (
@@ -76,13 +102,24 @@ function Login(props) {
           />
           <TextField
             error={isFailed}
-            helperText="Invalid Username or Password"
             margin="normal"
             required
             fullWidth
             name="password"
             label="Password"
-            type="password"
+            type={showPassword ? 'text' : 'password'}
+            InputProps={{
+              endAdornment: <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={handleClickShowPassword}
+                  onMouseDown={handleMouseDownPassword}
+                  edge={"end"}
+                >
+                  {showPassword ? <VisibilityOff sx={{color: "rgba(0,105,93,1)"}}/> : <Visibility sx={{color: "rgba(0,105,93,1)"}}/>}
+                </IconButton>
+              </InputAdornment>
+            }}
             id="password"
             autoComplete="current-password"
             value={password}

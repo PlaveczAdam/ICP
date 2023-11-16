@@ -3,9 +3,11 @@ import { useContext } from "react";
 import { UserContext } from "./UserContextProvider";
 import Character from "./Character";
 import CharacterCreation from "./CharacterCreation";
+import { useMemo } from "react";
 
 function Characters(props) {
   const userCTX = useContext(UserContext);
+
   if (!userCTX.user) {
     return null;
   }

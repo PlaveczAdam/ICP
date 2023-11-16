@@ -1,8 +1,9 @@
 import "./App.css";
 import logo from "./img/logo.png";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Login from "./components/Login";
+import { DateTime } from "luxon";
 import Registration from "./components/Registration";
 import Home from "./components/Home";
 import Account from "./components/Account";
@@ -11,10 +12,35 @@ import { UserContext } from "./components/UserContextProvider";
 import { Box, Button } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { purple, teal } from "@mui/material/colors";
-import Inventory from './components/Inventory';
-import Market from './components/Market';
-import CreateListing from './components/CreateListing';
-import MyListings from './components/MyListings';
+import Inventory from "./components/Inventory";
+import Market from "./components/Market";
+import CreateListing from "./components/CreateListing";
+import MyListings from "./components/MyListings";
+import AllListings from "./components/AllListings";
+import Messages from "./components/Messages";
+import { ToastContainer } from "react-toastify";
+import Badge from "@mui/material/Badge";
+import QuestionAnswerIcon from "@mui/icons-material/QuestionAnswer";
+import useNotification, { notificationTypes } from "./hooks/useNotification";
+import {
+  Chart as ChartJS,
+  RadialLinearScale,
+  PointElement,
+  LineElement,
+  Filler,
+  Tooltip,
+  Legend,
+} from 'chart.js';
+import BoHome from "./components/backoffice/BoHome";
+
+ChartJS.register(
+  RadialLinearScale,
+  PointElement,
+  LineElement,
+  Filler,
+  Tooltip,
+  Legend
+);
 
 const theme = createTheme({
   palette: {
@@ -34,7 +60,6 @@ const theme = createTheme({
       main: "#fff",
     },
     disabled: {
-      //background: repeating-linear-gradient(45deg, green 0, green 25%, #58a 0, #58a 50%);
       main: "rgba(166, 23, 202, 0.4)",
       text: "#fff",
     },
@@ -90,14 +115,14 @@ const globalTheme = createTheme(theme, {
     MuiOutlinedInput: {
       styleOverrides: {
         notchedOutline: {
-          borderColor: "teal",
+          borderColor: "rgba(0,105,93,1)",
         },
       },
     },
     MuiTextField: {
       styleOverrides: {
         root: {
-          borderColor: "teal",
+          borderColor: "rgba(0,105,93,1)",
         },
       },
     },
@@ -131,6 +156,81 @@ const globalTheme = createTheme(theme, {
       styleOverrides: {
         root: {
           color: "#fafafa",
+        },
+      },
+    },
+    MuiMenu: {
+      styleOverrides: {
+        list: {
+          backgroundColor: "black",
+        },
+      },
+    },
+    MuiIconButton: {
+      styleOverrides: {
+        root: {
+          color: "white",
+        },
+      },
+    },
+    MuiListItemIcon: {
+      styleOverrides: {
+        root: {
+          color: "white",
+        },
+      },
+    },
+    MuiDataGrid: {
+      styleOverrides: {
+        menu: {
+          "& .MuiDataGrid-menuList": {
+            backgroundColor: "black",
+            border: "solid 1px white",
+            borderRadius: "4px",
+          },
+        },
+        root: {
+          borderColor: "transparent",
+        },
+        withBorderColor: {
+          borderColor: "rgb(85 32 91)",
+        },
+      },
+    },
+    MuiSelect: {
+      styleOverrides: {
+        select: {
+          color: "white",
+        },
+        icon: {
+          color: "white",
+        },
+      },
+    },
+    MuiTablePagination: {
+      styleOverrides: {
+        select: {
+          "&,&:focus": {
+            border: "solid 1px",
+            borderRadius: "4px",
+            borderColor: "white",
+          },
+        },
+      },
+    },
+    MuiMenuItem: {
+      styleOverrides: {
+        root: {
+          "&:hover": {
+            color: theme.palette.secondary.contrastText,
+            backgroundColor: theme.palette.secondary.light,
+            borderColor: theme.palette.secondary.main,
+          },
+          "&.Mui-selected, &.Mui-selected:hover": {
+            color: theme.palette.secondary.contrastText,
+            backgroundColor: theme.palette.secondary.light,
+            borderColor: theme.palette.secondary.main,
+          },
         },
       },
     },
@@ -178,21 +278,122 @@ const globalTheme = createTheme(theme, {
       ],
     },
   },
+  typography: {
+    body1: {
+      color: "white",
+    },
+    body2: {
+      color: "white",
+    },
+    h1: {
+      color: "white",
+    },
+    h2: {
+      color: "white",
+    },
+    h3: {
+      color: "white",
+    },
+    h4: {
+      color: "white",
+    },
+    h5: {
+      color: "white",
+    },
+    h6: {
+      color: "white",
+    },
+    subtitle1: {
+      color: "white",
+    },
+    subtitle2: {
+      color: "white",
+    },
+    button: {
+      color: "white",
+    },
+    caption: {
+      color: "white",
+    },
+    overline: {
+      color: "white",
+    },
+  },
 });
 
 function App() {
   const [activeButton, setActiveButton] = useState("home");
+  const [childData, setChildData] = useState([]);
+  const [msgNumber, setMsgNumber] = useState(0);
+  const [isOpen, setIsOpen] = useState(false);
+  const [checked, setChecked] = useState(false);
   const userCTX = useContext(UserContext);
+  let newMessagesCounter;
+
   async function handleLogOut() {
     await fetch("/api/player/logout");
+    setActiveButton("home");
     userCTX.refresh();
+    setChecked(false);
   }
+
+  function openMessages() {
+    let date = DateTime.utc().toISO();
+    if (isOpen) {
+      setIsOpen(false);
+      setChecked(false);
+      localStorage.setItem(`${userCTX.user.name}Close`, date);
+    } else {
+      setChecked(true);
+      setIsOpen(true);
+      localStorage.setItem(`${userCTX.user.name}Open`, date);
+    }
+  }
+
+  function handleChildData(data) {
+    setChildData(data);
+  }
+
+  useEffect(() => {
+    if(userCTX.user){
+      const lastDate = localStorage.getItem(`${userCTX.user.name}Open`);
+      const closeDate = localStorage.getItem(`${userCTX.user.name}Close`);
+    newMessagesCounter = childData.filter(
+      (x) =>
+        x.recipient.name === userCTX.user.name &&
+        x.sendDate >= lastDate &&
+        x.sendDate >= closeDate
+    );
+    console.log(newMessagesCounter[0]);
+    setTimeout(() => {
+      if (!checked) setMsgNumber(newMessagesCounter.length);
+    }, 200);
+  }
+  }, [childData]);
+
+  let notification = useNotification(notificationTypes.QuestUpdate);
+  useEffect(() => {
+    userCTX.refresh();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [notification]);
 
   return (
     <ThemeProvider theme={globalTheme}>
       <div className="App">
+        <Box>
+          <ToastContainer
+            position="top-center"
+            autoClose={2000}
+            hideProgressBar={false}
+            closeOnClick={true}
+            pauseOnHover={true}
+            draggable={true}
+            theme="dark"
+            style={{ userSelect: "none" }}
+          />
+        </Box>
         <Box className="App-header">
-          <Router>
+          <Router basename="/">
             <Box
               sx={{
                 display: "flex",
@@ -213,12 +414,17 @@ function App() {
                   zIndex: 1000,
                   className: "navbarBox",
                   boxShadow: "2px 6px 11px 2px #101010",
+                  minHeight: 70,
                 }}
               >
-                <Box sx={{ flexShrink: "1" }}>
-                  <Link to="/">
-                    <img src={logo} alt="logo" width="70" height="70" />
-                  </Link>
+                <Box
+                  component={Link}
+                  to="/"
+                  display="flex"
+                  alignItems="center"
+                  paddingLeft={3}
+                >
+                  <img src={logo} alt="logo" height="60" />
                 </Box>
                 <Box
                   sx={{
@@ -264,7 +470,7 @@ function App() {
                           : "primary"
                       }
                       component={Link}
-                      to="/market/myListings"
+                      to="/market/allListings"
                       onClick={() => {
                         setActiveButton("market");
                       }}
@@ -275,7 +481,33 @@ function App() {
                 </Box>
                 <Box sx={{ flexShrink: "1" }}>
                   {userCTX.user && (
-                    <Box sx={{ display: "flex", flexWrap: "wrap", alignItems: "center" }}>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexWrap: "wrap",
+                        alignItems: "center",
+                      }}
+                    >
+                      <Box sx={{ paddingRight: "20px" }}>
+                        <Badge badgeContent={msgNumber} color="error" max={9}>
+                          <QuestionAnswerIcon
+                            style={{
+                              color: "",
+                              borderRadius: "15%",
+                              backgroundColor: "rgba(0, 105, 94, 0.4)",
+                              padding: "10px",
+                              border: "1px solid #202020",
+                              boxShadow: "0px 5px 8px #101010",
+                            }}
+                            sx={{ "&:hover": { cursor: "pointer" } }}
+                            onClick={() => {
+                              setMsgNumber(0);
+                              openMessages();
+                            }}
+                            color="action"
+                          />
+                        </Badge>
+                      </Box>
                       <Box sx={{ paddingRight: "10px" }}>
                         {userCTX.user.name}
                       </Box>
@@ -337,15 +569,30 @@ function App() {
                   padding="16px"
                   overflow="auto"
                   minHeight="0"
+                  justifyContent="center"
                 >
                   <Routes>
+                    <Route 
+                    path="/bo"
+                    element={<BoHome></BoHome>}>
+                    </Route>
                     <Route
                       path="/registration"
                       element={<Registration />}
                     ></Route>
                     <Route path="/market" element={<Market></Market>}>
-                      <Route path="createListing" element={<CreateListing></CreateListing>}></Route>
-                      <Route path="myListings" element={<MyListings></MyListings>}></Route>
+                      <Route
+                        path="createListing"
+                        element={<CreateListing></CreateListing>}
+                      ></Route>
+                      <Route
+                        path="allListings"
+                        element={<AllListings></AllListings>}
+                      ></Route>
+                      <Route
+                        path="myListings"
+                        element={<MyListings></MyListings>}
+                      ></Route>
                     </Route>
                     <Route path="/account" element={<Account />}>
                       <Route path="characters" element={<Characters />}></Route>
@@ -358,6 +605,14 @@ function App() {
               </Box>
             </Box>
           </Router>
+          <Messages
+            onDataPassed={handleChildData}
+            setChecked={setChecked}
+            checked={checked}
+            setMsgNumber={setMsgNumber}
+            setIsOpen={setIsOpen}
+            isOpen={isOpen}
+          ></Messages>
         </Box>
       </div>
     </ThemeProvider>

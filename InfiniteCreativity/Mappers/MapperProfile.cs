@@ -1,10 +1,17 @@
 ﻿using AutoMapper;
-using InfiniteCreativity.Models;
-using InfiniteCreativity.Models.Armor;
-using InfiniteCreativity.Models.DTO;
-using InfiniteCreativity.Models.DTO.Armor;
-using InfiniteCreativity.Models.DTO.Weapon;
-using InfiniteCreativity.Models.Weapons;
+using DTOs;
+using DTOs.Game;
+using InfiniteCreativity.DTO;
+using InfiniteCreativity.DTO.Armor;
+using InfiniteCreativity.DTO.Game;
+using InfiniteCreativity.DTO.Message;
+using InfiniteCreativity.DTO.Weapon;
+using InfiniteCreativity.Models.CoreNS;
+using InfiniteCreativity.Models.CoreNS.ArmorNs;
+using InfiniteCreativity.Models.CoreNS.Materials;
+using InfiniteCreativity.Models.CoreNS.Weapons;
+using InfiniteCreativity.Models.GameNS;
+using InfiniteCreativity.Models.GameNS.Enemys;
 
 namespace InfiniteCreativity.Mappers
 {
@@ -14,6 +21,8 @@ namespace InfiniteCreativity.Mappers
         {
             CreateMap<Item, ShowItemDTO>().IncludeAllDerived();
             CreateMap<Equippable, ShowEquippableDTO>();
+            CreateMap<Stackable, ShowStackableDTO>();
+
             CreateMap<Weapon, ShowWeaponDTO>();
             CreateMap<Melee, ShowMeleeDTO>();
             CreateMap<Ranged, ShowRangedDTO>();
@@ -26,15 +35,41 @@ namespace InfiniteCreativity.Mappers
             CreateMap<Leg, ShowLegDTO>();
             CreateMap<Boot, ShowBootDTO>();
 
-            CreateMap<Player, CreatePlayerDTO>().ReverseMap();
-            CreateMap<Character, CreateCharacterDTO>().ReverseMap();
-            CreateMap<Quest, ShowQuestDTO>();
+            CreateMap<Material, ShowMaterialDTO>();
 
+            CreateMap<Player, CreatePlayerDTO>().ReverseMap();
+            CreateMap<Player, ShowGamePlayerDTO>();
+            CreateMap<Player, ShowWalletDTO>();
             CreateMap<Player, ShowPlayerDTO>();
+
+            CreateMap<Character, CreateCharacterDTO>().ReverseMap();
             CreateMap<Character, ShowCharacterDTO>();
             CreateMap<Character, ShowEquipmentDTO>();
+            CreateMap<Character, ShowGameCharacterDTO>().ForMember(dest => dest.SkillSlots, opt => opt.MapFrom(src => src.SkillSlots.OrderBy(x => x.SlotNumber)));
+            CreateMap<Character, ShowCharacterWithStatDTO>();
+
+            CreateMap<GameMapAccessor, ShowGameMapDTO>();
+            CreateMap<HexTileDataObject, ShowGameHexTileDataObjectDTO>();
+
+            CreateMap<Enemy, ShowGameEnemyDTO>().IncludeAllDerived();
+            CreateMap<Boss, ShowGameBossDTO>();
+            CreateMap<Minion, ShowGameMinionDTO>();
+
+            CreateMap<Skill, ShowSkillDTO>();
+            CreateMap<SkillHolder, ShowSkillHolderDTO>();
+            CreateMap<Buff, ShowBuffDTO>();
+            CreateMap<Condition, ShowConditionDTO>();
+
+            CreateMap<Battle, ShowBattleStateDTO>();
+            CreateMap<BattleParticipant, ShowBattleParticipantDTO>().ForMember(d => d.OwnedMinions, opt => opt.MapFrom(s => s.OwnedMinions.Select(x => x.BattleParticipant)));
+
+            CreateMap<Quest, ShowQuestDTO>();
 
             CreateMap<Listing, ShowListingDTO>();
+
+            CreateMap<Message, ShowMessageDTO>();
+
+            CreateMap<CharacterSkillSlot, ShowCharacterSkillSlotDTO>();
 
             /*CreateMap<Item, ShowMeleeDTO>().ConstructUsing((source, context) => context.Mapper.Map<ShowMeleeDTO>(source as Melee));*/
         }

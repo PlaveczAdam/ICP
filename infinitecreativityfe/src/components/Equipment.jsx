@@ -7,6 +7,7 @@ import {
   TableCell,
   TableBody,
   LinearProgress,
+  Collapse,
 } from "@mui/material";
 import { useState, forwardRef, useEffect, useContext } from "react";
 import Dialog from "@mui/material/Dialog";
@@ -28,11 +29,34 @@ function Equipment(props) {
   const [equipment, setEquipment] = useState();
   const [armor, setArmor] = useState("");
   const [weapon, setWeapon] = useState("");
+  const [skills, setSkills] = useState();
+  const [skillSlot, setSkillSlot] = useState(-1);
+
   const inventoryCTX = useContext(InventoryContext);
+
   async function getEquipment() {
     const res = await fetch(`/api/character/equipment/${props.characterID}`);
     let equipment = await res.json();
     setEquipment(equipment);
+  }
+
+  async function getSkills() {
+    const res = await fetch(`/api/character/skills/${props.characterID}`);
+    let sks = await res.json();
+    setSkills(sks.skillHolders);
+  }
+  async function equipSkill(item) {
+    const newSkills = [...skills];
+    newSkills[skillSlot] = item;
+
+    const res = await fetch(
+      `/api/character/skills/${props.characterID}`,
+      { method: "PUT", body:JSON.stringify({skills:newSkills.map(x=>x?.id)}), headers:{"content-type":"application/json"}}
+    );
+    if (res.ok) {
+      setSkills(newSkills);
+      inventoryCTX.refresh();
+    }
   }
 
   async function equip(item) {
@@ -42,11 +66,37 @@ function Equipment(props) {
     );
     if (res.ok) {
       const key = armor || weapon;
-      setEquipment((old) => ({ ...old, [key]: {...item, isEquipped:true} }));
+      setEquipment((old) => ({ ...old, [key]: { ...item, isEquipped: true } }));
       inventoryCTX.refresh();
     }
   }
 
+  async function unEquip(item) {
+    const res = await fetch(
+      `/api/character/unequip/${props.characterID}/${item.id}`,
+      { method: "PUT" }
+    );
+    if (res.ok) {
+      const key = armor || weapon;
+      setEquipment((old) => ({ ...old, [key]: null }));
+      inventoryCTX.refresh();
+    }
+  }
+
+  function filterItem(item)
+  {
+    if(armor)
+    {
+      return item.armorType === armor
+    }else if(weapon)
+    {
+      return item.itemType === "weapon" 
+    }else if(skillSlot !== -1)
+    {
+      return item.itemType === "skill"
+    }
+    return false;
+  }
 
   return (
     <Box>
@@ -54,6 +104,7 @@ function Equipment(props) {
         type="btn"
         onClick={() => {
           getEquipment();
+          getSkills();
           setIsModalOpen(true);
         }}
       >
@@ -80,88 +131,198 @@ function Equipment(props) {
             </Typography>
           </Toolbar>
         </AppBar>
-        {equipment ? (
-          <Box display="flex">
-            <Box display="flex" flexGrow={1} gap={2} flexWrap="wrap">
-              {armor || weapon
-                ? inventoryCTX.inventory
-                    .filter((x) =>
-                      armor
-                        ? x.itemType === "armor" && x.armorType === armor
-                        : x.itemType === "weapon"
-                    )
-                    .map((x) => (
-                      <Item
-                        item={x}
-                        onClick={() => equip(x)}
-                        key={x.id}
-                        interactive
-                      ></Item>
-                    ))
-                : null}
+        {(equipment && skills) ? (
+          <Box
+            display="flex"
+            alignItems="flex-start"
+            flexGrow={1}
+            overflow="auto"
+          >
+            <Box
+              display="flex"
+              flexGrow={1}
+              flexDirection="column"
+              alignSelf="stretch"
+            >
+              <Box flexGrow={1} minHeight={0} overflow="auto">
+                <Box
+                  display="flex"
+                  flexGrow={1}
+                  gap={2}
+                  flexWrap="wrap"
+                  alignItems="flex-start"
+                >
+                  { inventoryCTX.inventory
+                        .filter(filterItem)
+                        .map((x) => (
+                          <Item
+                            item={x}
+                            onClick={() => skillSlot===-1? equip(x):equipSkill(x)}
+                            key={x.id}
+                            interactive
+                          ></Item>
+                        ))
+                   }
+                </Box>
+              </Box>
+              <Box minHeight={125} display="flex">
+                {skills.map((x, ind) => (
+                  <Box display="flex" flexDirection="column" alignItems="center" key={ind}>
+                    <Item
+                      item={x}
+                      onClick={() => {
+                        setArmor("");
+                        setWeapon("");
+                        setSkillSlot(ind);
+                      }}
+                      interactive
+                    ></Item>
+                    <Collapse
+                      in={x && ind === skillSlot}
+                      orientation="vertical"
+                    >
+                      <Button onClick={() => equipSkill(null)}>
+                        Unequip
+                      </Button>
+                    </Collapse>
+                  </Box>
+                ))}
+              </Box>
             </Box>
-            <Box display="flex" flexDirection="column" gap="3px">
-              <Item
-                item={equipment.head}
-                onClick={() => {
-                  setArmor("head");
-                  setWeapon("");
-                }}
-                interactive
-              ></Item>
-              <Item
-                item={equipment.shoulder}
-                onClick={() => {
-                  setArmor("shoulder");
-                  setWeapon("");
-                }}
-                interactive
-              ></Item>
-
-              <Item
-                item={equipment.chest}
-                onClick={() => {
-                  setArmor("chest");
-                  setWeapon("");
-                }}
-                interactive
-              ></Item>
-
-              <Item
-                item={equipment.hand}
-                onClick={() => {
-                  setArmor("hand");
-                  setWeapon("");
-                }}
-                interactive
-              ></Item>
-
-              <Item
-                item={equipment.leg}
-                onClick={() => {
-                  setArmor("leg");
-                  setWeapon("");
-                }}
-                interactive
-              ></Item>
-
-              <Item
-                item={equipment.boot}
-                onClick={() => {
-                  setArmor("boot");
-                  setWeapon("");
-                }}
-                interactive
-              ></Item>
-
-              <Item
-                item={equipment.weapon}
-                onClick={() => {
-                  setWeapon("weapon");
-                  setArmor("");
-                }}
-                interactive
-              ></Item>
+            <Box display="flex" flexDirection="column" gap="3px" minWidth={220}>
+              <Box display="flex" flexDirection="row" alignItems="center">
+                <Item
+                  item={equipment.head}
+                  onClick={() => {
+                    setArmor("head");
+                    setWeapon("");
+                    setSkillSlot(-1);
+                  }}
+                  interactive
+                ></Item>
+                <Collapse
+                  in={equipment.head && armor === "head"}
+                  orientation="horizontal"
+                >
+                  <Button onClick={() => unEquip(equipment.head)}>
+                    Unequip
+                  </Button>
+                </Collapse>
+              </Box>
+              <Box display="flex" flexDirection="row" alignItems="center">
+                <Item
+                  item={equipment.shoulder}
+                  onClick={() => {
+                    setArmor("shoulder");
+                    setWeapon("");
+                    setSkillSlot(-1);
+                  }}
+                  interactive
+                ></Item>
+                <Collapse
+                  in={equipment.shoulder && armor === "shoulder"}
+                  orientation="horizontal"
+                >
+                  <Button onClick={() => unEquip(equipment.shoulder)}>
+                    Unequip
+                  </Button>
+                </Collapse>
+              </Box>
+              <Box display="flex" flexDirection="row" alignItems="center">
+                <Item
+                  item={equipment.chest}
+                  onClick={() => {
+                    setArmor("chest");
+                    setWeapon("");
+                    setSkillSlot(-1);
+                  }}
+                  interactive
+                ></Item>
+                <Collapse
+                  in={equipment.chest && armor === "chest"}
+                  orientation="horizontal"
+                >
+                  <Button onClick={() => unEquip(equipment.chest)}>
+                    Unequip
+                  </Button>
+                </Collapse>
+              </Box>
+              <Box display="flex" flexDirection="row" alignItems="center">
+                <Item
+                  item={equipment.hand}
+                  onClick={() => {
+                    setArmor("hand");
+                    setWeapon("");
+                    setSkillSlot(-1);
+                  }}
+                  interactive
+                ></Item>
+                <Collapse
+                  in={equipment.hand && armor === "hand"}
+                  orientation="horizontal"
+                >
+                  <Button onClick={() => unEquip(equipment.hand)}>
+                    Unequip
+                  </Button>
+                </Collapse>
+              </Box>
+              <Box display="flex" flexDirection="row" alignItems="center">
+                <Item
+                  item={equipment.leg}
+                  onClick={() => {
+                    setArmor("leg");
+                    setWeapon("");
+                    setSkillSlot(-1);
+                  }}
+                  interactive
+                ></Item>
+                <Collapse
+                  in={equipment.leg && armor === "leg"}
+                  orientation="horizontal"
+                >
+                  <Button onClick={() => unEquip(equipment.leg)}>
+                    Unequip
+                  </Button>
+                </Collapse>
+              </Box>
+              <Box display="flex" flexDirection="row" alignItems="center">
+                <Item
+                  item={equipment.boot}
+                  onClick={() => {
+                    setArmor("boot");
+                    setWeapon("");
+                    setSkillSlot(-1);
+                  }}
+                  interactive
+                ></Item>
+                <Collapse
+                  in={equipment.boot && armor === "boot"}
+                  orientation="horizontal"
+                >
+                  <Button onClick={() => unEquip(equipment.boot)}>
+                    Unequip
+                  </Button>
+                </Collapse>
+              </Box>
+              <Box display="flex" flexDirection="row" alignItems="center">
+                <Item
+                  item={equipment.weapon}
+                  onClick={() => {
+                    setWeapon("weapon");
+                    setArmor("");
+                    setSkillSlot(-1);
+                  }}
+                  interactive
+                ></Item>
+                <Collapse
+                  in={equipment.weapon && weapon === "weapon"}
+                  orientation="horizontal"
+                >
+                  <Button onClick={() => unEquip(equipment.weapon)}>
+                    Unequip
+                  </Button>
+                </Collapse>
+              </Box>
             </Box>
           </Box>
         ) : (

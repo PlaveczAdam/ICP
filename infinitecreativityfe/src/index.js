@@ -4,14 +4,20 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import UserContextProvider from "./components/UserContextProvider";
+import WalletContextProvider from "./components/WalletContextProvider";
+import NotificationContextProvider from "./components/NotificationContextProvider";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <React.StrictMode>
-    <UserContextProvider>
-      <App />
-    </UserContextProvider>
-  </React.StrictMode>
+  /*  <React.StrictMode> */
+  <UserContextProvider>
+    <NotificationContextProvider>
+      <WalletContextProvider>
+        <App />
+      </WalletContextProvider>
+    </NotificationContextProvider>
+  </UserContextProvider>
+  /*  </React.StrictMode> */
 );
 
 // If you want to start measuring performance in your app, pass a function

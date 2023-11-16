@@ -8,11 +8,13 @@ function CreateListing(props) {
   const [item, setItem] = useState();
   const [price, setPrice] = useState(0);
   const [inventoryOpen, setInventoryOpen] = useState(false);
+  const [counter, setCounter] = useState(1);
+  const [amount, setAmount] = useState(1);
 
   async function handleCreate() {
     const res = await fetch("/api/listing", {
       method: "POST",
-      body: JSON.stringify({ itemId: item.id, price: price }),
+      body: JSON.stringify({ itemId: item.id, price: price, amount: amount }),
       headers: { "Content-Type": "application/json" },
     });
     if (res.ok) {
@@ -29,13 +31,28 @@ function CreateListing(props) {
     handleCreate();
   }
   function handleSelection() {
+    setCounter(counter + 1);
     setItem();
-    setInventoryOpen(true);
+    if(counter % 2 === 0) setInventoryOpen(false);
+    else setInventoryOpen(true);
   }
 
   return (
-    <Box>
-      <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+    <Box minWidth={"40%"} display="flex" flexWrap={"wrap"} justifyContent="center" maxHeight="0">
+      <Box
+        minHeight={"30%"}
+        maxWidth={"70%"}
+        component="form"
+        onSubmit={handleSubmit}
+        noValidate
+        sx={{
+          mt: 1,
+          background: "linear-gradient(to bottom right, teal, rgba(0, 71, 71, 1))",
+          borderRadius: "10px",
+          padding: "10px",
+          boxShadow: "0px 15px 15px #101010",
+        }}
+      >
         <Item
           item={item}
           onClick={() => {
@@ -44,20 +61,33 @@ function CreateListing(props) {
           interactive
         ></Item>
         <Collapse in={inventoryOpen}>
-          <Box display="flex" flexWrap="wrap">
+          <Box display="flex" flexWrap="wrap" gap={"3px"}>
             {inventoryCTX.inventory.map((x) => (
               <Item
                 item={x}
                 key={x.id}
                 interactive
                 onClick={() => {
-                    setItem(x);
-                    setInventoryOpen(false);
+                  setItem(x);
+                  setInventoryOpen(false);
                 }}
               ></Item>
             ))}
           </Box>
         </Collapse>
+        <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="amount"
+              label="Amount"
+              name="amount"
+              autoFocus
+              InputProps={{ inputProps: { min: "1", max: item?.amount??1, step: "1" } }}
+              type="number"
+              value={amount}
+              onChange={(e) => setAmount(e.target.value)}
+            />
         <TextField
           margin="normal"
           required
@@ -69,9 +99,10 @@ function CreateListing(props) {
           value={price}
           onChange={(e) => setPrice(e.target.value)}
           type="number"
+          InputProps={{inputProps:{min:1}}}
         />
         <Button
-          disabled={!price || !item}
+          disabled={!price || !item || price<1}
           type="submit"
           fullWidth
           variant="contained"
